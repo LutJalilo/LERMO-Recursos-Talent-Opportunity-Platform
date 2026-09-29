@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-PT" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="redir.fp.title">Recuperar senha — LERMO Recursos</title>
+<meta name="robots" content="noindex" />
+<!-- Os formulários de acesso são painéis (modais) da página inicial. Esta rota apenas abre o painel certo. -->
+<script>
+(function(){
+  var base = location.protocol === 'file:' ? 'index.html' : '/';
+  var qs = location.search || '';
+  location.replace(base + qs + '#recuperar-senha');
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=index.html#recuperar-senha" /></noscript>
+<link rel="stylesheet" href="css/pagina.css" th:href="@{/css/pagina.css}" />
+</head>
+<body>
+<section class="hero"><div class="wrap">
+  <a class="logo" href="index.html" th:href="@{/}">LERMO <em>Recursos</em></a>
+  <h1 data-i18n-html="redir.fp.h1">Recuperar <em>a sua senha</em></h1>
+  <p data-i18n="redir.fp.p">A abrir a recuperação de senha…</p>
+</div></section>
+<main><div class="wrap"><p data-i18n="redir.fallback">Se não for redireccionado automaticamente,</p><a href="index.html#recuperar-senha" data-i18n="redir.link">continue aqui</a></div></main>
+<script src="js/i18n.js" th:src="@{/js/i18n.js}"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-PT" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="lg.title.termos">Termos de Utilização — LERMO Recursos</title>
+<meta name="description" content="Regras de utilização da plataforma LERMO Recursos para candidatos e entidades." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="css/oportunidades.css" th:href="@{/css/oportunidades.css}" />
+<link rel="stylesheet" href="css/legal.css" th:href="@{/css/legal.css}" />
+</head>
+<body>
+
+<header><div class="wrap">
+  <a href="index.html" th:href="@{/}" class="logo" aria-label="LERMO Recursos — Início" data-i18n-aria="op.logoAria"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="150" cy="144" r="82" stroke-width="9"/><line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/><line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/><g class="lermo-orbit"><circle cx="185" cy="106" r="32" stroke-width="7"/><circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/></g><circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/></svg><span class="lt">LERMO <span>Recursos</span></span></a>
+  <nav class="links" aria-label="Navegação principal" data-i18n-aria="op.navAria"><a href="index.html" th:href="@{/}" data-i18n="nav.home">Início</a><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="nav.about">Sobre Nós</a><a href="oportunidades.html" th:href="@{/oportunidades}" class="on" data-i18n="nav.opportunities">Oportunidades</a><a href="index.html#servicos" th:href="@{/#servicos}" data-i18n="nav.services">Serviços</a><a href="index.html#comofunciona" th:href="@{/#comofunciona}" data-i18n="nav.how">Como Funciona</a><a href="index.html#contactos" th:href="@{/#contactos}" data-i18n="nav.contact">Contactos</a></nav>
+  <div class="hact">
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Alternar idioma" data-i18n-aria="op.langAria"><i class="fas fa-globe" aria-hidden="true"></i> <span id="langLabel">PT</span></button>
+    <div id="authBtns">
+      <a class="btn btn-o" data-auth="login" href="login.html" th:href="@{/login}" data-i18n="nav.login">Entrar</a>
+      <a class="btn btn-g" data-auth="reg" href="registo.html?tipo=candidato" th:href="@{/registo(tipo='candidato')}" data-i18n="nav.register">Registar</a>
+    </div>
+  </div>
+  <button class="hamb" id="hamb" type="button" aria-label="Abrir menu" data-i18n-aria="op.menuOpen" aria-expanded="false" aria-controls="mm"><i class="fas fa-bars"></i></button>
+</div></header>
+<div class="mm" id="mm" role="dialog" aria-modal="true" aria-label="Menu" data-i18n-aria="op.mobileNavAria">
+  <div class="tb"><a href="index.html" th:href="@{/}" class="logo"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="150" cy="144" r="82" stroke-width="9"/><line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/><line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/><g class="lermo-orbit"><circle cx="185" cy="106" r="32" stroke-width="7"/><circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/></g><circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/></svg><span class="lt">LERMO <span>Recursos</span></span></a><button class="cl" id="mmClose" type="button" aria-label="Fechar menu" data-i18n-aria="op.menuClose"><i class="fas fa-xmark"></i></button></div>
+  <nav aria-label="Menu mobile" data-i18n-aria="op.mobileNavAria"><a href="index.html" th:href="@{/}"><i class="fas fa-home"></i> <span data-i18n="nav.home">Início</span></a><a href="index.html#sobre" th:href="@{/#sobre}"><i class="fas fa-info-circle"></i> <span data-i18n="nav.about">Sobre Nós</span></a><a href="oportunidades.html" th:href="@{/oportunidades}" class="on"><i class="fas fa-briefcase"></i> <span data-i18n="nav.opportunities">Oportunidades</span></a><a href="index.html#servicos" th:href="@{/#servicos}"><i class="fas fa-cogs"></i> <span data-i18n="nav.services">Serviços</span></a><a href="index.html#comofunciona" th:href="@{/#comofunciona}"><i class="fas fa-route"></i> <span data-i18n="nav.how">Como Funciona</span></a><a href="index.html#contactos" th:href="@{/#contactos}"><i class="fas fa-envelope"></i> <span data-i18n="nav.contact">Contactos</span></a></nav>
+  <div class="ba" id="mmAuth">
+    <a class="btn btn-o" href="login.html" th:href="@{/login}"><i class="fas fa-right-to-bracket"></i> <span data-i18n="nav.login">Entrar</span></a>
+    <a class="btn btn-g" href="registo.html?tipo=candidato" th:href="@{/registo(tipo='candidato')}"><i class="fas fa-user-plus"></i> <span data-i18n="nav.register">Registar</span></a>
+  </div>
+</div>
+
+<section class="hero lhero"><div class="wrap" id="lgHero"></div></section>
+<div class="wrap">
+  <div class="ltabs" id="lgTabs" role="tablist"></div>
+  <noscript><p class="empty">Active o JavaScript para ler este documento. / Turn on JavaScript to read this document.</p></noscript>
+  <div class="llayout">
+    <aside class="lcard ltoc" id="lgToc"><h2 id="lgTocTitle">Neste documento</h2><ol id="lgTocList"></ol></aside>
+    <article class="lcard ldoc" id="lgDoc"></article>
+  </div>
+</div>
+
+<footer>
+    <div class="container">
+      <div class="grid-4">
+        <div>
+          <h4>LERMO Recursos</h4>
+          <p style="font-size:0.8rem; opacity:0.5;" data-i18n="op.footerDesc">Conectamos talento a oportunidades em vários países.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div><h4 data-i18n="footer.company">Empresa</h4><ul><li><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="footer.about">Sobre</a></li><li><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="footer.mission">Missão</a></li><li><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="footer.vision">Visão</a></li><li><a href="index.html#equipa" th:href="@{/#equipa}" data-i18n="footer.team">Equipa</a></li></ul></div>
+        <div><h4 data-i18n="footer.opportunities">Oportunidades</h4><ul><li><a href="oportunidades.html?tipo=estagio" data-i18n="footer.internships">Estágios</a></li><li><a href="oportunidades.html?cat=vaga" data-i18n="footer.firstjob">Primeiro Emprego</a></li><li><a href="oportunidades.html?tipo=emprego_efectivo" data-i18n="footer.jobs">Emprego</a></li><li><a href="registo.html?tipo=empresa" th:href="@{/registo(tipo='empresa')}" data-i18n="footer.companies">Empresas</a></li></ul></div>
+        <div><h4 data-i18n="footer.support">Suporte</h4><ul><li><a href="index.html#faq" th:href="@{/#faq}" data-i18n="footer.faq">FAQ</a></li><li><a href="index.html#contactos" th:href="@{/#contactos}" data-i18n="footer.contact">Contactos</a></li><li><a href="legal.html#privacidade" th:href="@{/legal#privacidade}" data-i18n="footer.privacy">Privacidade</a></li><li><a href="legal.html#termos" th:href="@{/legal#termos}" data-i18n="footer.terms">Termos</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 LERMO Recursos</span>
+        <span data-i18n="op.footerCity">Nampula, Moçambique</span>
+      </div>
+    </div>
+  </footer>
+
+<button id="backToTop" type="button" aria-label="Voltar ao topo" data-i18n-aria="op.top"><i class="fas fa-arrow-up"></i></button>
+
+<script src="js/i18n.js" th:src="@{/js/i18n.js}"></script>
+<script th:inline="javascript">
+/* Thymeleaf: define se há sessão. Em ficheiro estático fica false. */
+var LOGGED_IN = /*[[${#authentication != null and #authentication.authenticated and !(#authentication instanceof T(org.springframework.security.authentication.AnonymousAuthenticationToken))}]]*/ false;
+</script>
+<script src="js/legal.js" th:src="@{/js/legal.js}"></script>
+</body>
+</html>

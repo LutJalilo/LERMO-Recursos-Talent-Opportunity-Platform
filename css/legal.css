@@ -1,0 +1,25 @@
+/* Página legal (Termos e Privacidade) — complementa oportunidades.css */
+.lhero{padding-bottom:5.5rem}
+.lhero h1{max-width:30ch}
+.lhero .upd{margin-top:.9rem;font-size:.85rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:.4rem}
+.ltabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:-3rem;position:relative;margin-bottom:1rem}
+.ltabs a{padding:.55rem 1.1rem;border-radius:var(--rf);background:var(--s);border:1px solid var(--line);font-size:.85rem;font-weight:600;color:var(--t);box-shadow:var(--sh);transition:.25s}
+.ltabs a:hover{border-color:var(--g);color:var(--pd)}
+.ltabs a.on{background:var(--p);border-color:var(--p);color:#fff}
+.llayout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:1.6rem;align-items:start;padding-bottom:3rem}
+.lcard{background:var(--s);border:1px solid var(--line);border-radius:16px;padding:1.6rem;box-shadow:var(--sh)}
+.ltoc{position:sticky;top:84px}
+.ltoc h2{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--m);margin-bottom:.7rem}
+.ltoc ol{list-style:none;display:grid;gap:.1rem;padding:0;margin:0}
+.ltoc a{display:block;padding:.35rem .6rem;border-radius:8px;font-size:.82rem;color:var(--t);line-height:1.4}
+.ltoc a:hover{background:rgba(201,160,58,.1);color:var(--pd)}
+.ldoc .intro{font-size:1.02rem;color:var(--t);padding-bottom:1.2rem;margin-bottom:.4rem;border-bottom:1px solid var(--line)}
+.ldoc section{padding-top:1.3rem;scroll-margin-top:90px}
+.ldoc h2{font-size:1.1rem;margin-bottom:.55rem;color:var(--pd)}
+.ldoc p,.ldoc li{color:#2a3d33;max-width:72ch;line-height:1.7}
+.ldoc p+p,.ldoc p+ul,.ldoc ul+p{margin-top:.7rem}
+.ldoc ul{padding-left:1.25rem;display:grid;gap:.4rem}
+.ldoc a{color:var(--p);text-decoration:underline;text-underline-offset:2px}
+.ldoc a:hover{color:var(--g)}
+@media(max-width:900px){.llayout{grid-template-columns:1fr}.ltoc{position:static}}
+@media print{header,.mm,footer,#backToTop,.ltabs,.ltoc{display:none!important}.llayout{display:block}.lhero{padding-bottom:1rem}}

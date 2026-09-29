@@ -1,0 +1,25 @@
+/* Página de detalhe — complementa oportunidades.css */
+.dhero{padding-bottom:5.5rem}
+.dhero h1{max-width:30ch}
+.dhero .tag{display:inline-block;margin-bottom:.8rem}
+.dhero .emp{color:rgba(255,255,255,.82);font-size:1.02rem;margin-top:.5rem}
+.dstat{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.1rem;font-size:.82rem;font-weight:600;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:.35rem .9rem;border-radius:var(--rf)}
+.dstat.warn{background:rgba(201,160,58,.22);border-color:var(--g);color:var(--gs)}
+.dstat.off{background:rgba(255,255,255,.06);color:rgba(255,255,255,.65)}
+.dlayout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:1.6rem;margin-top:-3rem;position:relative;padding-bottom:3rem;align-items:start}
+.dcard{background:var(--s);border:1px solid var(--line);border-radius:16px;padding:1.6rem;box-shadow:var(--sh)}
+.dmain section+section{margin-top:1.6rem}
+.dmain h2{font-size:1.05rem;margin-bottom:.5rem}
+.dmain p,.dmain li{color:#2a3d33;max-width:68ch}
+.dmain ul{padding-left:1.2rem;display:grid;gap:.35rem}
+.dside{position:sticky;top:84px}
+.dside .facts{margin-top:0}
+.dside .acts{flex-direction:column}
+.dside .acts .btn{flex:none;width:100%}
+.dnote{margin-top:1rem;font-size:.8rem;color:var(--m)}
+.dnf{text-align:center;padding:2.5rem 1rem}
+.dnf i{font-size:2rem;color:var(--gs);margin-bottom:.6rem}
+.dnf p{color:var(--m);margin-bottom:1rem}
+.dsim{padding:1rem 0 3.5rem}
+.dsim h2{font-size:1.3rem;margin-bottom:1rem}
+@media(max-width:900px){.dlayout{grid-template-columns:1fr}.dside{position:static;order:-1}}
