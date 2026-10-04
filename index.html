@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-i18n-manual>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="idx.title">LERMO Recursos — Recrutamento, Estágios e Oportunidades em Moçambique</title>
+  <meta name="description" content="LERMO Recursos conecta jovens talentos, estudantes e empresas através de oportunidades de estágio, primeiro emprego, formação, empreendedorismo e financiamento em Moçambique." data-i18n-content="idx.desc" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+
+  <!-- ===== LOADER ===== -->
+  <div id="loader" role="status" aria-label="A carregar" data-i18n-aria="idx.loading">
+    <div class="logo">
+      <svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round">
+        <circle cx="150" cy="144" r="82" stroke-width="9"/>
+        <line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/>
+        <line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/>
+        <g class="lermo-orbit">
+          <circle cx="185" cy="106" r="32" stroke-width="7"/>
+          <circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/>
+        </g>
+        <circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/>
+      </svg>
+      LERMO <span>Recursos</span>
+    </div>
+    <p><span class="ld-spin" aria-hidden="true"></span><span data-i18n="loader.text">A preparar oportunidades...</span></p>
+    <div class="progress-bar"><div class="fill" id="loaderFill"></div></div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header id="header">
+    <div class="container navbar">
+      <a href="#" class="logo" aria-label="LERMO Recursos Início" data-i18n-aria="idx.logoAria">
+        <svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round">
+          <circle cx="150" cy="144" r="82" stroke-width="9"/>
+          <line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/>
+          <line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/>
+          <g class="lermo-orbit">
+            <circle cx="185" cy="106" r="32" stroke-width="7"/>
+            <circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/>
+          </g>
+          <circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="logo-text">LERMO <span>Recursos</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal" data-i18n-aria="op.navAria">
+        <a href="#inicio" class="active" data-i18n="nav.home">Início</a>
+        <a href="#sobre" data-i18n="nav.about">Sobre Nós</a>
+        <a href="oportunidades.html" th:href="@{/oportunidades}" data-i18n="nav.opportunities">Oportunidades</a>
+        <a href="#servicos" data-i18n="nav.services">Serviços</a>
+        <a href="#comofunciona" data-i18n="nav.how">Como Funciona</a>
+        <a href="#contactos" data-i18n="nav.contact">Contactos</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" aria-label="Alternar idioma" data-i18n-aria="op.langAria">
+          <i class="fas fa-globe"></i> <span id="langLabel">PT</span>
+        </button>
+        <a href="login.html" th:href="@{/login}" class="btn btn-login btn-sm" data-i18n="nav.login">Entrar</a>
+        <a href="registo.html" th:href="@{/registo}" class="btn btn-primary btn-register btn-sm" data-i18n="nav.register">Registar</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu" data-i18n-aria="op.menuOpen">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="mobile-overlay" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu mobile" data-i18n-aria="op.mobileNavAria">
+    <div class="top-bar">
+      <div class="logo" style="color:var(--color-white);">
+        <svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round">
+          <circle cx="150" cy="144" r="82" stroke-width="9"/>
+          <line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/>
+          <line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/>
+          <g class="lermo-orbit">
+            <circle cx="185" cy="106" r="32" stroke-width="7"/>
+            <circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/>
+          </g>
+          <circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="logo-text">LERMO <span>Recursos</span></span>
+      </div>
+      <button class="close-btn" id="closeMobile" aria-label="Fechar menu" data-i18n-aria="op.menuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav>
+      <a href="#inicio"><i class="fas fa-home"></i> <span data-i18n="nav.home">Início</span></a>
+      <a href="#sobre"><i class="fas fa-info-circle"></i> <span data-i18n="nav.about">Sobre Nós</span></a>
+      <a href="oportunidades.html" th:href="@{/oportunidades}"><i class="fas fa-briefcase"></i> <span data-i18n="nav.opportunities">Oportunidades</span></a>
+      <a href="#servicos"><i class="fas fa-cogs"></i> <span data-i18n="nav.services">Serviços</span></a>
+      <a href="#comofunciona"><i class="fas fa-route"></i> <span data-i18n="nav.how">Como Funciona</span></a>
+      <a href="#contactos"><i class="fas fa-envelope"></i> <span data-i18n="nav.contact">Contactos</span></a>
+    </nav>
+    <div class="bottom-actions">
+      <a href="login.html" th:href="@{/login}" class="btn btn-login"><i class="fas fa-right-to-bracket"></i> <span data-i18n="nav.login">Entrar</span></a>
+      <a href="registo.html" th:href="@{/registo}" class="btn btn-primary btn-register"><i class="fas fa-user-plus"></i> <span data-i18n="nav.register">Registar</span></a>
+      <div class="lang-row">
+        <button class="active" data-lang="pt">PT</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="inicio">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <h1>
+          <span data-i18n="hero.line1">Transformamos</span><br>
+          <span class="highlight" data-i18n="hero.line2">talento</span>
+          <span data-i18n="hero.line3">em</span><br>
+          <span class="highlight" data-i18n="hero.line4">oportunidades</span><span data-i18n="hero.line5">.</span>
+        </h1>
+        <p class="hero-sub" data-i18n="hero.sub">
+          A LERMO Recursos conecta estudantes, jovens e empresas a oportunidades de estágio, emprego e intermediação empresarial em Moçambique.
+        </p>
+        <div class="hero-actions">
+          <a href="oportunidades.html" th:href="@{/oportunidades}" class="btn btn-primary"><i class="fas fa-arrow-right"></i> <span data-i18n="hero.cta1">Encontrar Oportunidades</span></a>
+          <a href="registo.html?tipo=empresa" th:href="@{/registo(tipo='empresa')}" class="btn btn-outline"><i class="fas fa-building"></i> <span data-i18n="hero.cta2">Sou Empresa</span></a>
+        </div>
+        <div class="hero-quote">
+          <i class="fas fa-quote-left"></i>
+          <span data-i18n="hero.quote">Quando a vida te dá limões, o LERMO dá-te oportunidades.</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orb-wrapper">
+          <div class="orb"></div>
+          <div class="orb"></div>
+          <svg class="hero-mark" viewBox="0 0 300 300" fill="none" stroke="#E4C878" stroke-linecap="round">
+            <circle class="hero-mark-draw" cx="150" cy="144" r="82" stroke-width="6"/>
+            <line class="hero-mark-draw" x1="42" y1="144" x2="62" y2="144" stroke-width="5"/>
+            <line class="hero-mark-draw" x1="238" y1="144" x2="258" y2="144" stroke-width="5"/>
+            <g class="lermo-orbit">
+              <circle class="hero-mark-draw" cx="185" cy="106" r="32" stroke-width="5"/>
+              <circle class="hero-mark-dot" cx="193" cy="82" r="5" fill="#E4C878" stroke="none"/>
+            </g>
+            <circle class="hero-mark-dot" cx="150" cy="144" r="2.6" fill="#E4C878" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SOBRE ===== -->
+  <section id="sobre" class="has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-info-circle"></i> <span data-i18n="about.tag">Sobre a LERMO</span></span>
+        <h2 class="section-title" data-i18n="about.title">Conectamos pessoas e empresas</h2>
+        <p class="section-desc" data-i18n="about.desc">
+          A LERMO Recursos é uma plataforma moçambicana que liga talento jovem a oportunidades reais de estágio, emprego e desenvolvimento empresarial.
+        </p>
+      </div>
+    </div></div>
+    <div class="container">
+      <div class="grid-3 mt-2">
+        <div class="card fade-up delay-1">
+          <div class="icon"><i class="fas fa-user-graduate"></i></div>
+          <h4 data-i18n="about.card1.title">Jovens</h4>
+          <p data-i18n="about.card1.desc">Estágios, primeiro emprego, oportunidades e desenvolvimento profissional para estudantes e recém-graduados.</p>
+        </div>
+        <div class="card fade-up delay-2">
+          <div class="icon"><i class="fas fa-building"></i></div>
+          <h4 data-i18n="about.card2.title">Empresas</h4>
+          <p data-i18n="about.card2.desc">Recrutamento, acesso a talentos, fornecedores e soluções empresariais para fortalecer o seu negócio.</p>
+        </div>
+        <div class="card fade-up delay-3">
+          <div class="icon"><i class="fas fa-handshake"></i></div>
+          <h4 data-i18n="about.card3.title">Parceiros</h4>
+          <p data-i18n="about.card3.desc">Parcerias estratégicas, eventos e desenvolvimento de negócios para impulsionar o ecossistema empresarial.</p>
+        </div>
+      </div>
+
+      <div class="grid-2 mt-2">
+        <div class="card card-dark fade-up delay-1">
+          <div class="icon"><i class="fas fa-bullseye"></i></div>
+          <h4 data-i18n="about.mission.title">Missão</h4>
+          <p data-i18n="about.mission.desc">Conectar estudantes e jovens moçambicanos ao mercado de trabalho, facilitando o acesso a estágios e ao primeiro emprego, e aproximar empresários de fornecedores de produtos e serviços, contribuindo para o dinamismo do tecido empresarial nacional.</p>
+        </div>
+        <div class="card card-dark fade-up delay-2">
+          <div class="icon"><i class="fas fa-eye"></i></div>
+          <h4 data-i18n="about.vision.title">Visão</h4>
+          <p data-i18n="about.vision.desc">Ser a plataforma de referência em Moçambique na ligação entre talento jovem e oportunidades empresariais, reduzindo o desemprego juvenil e fortalecendo as redes de negócio locais.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-2 fade-up">
+        <span class="section-tag" data-i18n="values.tag">Valores</span>
+      </div>
+      <div class="grid-3 card-grid-values mt-1">
+        <div class="card fade-up delay-1"><div class="icon"><i class="fas fa-people-group"></i></div><h4 data-i18n="values.v1">Empregabilidade Jovem e Inclusão</h4><p data-i18n="values.v1d">Criar linhas de acesso reais ao primeiro emprego.</p></div>
+        <div class="card fade-up delay-2"><div class="icon"><i class="fas fa-shield-halved"></i></div><h4 data-i18n="values.v2">Transparência e Confiança</h4><p data-i18n="values.v2d">Relações claras entre candidatos, empresas e parceiros.</p></div>
+        <div class="card fade-up delay-3"><div class="icon"><i class="fas fa-lightbulb"></i></div><h4 data-i18n="values.v3">Inovação e Proximidade Digital</h4><p data-i18n="values.v3d">Soluções digitais construídas com responsabilidade.</p></div>
+        <div class="card fade-up delay-4"><div class="icon"><i class="fas fa-rocket"></i></div><h4 data-i18n="values.v4">Espírito Empreendedor</h4><p data-i18n="values.v4d">Incentivo ao dinamismo do tecido empresarial nacional.</p></div>
+        <div class="card fade-up delay-1"><div class="icon"><i class="fas fa-hand-holding-heart"></i></div><h4 data-i18n="values.v5">Responsabilidade Social</h4><p data-i18n="values.v5d">Compromisso com o impacto social e económico do país.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INOVAÇÃO & EXCELÊNCIA ===== -->
+  <section class="dark">
+    <div class="container">
+      <div class="text-center fade-up">
+        <span class="section-tag"><i class="fas fa-star"></i> <span data-i18n="innovation.tag">O nosso compromisso</span></span>
+        <h2 class="section-title" data-i18n="innovation.title">Inovação &amp; Excelência</h2>
+        <p class="section-desc mx-auto" style="max-width:600px;" data-i18n="innovation.desc">Na LERMO Recursos, acreditamos que tecnologia, talento e proximidade podem transformar a forma como pessoas e empresas encontram oportunidades. Trabalhamos para construir soluções eficientes, acessíveis e orientadas para a melhoria contínua.</p>
+      </div>
+      <div class="grid-4 mt-2">
+        <div class="card card-dark fade-up delay-1 text-center"><div class="icon"><i class="fas fa-lightbulb"></i></div><h4 data-i18n="innovation.i1">Inovação</h4></div>
+        <div class="card card-dark fade-up delay-2 text-center"><div class="icon"><i class="fas fa-microchip"></i></div><h4 data-i18n="innovation.i2">Tecnologia</h4></div>
+        <div class="card card-dark fade-up delay-3 text-center"><div class="icon"><i class="fas fa-medal"></i></div><h4 data-i18n="innovation.i3">Qualidade</h4></div>
+        <div class="card card-dark fade-up delay-4 text-center"><div class="icon"><i class="fas fa-arrows-rotate"></i></div><h4 data-i18n="innovation.i4">Melhoria Contínua</h4></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OPORTUNIDADES ===== -->
+  <section id="oportunidades" class="alt has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-briefcase"></i> <span data-i18n="opportunities.tag">Oportunidades</span></span>
+        <h2 class="section-title" data-i18n="opportunities.title">Encontre a sua próxima oportunidade</h2>
+        <p class="section-desc" data-i18n="opportunities.desc">Explore as categorias disponíveis e dê o próximo passo na sua carreira.</p>
+      </div>
+    </div></div>
+    <div class="container">
+      <div class="grid-3 mt-2">
+        <div class="card fade-up delay-1" data-href="oportunidades.html?tipo=estagio"><div class="icon"><i class="fas fa-graduation-cap"></i></div><h4 data-i18n="opp.1">Estágios</h4><p data-i18n="opp.1d">Para estudantes e jovens que procuram experiência profissional.</p></div>
+        <div class="card fade-up delay-2" data-href="oportunidades.html?cat=vaga"><div class="icon"><i class="fas fa-user-tie"></i></div><h4 data-i18n="opp.2">Primeiro Emprego</h4><p data-i18n="opp.2d">Para jovens que procuram iniciar a carreira.</p></div>
+        <div class="card fade-up delay-3" data-href="oportunidades.html?tipo=emprego_efectivo"><div class="icon"><i class="fas fa-briefcase"></i></div><h4 data-i18n="opp.3">Emprego Efectivo</h4><p data-i18n="opp.3d">Contratos sem termo para profissionais que procuram uma nova oportunidade.</p></div>
+        <div class="card fade-up delay-1" data-href="oportunidades.html?tipo=trainee"><div class="icon"><i class="fas fa-user-clock"></i></div><h4 data-i18n="opp.4">Trainee</h4><p data-i18n="opp.4d">Programas de trainee para acelerar o desenvolvimento de talento.</p></div>
+        <div class="card fade-up delay-2" data-href="oportunidades.html?tipo=freelance"><div class="icon"><i class="fas fa-laptop-code"></i></div><h4 data-i18n="opp.5">Freelance</h4><p data-i18n="opp.5d">Trabalho autónomo ou por projecto, com flexibilidade.</p></div>
+        <div class="card fade-up delay-3" data-href="oportunidades.html?cat=formacao"><div class="icon"><i class="fas fa-chart-line"></i></div><h4 data-i18n="opp.6">Desenvolvimento Profissional</h4><p data-i18n="opp.6d">Formação, orientação e crescimento contínuo.</p></div>
+      </div>
+      <div class="text-center mt-2 fade-up">
+        <a href="oportunidades.html" th:href="@{/oportunidades}" class="btn btn-primary"><i class="fas fa-arrow-right"></i> <span data-i18n="opportunities.cta">Explorar Oportunidades</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVIÇOS ===== -->
+  <section id="servicos" class="has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-cogs"></i> <span data-i18n="services.tag">Serviços</span></span>
+        <h2 class="section-title" data-i18n="services.title">O que fazemos</h2>
+      </div>
+    </div></div>
+    <div class="container">
+      <div class="grid-3 mt-2">
+        <div class="card fade-up delay-1"><div class="icon"><i class="fas fa-user-check"></i></div><h4 data-i18n="services.s1">Recrutamento e Selecção</h4><p data-i18n="services.s1d">Ligação entre candidatos e empresas com processos rigorosos e personalizados.</p></div>
+        <div class="card fade-up delay-2"><div class="icon"><i class="fas fa-laptop"></i></div><h4 data-i18n="services.s2">Plataforma Digital</h4><p data-i18n="services.s2d">Gestão de intermediação de emprego e serviços empresariais via web e app.</p></div>
+        <div class="card fade-up delay-3"><div class="icon"><i class="fas fa-store"></i></div><h4 data-i18n="services.s3">Marketplace Empresarial</h4><p data-i18n="services.s3d">Intermediação comercial entre empresários e fornecedores de produtos e serviços.</p></div>
+        <div class="card fade-up delay-1"><div class="icon"><i class="fas fa-comments"></i></div><h4 data-i18n="services.s4">Consultoria em Empregabilidade</h4><p data-i18n="services.s4d">Orientação profissional e desenvolvimento de talento jovem.</p></div>
+        <div class="card fade-up delay-2"><div class="icon"><i class="fas fa-calendar-alt"></i></div><h4 data-i18n="services.s5">Eventos e Feiras de Emprego</h4><p data-i18n="services.s5d">Organização de acções de ligação entre instituições de ensino e o mercado.</p></div>
+        <div class="card fade-up delay-3"><div class="icon"><i class="fas fa-certificate"></i></div><h4 data-i18n="services.s6">Formação e Certificação</h4><p data-i18n="services.s6d">Programas de formação técnica, profissionalizante e de soft skills, com turmas nos distritos e certificação.</p></div>
+        <div class="card fade-up delay-1"><div class="icon"><i class="fas fa-seedling"></i></div><h4 data-i18n="services.s7">Empreendedorismo e Financiamento</h4><p data-i18n="services.s7d">Mentoria para projectos de empreendedorismo e acesso a linhas de financiamento para jovens empreendedores.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMO FUNCIONA ===== -->
+  <section id="comofunciona" class="alt has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-route"></i> <span data-i18n="how.tag">Como Funciona</span></span>
+        <h2 class="section-title" data-i18n="how.title">Passo a passo</h2>
+      </div>
+    </div></div>
+    <div class="container">
+      <div class="steps-groups">
+        <div class="steps-panel fade-up" aria-labelledby="stepsCandTitle">
+          <div class="steps-head"><span class="badge-ico" aria-hidden="true"><i class="fas fa-user-graduate"></i></span><h3 id="stepsCandTitle" data-i18n="how.candidate">Para Candidatos</h3></div>
+          <ol class="steps">
+            <li class="step fade-up delay-1" tabindex="0">
+              <span class="step-num" aria-hidden="true">01</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-user-pen"></i></div>
+                <h4 data-i18n="how.c1">Criar perfil</h4>
+                <p data-i18n="how.c1d">O candidato cria e completa o seu perfil profissional.</p>
+              </div>
+            </li>
+            <li class="step fade-up delay-2" tabindex="0">
+              <span class="step-num" aria-hidden="true">02</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-magnifying-glass"></i></div>
+                <h4 data-i18n="how.c2">Encontrar oportunidades</h4>
+                <p data-i18n="how.c2d">O candidato pesquisa oportunidades adequadas ao seu perfil.</p>
+              </div>
+            </li>
+            <li class="step fade-up delay-3" tabindex="0">
+              <span class="step-num" aria-hidden="true">03</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-paper-plane"></i></div>
+                <h4 data-i18n="how.c3">Candidatar-se</h4>
+                <p data-i18n="how.c3d">O candidato submete a sua candidatura às oportunidades disponíveis.</p>
+              </div>
+            </li>
+            <li class="step fade-up delay-4" tabindex="0">
+              <span class="step-num" aria-hidden="true">04</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
+                <h4 data-i18n="how.c4">Acompanhar candidatura</h4>
+                <p data-i18n="how.c4d">O candidato acompanha o estado das suas candidaturas.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="steps-panel company fade-up delay-1" aria-labelledby="stepsCompTitle">
+          <div class="steps-head"><span class="badge-ico" aria-hidden="true"><i class="fas fa-building"></i></span><h3 id="stepsCompTitle" data-i18n="how.company">Para Empresas</h3></div>
+          <ol class="steps">
+            <li class="step fade-up delay-1" tabindex="0">
+              <span class="step-num" aria-hidden="true">01</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-building"></i></div>
+                <h4 data-i18n="how.e1">Criar conta</h4>
+                <p data-i18n="how.e1d">A empresa regista-se e cria a sua conta na plataforma.</p>
+              </div>
+            </li>
+            <li class="step fade-up delay-2" tabindex="0">
+              <span class="step-num" aria-hidden="true">02</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-bullhorn"></i></div>
+                <h4 data-i18n="how.e2">Publicar oportunidade</h4>
+                <p data-i18n="how.e2d">A empresa publica as vagas e oportunidades que pretende preencher.</p>
+              </div>
+            </li>
+            <li class="step fade-up delay-3" tabindex="0">
+              <span class="step-num" aria-hidden="true">03</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-users-viewfinder"></i></div>
+                <h4 data-i18n="how.e3">Encontrar talentos</h4>
+                <p data-i18n="how.e3d">A empresa procura talentos qualificados para as suas vagas.</p>
+              </div>
+            </li>
+            <li class="step fade-up delay-4" tabindex="0">
+              <span class="step-num" aria-hidden="true">04</span>
+              <div class="step-card">
+                <div class="step-icon" aria-hidden="true"><i class="fas fa-list-check"></i></div>
+                <h4 data-i18n="how.e4">Gerir candidaturas</h4>
+                <p data-i18n="how.e4d">A empresa gere as candidaturas recebidas e o seu estado.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PLATAFORMA ===== -->
+  <section id="plataforma" class="dark">
+    <div class="container">
+      <div class="platform-wrap fade-up">
+        <div class="platform-inner">
+          <div class="platform-copy">
+            <span class="section-tag"><i class="fas fa-laptop"></i> <span data-i18n="platform.tag">Plataforma</span></span>
+            <h2 data-i18n="platform.title">Plataforma Digital de Recrutamento</h2>
+            <p data-i18n="platform.desc">Gestão de intermediação de emprego e serviços empresariais via web e app, a ligar estudantes, jovens e empresas moçambicanas.</p>
+            <div class="platform-actions">
+              <a href="registo.html" th:href="@{/registo}" class="btn btn-primary"><i class="fas fa-user-plus"></i> <span data-i18n="nav.register">Registar</span></a>
+              <a href="login.html" th:href="@{/login}" class="btn btn-outline"><i class="fas fa-right-to-bracket"></i> <span data-i18n="nav.login">Entrar</span></a>
+            </div>
+          </div>
+          <div class="platform-pillars">
+            <div class="pillar"><i class="fas fa-user-graduate" aria-hidden="true"></i><div><h4 data-i18n="how.candidate">Para Candidatos</h4><p data-i18n="platform.p1">Criar perfil, encontrar oportunidades, candidatar-se e acompanhar candidaturas.</p></div></div>
+            <div class="pillar"><i class="fas fa-building" aria-hidden="true"></i><div><h4 data-i18n="how.company">Para Empresas</h4><p data-i18n="platform.p2">Criar conta, publicar oportunidades, encontrar talentos e gerir candidaturas.</p></div></div>
+            <div class="pillar"><i class="fas fa-store" aria-hidden="true"></i><div><h4 data-i18n="services.s3">Marketplace Empresarial</h4><p data-i18n="services.s3d">Intermediação comercial entre empresários e fornecedores de produtos e serviços.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EQUIPA ===== -->
+  <section id="equipa" class="has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-users"></i> <span data-i18n="team.tag">Equipa</span></span>
+        <h2 class="section-title" data-i18n="team.title">Nossa Equipa</h2>
+        <p class="section-desc" data-i18n="team.desc">Conheça os membros da direcção da LERMO Recursos.</p>
+      </div>
+    </div></div>
+    <div class="container">
+      <div class="team-grid mt-2">
+        <div class="team-card fade-up delay-1">
+          <div class="avatar">GA</div>
+          <h4>Guinelson Alkebulan</h4>
+          <div class="role"><i class="fas fa-user-tie"></i> <span data-i18n="idx.role.ceo">CEO · Sócio-Gerente</span></div>
+        </div>
+        <div class="team-card fade-up delay-2">
+          <div class="avatar">FM</div>
+          <h4>Farid Abobacar</h4>
+          <div class="role"><i class="fas fa-tasks"></i> <span data-i18n="idx.role.coo">COO · Sócio-Gerente</span></div>
+        </div>
+        <div class="team-card fade-up delay-3">
+          <div class="avatar">LJ</div>
+          <h4>Lut Jalilo</h4>
+          <div class="role"><i class="fas fa-code"></i> <span data-i18n="idx.role.cto">CTO · Sócio</span></div>
+        </div>
+        <div class="team-card fade-up delay-1">
+          <div class="avatar">VP</div>
+          <h4>Vivaldo Patuá</h4>
+          <div class="role"><i class="fas fa-bullhorn"></i> <span data-i18n="idx.role.cmo">CMO · Sócio</span></div>
+        </div>
+        <div class="team-card fade-up delay-2">
+          <div class="avatar">RB</div>
+          <h4>Rikisha Bênesse</h4>
+          <div class="role"><i class="fas fa-clipboard-list"></i> <span data-i18n="idx.role.admin">Directora Administrativa · Sócia</span></div>
+        </div>
+        <div class="team-card fade-up delay-3">
+          <div class="avatar">LH</div>
+          <h4>Liston Hortensílio</h4>
+          <div class="role"><i class="fas fa-chart-pie"></i> <span data-i18n="idx.role.cfo">CFO · Sócio</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq" class="alt has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-question-circle"></i> <span data-i18n="faq.tag">FAQ</span></span>
+        <h2 class="section-title" data-i18n="faq.title">Perguntas Frequentes</h2>
+      </div>
+    </div></div>
+    <div class="container">
+      <div style="max-width:740px; margin:1.5rem auto 0;">
+        <div class="faq-search fade-up" style="margin-bottom:1.2rem;">
+          <input type="search" id="faqSearch" placeholder="Pesquisar pergunta…" data-i18n="faq.search" aria-label="Pesquisar pergunta" data-i18n-aria="faq.search">
+        </div>
+        <div id="faqList">
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q1">O que é a LERMO Recursos?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a1">A LERMO Recursos é uma plataforma moçambicana que conecta jovens, estudantes e empresas a oportunidades de estágio, emprego e intermediação empresarial.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q2">Quem pode utilizar a LERMO Recursos?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a2">Estudantes, recém-graduados, profissionais e empresas de todos os sectores, em Moçambique e noutros países.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q3">A LERMO oferece estágios?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a3">Sim, a LERMO facilita o acesso a estágios em empresas parceiras para estudantes e jovens.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q4">A LERMO ajuda no primeiro emprego?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a4">Sim, através da nossa plataforma, candidatos podem encontrar oportunidades de primeiro emprego.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q5">Empresas podem recrutar através da LERMO?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a5">Sim, as empresas podem publicar vagas e aceder a uma base de talentos qualificados.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q6">O que é o Marketplace Empresarial?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a6">É um espaço onde empresários e fornecedores se conectam para negócios e parcerias.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q8">Como posso contactar a LERMO?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a8">Através do formulário de contacto disponível nesta página.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q9b">Posso enviar o meu currículo?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a9b">Pode registar-se através do botão Registar e criar o seu perfil profissional na plataforma. Se preferir, pode também contactar-nos pelo formulário de contacto.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q9">Como posso ser parceiro da LERMO?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a9">Entre em contacto connosco através do formulário, seleccionando o assunto "Marketplace Empresarial e Parcerias".</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q10">A LERMO actua apenas em Nampula?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a10">Não. A actividade da sociedade é desenvolvida em todo o território de Moçambique, estando a plataforma aberta a candidatos e entidades de outros países.</p></div></div>
+        <div class="faq-item fade-up"><button type="button" class="faq-question" aria-expanded="false"><span data-i18n="faq.q11">Como uma empresa pode publicar uma oportunidade?</span><i class="fas fa-plus"></i></button><div class="faq-answer" role="region"><p data-i18n="faq.a11">Crie a sua conta de empresa através do botão Registar e publique as suas oportunidades na plataforma. Se preferir, contacte-nos pelo formulário de contacto.</p></div></div>
+        <p id="faqEmpty" class="faq-empty" data-i18n="faq.empty" role="status">Nenhuma pergunta corresponde à sua pesquisa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACTOS ===== -->
+  <section id="contactos" class="has-banner">
+    <div class="page-banner"><div class="container">
+      <div class="fade-up">
+        <span class="section-tag"><i class="fas fa-envelope"></i> <span data-i18n="contact.tag">Contactos</span></span>
+        <h2 class="section-title" data-i18n="contact.title">Entre em Contacto</h2>
+      </div>
+    </div></div>
+    <div class="container">
+      <div class="grid-2 mt-2">
+        <div class="contact-info">
+          <div class="contact-item fade-up"><span class="ci" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span><div><strong data-i18n="contact.address">Morada</strong><span class="text-muted" data-i18n="idx.addressText">Campus da UniRovuma, Bairro Napipine, Bloco-C, Nampula, Moçambique</span></div></div>
+          <div class="contact-item fade-up"><span class="ci" aria-hidden="true"><i class="fas fa-building-columns"></i></span><div><strong data-i18n="contact.nature">Natureza</strong><span class="text-muted" data-i18n="contact.natureText">Sociedade por Quotas de Responsabilidade Limitada</span></div></div>
+          <div class="contact-item fade-up"><span class="ci" aria-hidden="true"><i class="fas fa-clock"></i></span><div><strong data-i18n="contact.hours">Horário</strong><span class="text-muted" data-i18n="contact.hoursText">Segunda a Sexta, 08:00 – 17:00</span></div></div>
+        </div>
+        <div class="form-panel fade-up">
+          <form id="contactForm" novalidate>
+            <div class="form-group"><label for="nome"><span data-i18n="form.name">Nome</span> <span class="required">*</span></label><input type="text" id="nome" required /></div>
+            <div class="form-group"><label for="email"><span data-i18n="form.email">Email</span> <span class="required">*</span></label><input type="email" id="email" required /></div>
+            <div class="form-group"><label for="telefone"><span data-i18n="form.phone">Telefone</span></label><input type="tel" id="telefone" /></div>
+            <div class="form-group"><label for="assunto"><span data-i18n="form.subject">Assunto</span> <span class="required">*</span></label>
+              <select id="assunto" required>
+                <option value="" data-i18n="form.select">Seleccione um assunto</option>
+                <option data-i18n="form.sub1">Estágios e Primeiro Emprego</option>
+                <option data-i18n="form.sub2">Recrutamento para Empresas</option>
+                <option data-i18n="form.sub3">Marketplace Empresarial e Parcerias</option>
+                <option data-i18n="form.sub4">Consultoria em Empregabilidade</option>
+                <option data-i18n="form.sub5">Imprensa e Comunicação</option>
+                <option value="outro" data-i18n="form.sub6">Outro assunto</option>
+              </select>
+            </div>
+            <div class="form-group" id="outroAssuntoGroup" style="display:none;"><label for="outroAssunto"><span data-i18n="form.specify">Especifique o assunto</span> <span class="required">*</span></label><input type="text" id="outroAssunto" /></div>
+            <div class="form-group"><label for="mensagem"><span data-i18n="form.message">Mensagem</span> <span class="required">*</span></label><textarea id="mensagem" rows="3" maxlength="1000" required></textarea><div class="char-count"><span id="charCount">0</span> / 1000</div></div>
+            <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="consent" required /><label for="consent"><span data-i18n="form.consent">Concordo com o tratamento dos meus dados para efeitos de contacto.</span> <span class="required">*</span></label></div></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> <span data-i18n="form.send">Enviar mensagem</span></button>
+            <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta-final" aria-labelledby="ctaTitle">
+    <div class="container fade-up">
+      <h2 id="ctaTitle" data-i18n="cta.title">A próxima oportunidade pode começar aqui.</h2>
+      <p data-i18n="cta.desc">Seja candidato, empresa ou parceiro. Faça parte da rede LERMO Recursos.</p>
+      <div class="cta-actions">
+        <a href="registo.html?tipo=candidato" th:href="@{/registo(tipo='candidato')}" class="btn btn-primary"><i class="fas fa-arrow-right"></i> <span data-i18n="cta.btn1">Encontrar Oportunidades</span></a>
+        <a href="#contactos" class="btn btn-outline"><i class="fas fa-envelope"></i> <span data-i18n="cta.btn2">Entrar em Contacto</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="grid-4">
+        <div>
+          <h4>LERMO Recursos</h4>
+          <p style="font-size:0.8rem; opacity:0.5;" data-i18n="footer.desc">Conectamos talento a oportunidades em Moçambique.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div><h4 data-i18n="footer.company">Empresa</h4><ul><li><a href="#sobre" data-i18n="footer.about">Sobre</a></li><li><a href="#sobre" data-i18n="footer.mission">Missão</a></li><li><a href="#sobre" data-i18n="footer.vision">Visão</a></li><li><a href="#equipa" data-i18n="footer.team">Equipa</a></li></ul></div>
+        <div><h4 data-i18n="footer.opportunities">Oportunidades</h4><ul><li><a href="oportunidades.html?tipo=estagio" data-i18n="footer.internships">Estágios</a></li><li><a href="oportunidades.html?cat=vaga" data-i18n="footer.firstjob">Primeiro Emprego</a></li><li><a href="oportunidades.html?tipo=emprego_efectivo" data-i18n="footer.jobs">Emprego</a></li><li><a href="registo.html?tipo=empresa" th:href="@{/registo(tipo='empresa')}" data-i18n="footer.companies">Empresas</a></li></ul></div>
+        <div><h4 data-i18n="footer.support">Suporte</h4><ul><li><a href="#faq" data-i18n="footer.faq">FAQ</a></li><li><a href="#contactos" data-i18n="footer.contact">Contactos</a></li><li><a href="legal.html#privacidade" th:href="@{/legal#privacidade}" data-i18n="footer.privacy">Privacidade</a></li><li><a href="legal.html#termos" th:href="@{/legal#termos}" data-i18n="footer.terms">Termos</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 LERMO Recursos</span>
+        <span data-i18n="op.footerCity">Nampula, Moçambique</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== BACK TO TOP ===== -->
+  <button id="backToTop" aria-label="Voltar ao topo" data-i18n-aria="op.top"><i class="fas fa-arrow-up"></i></button>
+
+  <!-- ===== LOGIN (painel sobreposto) ===== -->
+  <div class="lm-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle" aria-hidden="true">
+    <div class="lm-box">
+      <button type="button" class="lm-close" id="loginClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="loginTitle" data-i18n="login.title">Entrar</h2>
+      <p class="lm-sub" data-i18n="login.sub">Aceda à sua conta LERMO Recursos.</p>
+      <div class="lm-scroll">
+
+      <!-- Spring: th:if="${param.error}" mostra o erro de autenticação -->
+      <!-- Após registo: o servidor redirecciona para /?registo=ok e mostra esta mensagem -->
+      <div class="lm-alert ok" id="loginOk" role="status" th:classappend="${param.registo} ? 'show'">
+        <i class="fas fa-circle-check" aria-hidden="true"></i><span data-i18n="login.registered">Conta criada com sucesso! Entre com as suas credenciais.</span>
+      </div>
+      <div class="lm-alert ok" id="loginPwOk" role="status">
+        <i class="fas fa-circle-check" aria-hidden="true"></i><span data-i18n="login.pwChanged">Senha alterada com sucesso! Entre com a nova senha.</span>
+      </div>
+      <div class="lm-alert" id="loginAlert" role="alert" th:classappend="${param.error} ? 'show'">
+        <i class="fas fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="login.error">Email ou senha incorrectos.</span>
+      </div>
+
+      <!-- Spring Security form-login: POST /login com username (email) e password; CSRF automático com th:action -->
+      <form id="loginForm" method="post" action="/login" th:action="@{/login}" novalidate>
+        <div class="lm-field">
+          <input type="email" id="loginEmail" name="username" placeholder=" " autocomplete="username" inputmode="email" required aria-describedby="loginEmailErr" />
+          <label for="loginEmail" data-i18n="login.email">Email</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+          <div class="lm-err" id="loginEmailErr" data-i18n="login.emailErr">Introduza um email válido.</div>
+        </div>
+
+        <div class="lm-field">
+          <input type="password" id="loginPass" name="password" class="has-toggle" placeholder=" " autocomplete="current-password" required aria-describedby="loginPassErr" />
+          <label for="loginPass" data-i18n="login.password">Senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <button type="button" class="lm-toggle" id="loginToggle" aria-label="Mostrar senha" aria-pressed="false" data-i18n-aria="login.show"><i class="fas fa-eye" aria-hidden="true"></i></button>
+          <div class="lm-err" id="loginPassErr" data-i18n="login.passErr">Introduza a sua senha.</div>
+        </div>
+
+        <div class="lm-row">
+          <label class="lm-check"><input type="checkbox" name="remember-me" /> <span data-i18n="login.remember">Manter sessão iniciada</span></label>
+          <a href="recuperar-senha.html" th:href="@{/recuperar-senha}" class="lm-link" data-i18n="login.forgot">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit" class="lm-submit" id="loginSubmit"><span data-i18n="login.submit">Entrar</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+
+      <p class="lm-switch"><span data-i18n="login.noAccount">Ainda não tem conta?</span> <a href="registo.html" th:href="@{/registo}" class="lm-link" data-i18n="login.register">Registar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REGISTO (painel sobreposto) ===== -->
+  <div class="lm-modal" id="regModal" role="dialog" aria-modal="true" aria-labelledby="regTitle" aria-hidden="true">
+    <div class="lm-box lm-wide">
+      <button type="button" class="lm-close" id="regClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="regTitle" data-i18n="reg.title">Criar conta</h2>
+      <p class="lm-sub" data-i18n="reg.sub">Junte-se à LERMO Recursos em poucos passos.</p>
+      <div class="lm-scroll">
+
+      <!-- Spring: th:if mostra erros devolvidos pelo controlador -->
+      <div class="lm-alert" id="regAlert" role="alert" th:classappend="${param.regError} ? 'show'">
+        <i class="fas fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="reg.error">Não foi possível criar a conta. Verifique os dados e tente novamente.</span>
+      </div>
+
+      <!-- Spring MVC: POST /registo (CSRF automático com th:action). Os "name" correspondem às colunas de utilizadores/empresas. -->
+      <form id="regForm" method="post" action="/registo" th:action="@{/registo}" novalidate>
+        <div class="lm-seg" role="radiogroup" aria-label="Tipo de conta" data-i18n-aria="reg.accountType">
+          <input type="radio" name="tipo" id="regTipoCand" value="candidato" checked />
+          <label for="regTipoCand"><i class="fas fa-user-graduate" aria-hidden="true"></i> <span data-i18n="reg.candidate">Candidato</span></label>
+          <input type="radio" name="tipo" id="regTipoEmp" value="empresa" />
+          <label for="regTipoEmp"><i class="fas fa-building" aria-hidden="true"></i> <span data-i18n="reg.company">Empresa</span></label>
+        </div>
+
+        <div class="lm-grid2">
+          <div class="lm-field" id="regNomeField">
+            <input type="text" id="regNome" name="nomeCompleto" placeholder=" " autocomplete="name" maxlength="150" required aria-describedby="regNomeErr" />
+            <label for="regNome" id="regNomeLabel" data-i18n="reg.name">Nome completo</label>
+            <span class="lm-lead" aria-hidden="true"><i class="fas fa-user"></i></span>
+            <div class="lm-err" id="regNomeErr" data-i18n="reg.nameErr">Introduza o seu nome completo.</div>
+          </div>
+          <div class="lm-field">
+            <input type="email" id="regEmail" name="email" placeholder=" " autocomplete="email" inputmode="email" maxlength="255" required aria-describedby="regEmailErr" />
+            <label for="regEmail" data-i18n="reg.email">Email</label>
+            <span class="lm-lead" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+            <div class="lm-err" id="regEmailErr" data-i18n="reg.emailErr">Introduza um email válido.</div>
+          </div>
+        </div>
+
+        <div class="lm-company" id="regCompany">
+            <div class="lm-field">
+              <input type="text" id="regEmpresa" name="nomeEmpresa" placeholder=" " autocomplete="organization" maxlength="200" aria-describedby="regEmpresaErr" />
+              <label for="regEmpresa" data-i18n="reg.companyName">Nome da empresa</label>
+              <span class="lm-lead" aria-hidden="true"><i class="fas fa-building"></i></span>
+              <div class="lm-err" id="regEmpresaErr" data-i18n="reg.companyErr">Introduza o nome da empresa.</div>
+            </div>
+        </div>
+
+        <!-- País (pais_id ISO) + indicativo (paises.codigo_telefone) + número; o servidor recebe telefone completo (ex.: +258841234567) -->
+        <div class="lm-phone">
+          <div class="lm-cc-wrap">
+            <button type="button" class="lm-cc" id="regCcBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="regCcList" aria-label="País e indicativo" data-i18n-aria="reg.ccAria"><span class="lm-flag-slot"></span><span class="lm-dial"></span><i class="fas fa-chevron-down lm-caret" aria-hidden="true"></i></button>
+            <ul class="lm-cc-list" id="regCcList" role="listbox" aria-label="País e indicativo" data-i18n-aria="reg.ccAria"></ul>
+            <input type="hidden" id="regCc" name="paisId" value="MZ" />
+          </div>
+          <div class="lm-field">
+            <input type="tel" id="regTel" name="telefoneNacional" placeholder=" " autocomplete="tel-national" inputmode="tel" maxlength="16" required aria-describedby="regTelErr" />
+            <label for="regTel" data-i18n="reg.phone">Telefone</label>
+            <span class="lm-lead" aria-hidden="true"><i class="fas fa-phone"></i></span>
+            <div class="lm-err" id="regTelErr" data-i18n="reg.phoneErr">Introduza um número válido (6 a 12 dígitos).</div>
+          </div>
+        </div>
+        <input type="hidden" id="regTelFull" name="telefone" />
+
+        <div class="lm-company" id="regFiscalBlock">
+            <!-- País = Moçambique → NUIT (9 dígitos); outro país → identificação fiscal estrangeira (Tax ID / VAT) -->
+            <div class="lm-field">
+              <input type="text" id="regFiscal" name="identificacaoFiscal" placeholder=" " maxlength="20" aria-describedby="regFiscalErr" />
+              <label for="regFiscal" id="regFiscalLabel" data-i18n="reg.nuit">NUIT</label>
+              <span class="lm-lead" aria-hidden="true"><i class="fas fa-id-card"></i></span>
+              <div class="lm-err" id="regFiscalErr" data-i18n="reg.nuitErr">O NUIT deve ter 9 dígitos.</div>
+              <input type="hidden" id="regTipoId" name="tipoIdentificacao" value="NUIT" />
+            </div>
+        </div>
+
+        <div class="lm-field">
+          <input type="password" id="regPass" name="password" class="has-toggle" placeholder=" " autocomplete="new-password" minlength="8" required aria-describedby="regPassErr regPassHint" />
+          <label for="regPass" data-i18n="reg.password">Senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <button type="button" class="lm-toggle" id="regToggle" aria-label="Mostrar senha" aria-pressed="false" data-i18n-aria="login.show"><i class="fas fa-eye" aria-hidden="true"></i></button>
+          <div class="lm-meter" aria-hidden="true"><i id="regMeterBar"></i></div>
+          <div class="lm-meter-txt" id="regPassHint" aria-live="polite"></div>
+          <div class="lm-err" id="regPassErr" data-i18n="reg.passErr">A senha deve ter pelo menos 8 caracteres, com letras e números.</div>
+        </div>
+
+        <div class="lm-terms" id="regTermsWrap">
+          <label class="lm-check"><input type="checkbox" id="regTerms" name="aceitaTermos" required /> <span data-i18n-html="reg.termsHtml">Li e aceito os <a href="legal.html#termos" th:href="@{/legal#termos}" target="_blank" rel="noopener">Termos de Utilização</a> e a <a href="legal.html#privacidade" th:href="@{/legal#privacidade}" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+          <div class="lm-err" data-i18n="reg.termsErr">Precisa de aceitar os termos para continuar.</div>
+        </div>
+
+        <button type="submit" class="lm-submit" id="regSubmit"><span data-i18n="reg.submit">Criar conta</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+
+      <p class="lm-switch"><span data-i18n="reg.haveAccount">Já tem conta?</span> <a href="login.html" th:href="@{/login}" class="lm-link" data-i18n="reg.login">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lm-modal" id="fpModal" role="dialog" aria-modal="true" aria-labelledby="fpTitle" aria-hidden="true">
+    <div class="lm-box">
+      <button type="button" class="lm-close" id="fpClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="fpTitle" data-i18n="fp.title">Recuperar senha</h2>
+      <p class="lm-sub" data-i18n="fp.sub">Introduza o email da sua conta e enviamos um link para definir uma nova senha.</p>
+      <div class="lm-scroll">
+      <div class="lm-alert ok" id="fpSent" role="status">
+        <i class="fas fa-circle-check" aria-hidden="true"></i><span data-i18n="fp.sent">Se existir uma conta com este email, enviámos um link para definir uma nova senha.</span>
+      </div>
+      <form id="fpForm" method="post" action="/recuperar-senha" th:action="@{/recuperar-senha}" novalidate>
+        <div class="lm-field">
+          <input type="email" id="fpEmail" name="email" placeholder=" " autocomplete="email" inputmode="email" maxlength="255" required aria-describedby="fpEmailErr" />
+          <label for="fpEmail" data-i18n="login.email">Email</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+          <div class="lm-err" id="fpEmailErr" data-i18n="login.emailErr">Introduza um email válido.</div>
+        </div>
+        <button type="submit" class="lm-submit" id="fpSubmit"><span data-i18n="fp.submit">Enviar link</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+      <p class="lm-switch"><span data-i18n="fp.remember">Lembrou-se da senha?</span> <a href="login.html" th:href="@{/login}" class="lm-link" data-i18n="reg.login">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NOVA SENHA (painel sobreposto; abre com ?token=... ou #redefinir-senha) ===== -->
+  <div class="lm-modal" id="rpModal" role="dialog" aria-modal="true" aria-labelledby="rpTitle" aria-hidden="true">
+    <div class="lm-box">
+      <button type="button" class="lm-close" id="rpClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="rpTitle" data-i18n="rp.title">Definir nova senha</h2>
+      <p class="lm-sub" data-i18n="rp.sub">Escolha uma nova senha para a sua conta.</p>
+      <div class="lm-scroll">
+      <div class="lm-alert" id="rpInvalid" role="alert">
+        <i class="fas fa-circle-exclamation" aria-hidden="true"></i><span><span data-i18n="rp.invalid">Este link é inválido ou expirou.</span> <a href="recuperar-senha.html" th:href="@{/recuperar-senha}" class="lm-link" data-i18n="rp.request">Pedir novo link</a></span>
+      </div>
+      <form id="rpForm" method="post" action="/redefinir-senha" th:action="@{/redefinir-senha}" novalidate>
+        <input type="hidden" id="rpToken" name="token" th:value="${param.token}" />
+        <div class="lm-field">
+          <input type="password" id="rpPass" name="password" class="has-toggle" placeholder=" " autocomplete="new-password" minlength="8" required aria-describedby="rpPassErr rpPassHint" />
+          <label for="rpPass" data-i18n="rp.password">Nova senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <button type="button" class="lm-toggle" id="rpToggle" aria-label="Mostrar senha" aria-pressed="false" data-i18n-aria="login.show"><i class="fas fa-eye" aria-hidden="true"></i></button>
+          <div class="lm-meter" aria-hidden="true"><i id="rpMeterBar"></i></div>
+          <div class="lm-meter-txt" id="rpPassHint" aria-live="polite"></div>
+          <div class="lm-err" id="rpPassErr" data-i18n="reg.passErr">A senha deve ter pelo menos 8 caracteres, com letras e números.</div>
+        </div>
+        <div class="lm-field">
+          <input type="password" id="rpPass2" name="confirmarPassword" placeholder=" " autocomplete="new-password" required aria-describedby="rpPass2Err" />
+          <label for="rpPass2" data-i18n="rp.password2">Confirmar nova senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <div class="lm-err" id="rpPass2Err" data-i18n="rp.pass2Err">As senhas não coincidem.</div>
+        </div>
+        <button type="submit" class="lm-submit" id="rpSubmit"><span data-i18n="rp.submit">Guardar nova senha</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+      <p class="lm-switch"><span data-i18n="fp.remember">Lembrou-se da senha?</span> <a href="login.html" th:href="@{/login}" class="lm-link" data-i18n="reg.login">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="js/paises.js"></script>
+  <script src="js/i18n.js" th:src="@{/js/i18n.js}"></script>
+<script src="js/index.js"></script>
+<script src="js/index-cards.js"></script>
+</body>
+</html>

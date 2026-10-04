@@ -1,0 +1,990 @@
+(function() {
+  'use strict';
+
+  // ===== TRANSLATIONS =====
+  const translations = {
+    pt: {
+      'nav.login': 'Entrar',
+      'login.title': 'Entrar', 'login.sub': 'Aceda à sua conta LERMO Recursos.', 'login.email': 'Email', 'login.password': 'Senha',
+      'login.emailErr': 'Introduza um email válido.', 'login.passErr': 'Introduza a sua senha.', 'login.remember': 'Manter sessão iniciada', 'login.forgot': 'Esqueceu a senha?', 'login.pwChanged': 'Senha alterada com sucesso! Entre com a nova senha.', 'fp.title': 'Recuperar senha', 'fp.sub': 'Introduza o email da sua conta e enviamos um link para definir uma nova senha.', 'fp.submit': 'Enviar link', 'fp.sent': 'Se existir uma conta com este email, enviámos um link para definir uma nova senha.', 'fp.remember': 'Lembrou-se da senha?', 'rp.title': 'Definir nova senha', 'rp.sub': 'Escolha uma nova senha para a sua conta.', 'rp.password': 'Nova senha', 'rp.password2': 'Confirmar nova senha', 'rp.pass2Err': 'As senhas não coincidem.', 'rp.submit': 'Guardar nova senha', 'rp.invalid': 'Este link é inválido ou expirou.', 'rp.request': 'Pedir novo link',
+      'login.submit': 'Entrar', 'login.error': 'Email ou senha incorrectos.', 'login.noAccount': 'Ainda não tem conta?', 'login.register': 'Registar', 'login.show': 'Mostrar senha', 'login.hide': 'Ocultar senha', 'login.close': 'Fechar', 'login.registered': 'Conta criada com sucesso! Entre com as suas credenciais.',
+      'reg.title': 'Criar conta', 'reg.sub': 'Junte-se à LERMO Recursos em poucos passos.', 'reg.candidate': 'Candidato', 'reg.company': 'Empresa',
+      'reg.name': 'Nome completo', 'reg.nameErr': 'Introduza o seu nome completo.', 'reg.companyName': 'Nome da empresa', 'reg.companyErr': 'Introduza o nome da empresa.', 'reg.nuit': 'NUIT', 'reg.nuitErr': 'O NUIT deve ter 9 dígitos.', 'reg.taxId': 'Identificação fiscal (Tax ID / VAT)', 'reg.taxIdErr': 'Introduza um identificador fiscal válido (5 a 20 caracteres).',
+      'reg.email': 'Email', 'reg.emailErr': 'Introduza um email válido.', 'reg.phone': 'Telefone', 'reg.phoneErr': 'Introduza um número válido (6 a 12 dígitos).',
+      'reg.password': 'Senha', 'reg.passErr': 'A senha deve ter pelo menos 8 caracteres, com letras e números.', 'reg.password2': 'Confirmar senha', 'reg.pass2Err': 'As senhas não coincidem.',
+      'reg.terms': 'Li e aceito os Termos de Utilização e a Política de Privacidade.', 'reg.termsErr': 'Precisa de aceitar os termos para continuar.', 'reg.submit': 'Criar conta',
+      'reg.haveAccount': 'Já tem conta?', 'reg.login': 'Entrar', 'reg.error': 'Não foi possível criar a conta. Verifique os dados e tente novamente.',
+      'meter.0': '', 'meter.1': 'Senha fraca', 'meter.2': 'Senha razoável', 'meter.3': 'Senha boa', 'meter.4': 'Senha forte',
+      'nav.register': 'Registar',
+      'how.c1d': 'O candidato cria e completa o seu perfil profissional.',
+      'how.c2d': 'O candidato pesquisa oportunidades adequadas ao seu perfil.',
+      'how.c3d': 'O candidato submete a sua candidatura às oportunidades disponíveis.',
+      'how.c4d': 'O candidato acompanha o estado das suas candidaturas.',
+      'how.e1d': 'A empresa regista-se e cria a sua conta na plataforma.',
+      'how.e2d': 'A empresa publica as vagas e oportunidades que pretende preencher.',
+      'how.e3d': 'A empresa procura talentos qualificados para as suas vagas.',
+      'how.e4d': 'A empresa gere as candidaturas recebidas e o seu estado.',
+      'platform.tag': 'Plataforma',
+      'platform.p1': 'Criar perfil, encontrar oportunidades, candidatar-se e acompanhar candidaturas.',
+      'platform.p2': 'Criar conta, publicar oportunidades, encontrar talentos e gerir candidaturas.',
+      'faq.search': 'Pesquisar pergunta…',
+      'faq.empty': 'Nenhuma pergunta corresponde à sua pesquisa.',
+      'loader.text': 'A preparar oportunidades...',
+      'nav.home': 'Início',
+      'nav.about': 'Sobre Nós',
+      'nav.opportunities': 'Oportunidades',
+      'nav.services': 'Serviços',
+      'nav.how': 'Como Funciona',
+      'nav.contact': 'Contactos',
+      'hero.line1': 'Transformamos',
+      'hero.line2': 'talento',
+      'hero.line3': 'em',
+      'hero.line4': 'oportunidades',
+      'hero.line5': '.',
+      'hero.sub': 'A LERMO Recursos conecta estudantes, jovens e empresas a oportunidades de estágio, emprego, formação e empreendedorismo em Moçambique.',
+      'hero.cta1': 'Encontrar Oportunidades',
+      'hero.cta2': 'Sou Empresa',
+      'hero.quote': 'Quando a vida te dá limões, o LERMO dá-te oportunidades.',
+      'about.tag': 'Sobre a LERMO',
+      'about.title': 'Conectamos pessoas e empresas',
+      'about.desc': 'A LERMO Recursos é uma plataforma moçambicana que liga talento jovem a oportunidades reais de estágio, emprego, formação profissional e empreendedorismo, com acesso a financiamento.',
+      'about.card1.title': 'Jovens',
+      'about.card1.desc': 'Estágios, primeiro emprego, oportunidades e desenvolvimento profissional para estudantes e recém-graduados.',
+      'about.card2.title': 'Empresas',
+      'about.card2.desc': 'Recrutamento, acesso a talentos, fornecedores e soluções empresariais para fortalecer o seu negócio.',
+      'about.card3.title': 'Parceiros',
+      'about.card3.desc': 'Parcerias estratégicas, eventos e desenvolvimento de negócios para impulsionar o ecossistema empresarial.',
+      'about.mission.title': 'Missão',
+      'about.mission.desc': 'Conectar estudantes e jovens moçambicanos ao mercado de trabalho, facilitando o acesso a estágios e ao primeiro emprego, e aproximar empresários de fornecedores de produtos e serviços, contribuindo para o dinamismo do tecido empresarial nacional.',
+      'about.vision.title': 'Visão',
+      'about.vision.desc': 'Ser a plataforma de referência em Moçambique na ligação entre talento jovem e oportunidades empresariais, reduzindo o desemprego juvenil e fortalecendo as redes de negócio locais.',
+      'values.tag': 'Valores',
+      'values.v1': 'Empregabilidade Jovem e Inclusão',
+      'values.v1d': 'Criar linhas de acesso reais ao primeiro emprego.',
+      'values.v2': 'Transparência e Confiança',
+      'values.v2d': 'Relações claras entre candidatos, empresas e parceiros.',
+      'values.v3': 'Inovação e Proximidade Digital',
+      'values.v3d': 'Soluções digitais construídas com responsabilidade.',
+      'values.v4': 'Espírito Empreendedor',
+      'values.v4d': 'Incentivo ao dinamismo do tecido empresarial nacional.',
+      'values.v5': 'Responsabilidade Social',
+      'values.v5d': 'Compromisso com o impacto social e económico do país.',
+      'innovation.tag': 'O nosso compromisso',
+      'innovation.title': 'Inovação & Excelência',
+      'innovation.desc': 'Na LERMO Recursos, acreditamos que tecnologia, talento e proximidade podem transformar a forma como pessoas e empresas encontram oportunidades. Trabalhamos para construir soluções eficientes, acessíveis e orientadas para a melhoria contínua.',
+      'innovation.i1': 'Inovação',
+      'innovation.i2': 'Tecnologia',
+      'innovation.i3': 'Qualidade',
+      'innovation.i4': 'Melhoria Contínua',
+      'opportunities.tag': 'Oportunidades',
+      'opportunities.title': 'Encontre a sua próxima oportunidade',
+      'opportunities.desc': 'Explore as categorias disponíveis e dê o próximo passo na sua carreira.',
+      'opp.1': 'Estágios',
+      'opp.1d': 'Para estudantes e jovens que procuram experiência profissional.',
+      'opp.2': 'Primeiro Emprego',
+      'opp.2d': 'Para jovens que procuram iniciar a carreira.',
+      'opp.3': 'Emprego Efectivo',
+      'opp.3d': 'Contratos sem termo para profissionais que procuram uma nova oportunidade.',
+      'opp.4': 'Trainee',
+      'opp.4d': 'Programas de trainee para acelerar o desenvolvimento de talento.',
+      'opp.5': 'Freelance',
+      'opp.5d': 'Trabalho autónomo ou por projecto, com flexibilidade.',
+      'opp.6': 'Desenvolvimento Profissional',
+      'opp.6d': 'Formação, orientação e crescimento contínuo.',
+      'opportunities.cta': 'Explorar Oportunidades',
+      'services.tag': 'Serviços',
+      'services.title': 'O que fazemos',
+      'services.s1': 'Recrutamento e Selecção',
+      'services.s1d': 'Ligação entre candidatos e empresas com processos rigorosos e personalizados.',
+      'services.s2': 'Plataforma Digital',
+      'services.s2d': 'Gestão de intermediação de emprego e serviços empresariais via web e app.',
+      'services.s3': 'Marketplace Empresarial',
+      'services.s3d': 'Intermediação comercial entre empresários e fornecedores de produtos e serviços.',
+      'services.s4': 'Consultoria em Empregabilidade',
+      'services.s4d': 'Orientação profissional e desenvolvimento de talento jovem.',
+      'services.s5': 'Eventos e Feiras de Emprego',
+      'services.s5d': 'Organização de acções de ligação entre instituições de ensino e o mercado.',
+      'services.s6': 'Formação e Certificação',
+      'services.s6d': 'Programas de formação técnica, profissionalizante e de soft skills, com turmas nos distritos e certificação.',
+      'services.s7': 'Empreendedorismo e Financiamento',
+      'services.s7d': 'Mentoria para projectos de empreendedorismo e acesso a linhas de financiamento para jovens empreendedores.',
+      'how.tag': 'Como Funciona',
+      'how.title': 'Passo a passo',
+      'how.candidate': 'Para Candidatos',
+      'how.c1': 'Criar perfil',
+      'how.c2': 'Encontrar oportunidades',
+      'how.c3': 'Candidatar-se',
+      'how.c4': 'Acompanhar candidatura',
+      'how.company': 'Para Empresas',
+      'how.e1': 'Criar conta',
+      'how.e2': 'Publicar oportunidade',
+      'how.e3': 'Encontrar talentos',
+      'how.e4': 'Gerir candidaturas',
+      'platform.title': 'Plataforma Digital de Recrutamento',
+      'platform.desc': 'Gestão de intermediação de emprego e serviços empresariais via web e app, a ligar estudantes, jovens e empresas moçambicanas.',
+      'team.tag': 'Equipa',
+      'team.title': 'Nossa Equipa',
+      'team.desc': 'Conheça os membros da direcção da LERMO Recursos.',
+      'faq.tag': 'FAQ',
+      'faq.title': 'Perguntas Frequentes',
+      'faq.q1': 'O que é a LERMO Recursos?',
+      'faq.a1': 'A LERMO Recursos é uma plataforma moçambicana que conecta jovens, estudantes e empresas a oportunidades de estágio, emprego, formação profissional, empreendedorismo e financiamento.',
+      'faq.q2': 'Quem pode utilizar a LERMO Recursos?',
+      'faq.a2': 'Estudantes, recém-graduados, profissionais e empresas de todos os sectores, em Moçambique e noutros países.',
+      'faq.q3': 'A LERMO oferece estágios?',
+      'faq.a3': 'Sim, a LERMO facilita o acesso a estágios em empresas parceiras para estudantes e jovens.',
+      'faq.q4': 'A LERMO ajuda no primeiro emprego?',
+      'faq.a4': 'Sim, através da nossa plataforma, candidatos podem encontrar oportunidades de primeiro emprego.',
+      'faq.q5': 'Empresas podem recrutar através da LERMO?',
+      'faq.a5': 'Sim, as empresas podem publicar vagas e aceder a uma base de talentos qualificados.',
+      'faq.q6': 'O que é o Marketplace Empresarial?',
+      'faq.a6': 'É um espaço onde empresários e fornecedores se conectam para negócios e parcerias.',
+      'faq.q8': 'Como posso contactar a LERMO?',
+      'faq.a8': 'Através do formulário de contacto disponível nesta página.',
+      'faq.q9b': 'Posso enviar o meu currículo?',
+      'faq.a9b': 'Pode registar-se através do botão Registar e criar o seu perfil profissional na plataforma. Se preferir, pode também contactar-nos pelo formulário de contacto.',
+      'faq.q9': 'Como posso ser parceiro da LERMO?',
+      'faq.a9': 'Entre em contacto connosco através do formulário, seleccionando o assunto "Marketplace Empresarial e Parcerias".',
+      'faq.q10': 'A LERMO actua apenas em Nampula?',
+      'faq.a10': 'Não. A actividade da sociedade é desenvolvida em todo o território de Moçambique, estando a plataforma aberta a candidatos e entidades de outros países.',
+      'faq.q11': 'Como uma empresa pode publicar uma oportunidade?',
+      'faq.a11': 'Crie a sua conta de empresa através do botão Registar e publique as suas oportunidades na plataforma. Se preferir, contacte-nos pelo formulário de contacto.',
+      'contact.tag': 'Contactos',
+      'contact.title': 'Entre em Contacto',
+      'contact.address': 'Morada',
+      'contact.nature': 'Natureza',
+      'contact.natureText': 'Sociedade por Quotas de Responsabilidade Limitada',
+      'contact.hours': 'Horário',
+      'contact.hoursText': 'Segunda a Sexta, 08:00 – 17:00',
+      'form.name': 'Nome',
+      'form.email': 'Email',
+      'form.phone': 'Telefone',
+      'form.subject': 'Assunto',
+      'form.select': 'Seleccione um assunto',
+      'form.sub1': 'Estágios e Primeiro Emprego',
+      'form.sub2': 'Recrutamento para Empresas',
+      'form.sub3': 'Marketplace Empresarial e Parcerias',
+      'form.sub4': 'Consultoria em Empregabilidade',
+      'form.sub5': 'Imprensa e Comunicação',
+      'form.sub6': 'Outro assunto',
+      'form.specify': 'Especifique o assunto',
+      'form.message': 'Mensagem',
+      'form.consent': 'Concordo com o tratamento dos meus dados para efeitos de contacto.',
+      'form.send': 'Enviar mensagem',
+      'cta.title': 'A próxima oportunidade pode começar aqui.',
+      'cta.desc': 'Seja candidato, empresa ou parceiro. Faça parte da rede LERMO Recursos.',
+      'cta.btn1': 'Encontrar Oportunidades',
+      'cta.btn2': 'Entrar em Contacto',
+      'footer.desc': 'Conectamos talento a oportunidades em Moçambique.',
+      'footer.company': 'Empresa',
+      'footer.about': 'Sobre',
+      'footer.mission': 'Missão',
+      'footer.vision': 'Visão',
+      'footer.team': 'Equipa',
+      'footer.opportunities': 'Oportunidades',
+      'footer.internships': 'Estágios',
+      'footer.firstjob': 'Primeiro Emprego',
+      'footer.jobs': 'Emprego',
+      'footer.companies': 'Empresas',
+      'footer.support': 'Suporte',
+      'footer.faq': 'FAQ',
+      'footer.contact': 'Contactos',
+      'footer.privacy': 'Privacidade',
+      'footer.terms': 'Termos'
+    },
+    en: {
+      'nav.login': 'Log in',
+      'login.title': 'Log in', 'login.sub': 'Access your LERMO Recursos account.', 'login.email': 'Email', 'login.password': 'Password',
+      'login.emailErr': 'Enter a valid email.', 'login.passErr': 'Enter your password.', 'login.remember': 'Keep me signed in', 'login.forgot': 'Forgot your password?', 'login.pwChanged': 'Password changed successfully! Log in with your new password.', 'fp.title': 'Reset password', 'fp.sub': 'Enter your account email and we will send you a link to set a new password.', 'fp.submit': 'Send link', 'fp.sent': 'If an account exists for this email, we have sent a link to set a new password.', 'fp.remember': 'Remembered your password?', 'rp.title': 'Set a new password', 'rp.sub': 'Choose a new password for your account.', 'rp.password': 'New password', 'rp.password2': 'Confirm new password', 'rp.pass2Err': 'Passwords do not match.', 'rp.submit': 'Save new password', 'rp.invalid': 'This link is invalid or has expired.', 'rp.request': 'Request a new link',
+      'login.submit': 'Log in', 'login.error': 'Incorrect email or password.', 'login.noAccount': "Don't have an account yet?", 'login.register': 'Sign up', 'login.show': 'Show password', 'login.hide': 'Hide password', 'login.close': 'Close', 'login.registered': 'Account created successfully! Log in with your credentials.',
+      'reg.title': 'Create account', 'reg.sub': 'Join LERMO Recursos in a few steps.', 'reg.candidate': 'Candidate', 'reg.company': 'Company',
+      'reg.name': 'Full name', 'reg.nameErr': 'Enter your full name.', 'reg.companyName': 'Company name', 'reg.companyErr': 'Enter the company name.', 'reg.nuit': 'NUIT (tax ID)', 'reg.nuitErr': 'The NUIT must have 9 digits.', 'reg.taxId': 'Tax ID / VAT number', 'reg.taxIdErr': 'Enter a valid tax ID (5 to 20 characters).',
+      'reg.email': 'Email', 'reg.emailErr': 'Enter a valid email.', 'reg.phone': 'Phone', 'reg.phoneErr': 'Enter a valid number (6 to 12 digits).',
+      'reg.password': 'Password', 'reg.passErr': 'Password must be at least 8 characters, with letters and numbers.', 'reg.password2': 'Confirm password', 'reg.pass2Err': 'Passwords do not match.',
+      'reg.terms': 'I have read and accept the Terms of Use and the Privacy Policy.', 'reg.termsErr': 'You must accept the terms to continue.', 'reg.submit': 'Create account',
+      'reg.haveAccount': 'Already have an account?', 'reg.login': 'Log in', 'reg.error': 'Could not create the account. Check your details and try again.',
+      'meter.0': '', 'meter.1': 'Weak password', 'meter.2': 'Fair password', 'meter.3': 'Good password', 'meter.4': 'Strong password',
+      'nav.register': 'Sign up',
+      'how.c1d': 'Candidates create and complete their professional profile.',
+      'how.c2d': 'Candidates search for opportunities that fit their profile.',
+      'how.c3d': 'Candidates submit their application to available opportunities.',
+      'how.c4d': 'Candidates follow the status of their applications.',
+      'how.e1d': 'Companies sign up and create their account on the platform.',
+      'how.e2d': 'Companies post the vacancies and opportunities they want to fill.',
+      'how.e3d': 'Companies look for qualified talent for their vacancies.',
+      'how.e4d': 'Companies manage the applications received and their status.',
+      'platform.tag': 'Platform',
+      'platform.p1': 'Create a profile, find opportunities, apply and track applications.',
+      'platform.p2': 'Create an account, post opportunities, find talent and manage applications.',
+      'faq.search': 'Search a question…',
+      'faq.empty': 'No question matches your search.',
+      'loader.text': 'Preparing opportunities...',
+      'nav.home': 'Home',
+      'nav.about': 'About',
+      'nav.opportunities': 'Opportunities',
+      'nav.services': 'Services',
+      'nav.how': 'How It Works',
+      'nav.contact': 'Contact',
+      'hero.line1': 'We turn',
+      'hero.line2': 'talent',
+      'hero.line3': 'into',
+      'hero.line4': 'opportunities',
+      'hero.line5': '.',
+      'hero.sub': 'LERMO Recursos connects students, youth and companies to internship, employment, training and entrepreneurship opportunities in Mozambique.',
+      'hero.cta1': 'Find Opportunities',
+      'hero.cta2': 'I\'m a Company',
+      'hero.quote': 'When life gives you lemons, LERMO gives you opportunities.',
+      'about.tag': 'About LERMO',
+      'about.title': 'Connecting people and companies',
+      'about.desc': 'LERMO Recursos is a Mozambican platform that connects young talent to real internship, employment, professional training and entrepreneurship opportunities, with access to financing.',
+      'about.card1.title': 'Youth',
+      'about.card1.desc': 'Internships, first jobs, opportunities and professional development for students and recent graduates.',
+      'about.card2.title': 'Companies',
+      'about.card2.desc': 'Recruitment, access to talent, suppliers and business solutions to strengthen your company.',
+      'about.card3.title': 'Partners',
+      'about.card3.desc': 'Strategic partnerships, events and business development to boost the entrepreneurial ecosystem.',
+      'about.mission.title': 'Mission',
+      'about.mission.desc': 'Connect Mozambican students and youth to the job market, facilitating access to internships and first jobs, and bringing entrepreneurs closer to suppliers of products and services, contributing to the dynamism of the national business fabric.',
+      'about.vision.title': 'Vision',
+      'about.vision.desc': 'To be the reference platform in Mozambique connecting young talent to business opportunities, reducing youth unemployment and strengthening local business networks.',
+      'values.tag': 'Values',
+      'values.v1': 'Youth Employability and Inclusion',
+      'values.v1d': 'Creating real access lines to first jobs.',
+      'values.v2': 'Transparency and Trust',
+      'values.v2d': 'Clear relationships between candidates, companies and partners.',
+      'values.v3': 'Innovation and Digital Proximity',
+      'values.v3d': 'Digital solutions built with responsibility.',
+      'values.v4': 'Entrepreneurial Spirit',
+      'values.v4d': 'Encouraging the dynamism of the national business fabric.',
+      'values.v5': 'Social Responsibility',
+      'values.v5d': 'Commitment to the country\'s social and economic impact.',
+      'innovation.tag': 'Our commitment',
+      'innovation.title': 'Innovation & Excellence',
+      'innovation.desc': 'At LERMO Recursos, we believe that technology, talent and proximity can transform how people and companies find opportunities. We build efficient, accessible solutions oriented toward continuous improvement.',
+      'innovation.i1': 'Innovation',
+      'innovation.i2': 'Technology',
+      'innovation.i3': 'Quality',
+      'innovation.i4': 'Continuous Improvement',
+      'opportunities.tag': 'Opportunities',
+      'opportunities.title': 'Find your next opportunity',
+      'opportunities.desc': 'Explore the available categories and take the next step in your career.',
+      'opp.1': 'Internships',
+      'opp.1d': 'For students and youth seeking professional experience.',
+      'opp.2': 'First Job',
+      'opp.2d': 'For youth looking to start their career.',
+      'opp.3': 'Permanent Employment',
+      'opp.3d': 'Open-ended contracts for professionals seeking a new opportunity.',
+      'opp.4': 'Trainee',
+      'opp.4d': 'Trainee programs to accelerate talent development.',
+      'opp.5': 'Freelance',
+      'opp.5d': 'Self-employed or project-based work, with flexibility.',
+      'opp.6': 'Professional Development',
+      'opp.6d': 'Training, guidance and continuous growth.',
+      'opportunities.cta': 'Explore Opportunities',
+      'services.tag': 'Services',
+      'services.title': 'What we do',
+      'services.s1': 'Recruitment & Selection',
+      'services.s1d': 'Connection between candidates and companies with rigorous and personalized processes.',
+      'services.s2': 'Digital Platform',
+      'services.s2d': 'Management of job intermediation and business services via web and app.',
+      'services.s3': 'Business Marketplace',
+      'services.s3d': 'Commercial intermediation between entrepreneurs and suppliers.',
+      'services.s4': 'Employability Consulting',
+      'services.s4d': 'Professional guidance and development of young talent.',
+      'services.s5': 'Events & Job Fairs',
+      'services.s5d': 'Organization of connection actions between educational institutions and the market.',
+      'services.s6': 'Training & Certification',
+      'services.s6d': 'Technical, vocational and soft-skills training programs, with in-district classes and certification.',
+      'services.s7': 'Entrepreneurship & Financing',
+      'services.s7d': 'Mentorship for entrepreneurship projects and access to financing lines for young entrepreneurs.',
+      'how.tag': 'How It Works',
+      'how.title': 'Step by step',
+      'how.candidate': 'For Candidates',
+      'how.c1': 'Create profile',
+      'how.c2': 'Find opportunities',
+      'how.c3': 'Apply',
+      'how.c4': 'Track application',
+      'how.company': 'For Companies',
+      'how.e1': 'Create account',
+      'how.e2': 'Post opportunity',
+      'how.e3': 'Find talent',
+      'how.e4': 'Manage applications',
+      'platform.title': 'Digital Recruitment Platform',
+      'platform.desc': 'Management of job intermediation and business services via web and app, connecting students, youth and Mozambican companies.',
+      'team.tag': 'Team',
+      'team.title': 'Our Team',
+      'team.desc': 'Meet the members of the LERMO Recursos board.',
+      'faq.tag': 'FAQ',
+      'faq.title': 'Frequently Asked Questions',
+      'faq.q1': 'What is LERMO Recursos?',
+      'faq.a1': 'LERMO Recursos is a Mozambican platform that connects youth, students and companies to internship, employment, professional training, entrepreneurship and financing opportunities.',
+      'faq.q2': 'Who can use LERMO Recursos?',
+      'faq.a2': 'Students, recent graduates, professionals and companies from all sectors, in Mozambique and in other countries.',
+      'faq.q3': 'Does LERMO offer internships?',
+      'faq.a3': 'Yes, LERMO facilitates access to internships in partner companies for students and youth.',
+      'faq.q4': 'Does LERMO help with first jobs?',
+      'faq.a4': 'Yes, through our platform, candidates can find first job opportunities.',
+      'faq.q5': 'Can companies recruit through LERMO?',
+      'faq.a5': 'Yes, companies can post vacancies and access a pool of qualified talent.',
+      'faq.q6': 'What is the Business Marketplace?',
+      'faq.a6': 'It\'s a space where entrepreneurs and suppliers connect for business and partnerships.',
+      'faq.q8': 'How can I contact LERMO?',
+      'faq.a8': 'Through the contact form available on this page.',
+      'faq.q9b': 'Can I submit my résumé?',
+      'faq.a9b': 'You can sign up with the Sign up button and create your professional profile on the platform. If you prefer, you can also reach us through the contact form.',
+      'faq.q9': 'How can I become a partner of LERMO?',
+      'faq.a9': 'Contact us through the form, selecting the "Business Marketplace and Partnerships" subject.',
+      'faq.q10': 'Does LERMO only operate in Nampula?',
+      'faq.a10': 'No. The company\'s activity is carried out throughout the territory of Mozambique, and the platform is open to candidates and organisations from other countries.',
+      'faq.q11': 'How can a company post an opportunity?',
+      'faq.a11': 'Create your company account with the Sign up button and post your opportunities on the platform. If you prefer, contact us through the contact form.',
+      'contact.tag': 'Contact',
+      'contact.title': 'Get in Touch',
+      'contact.address': 'Address',
+      'contact.nature': 'Legal Nature',
+      'contact.natureText': 'Limited Liability Company',
+      'contact.hours': 'Hours',
+      'contact.hoursText': 'Monday to Friday, 08:00 – 17:00',
+      'form.name': 'Name',
+      'form.email': 'Email',
+      'form.phone': 'Phone',
+      'form.subject': 'Subject',
+      'form.select': 'Select a subject',
+      'form.sub1': 'Internships and First Job',
+      'form.sub2': 'Recruitment for Companies',
+      'form.sub3': 'Business Marketplace and Partnerships',
+      'form.sub4': 'Employability Consulting',
+      'form.sub5': 'Press and Communication',
+      'form.sub6': 'Other subject',
+      'form.specify': 'Specify the subject',
+      'form.message': 'Message',
+      'form.consent': 'I agree to the processing of my data for contact purposes.',
+      'form.send': 'Send message',
+      'cta.title': 'Your next opportunity can start here.',
+      'cta.desc': 'Be a candidate, company or partner. Join the LERMO Recursos network.',
+      'cta.btn1': 'Find Opportunities',
+      'cta.btn2': 'Get in Touch',
+      'footer.desc': 'Connecting talent to opportunities in Mozambique.',
+      'footer.company': 'Company',
+      'footer.about': 'About',
+      'footer.mission': 'Mission',
+      'footer.vision': 'Vision',
+      'footer.team': 'Team',
+      'footer.opportunities': 'Opportunities',
+      'footer.internships': 'Internships',
+      'footer.firstjob': 'First Job',
+      'footer.jobs': 'Employment',
+      'footer.companies': 'Companies',
+      'footer.support': 'Support',
+      'footer.faq': 'FAQ',
+      'footer.contact': 'Contact',
+      'footer.privacy': 'Privacy',
+      'footer.terms': 'Terms'
+    }
+  };
+
+  // Chaves partilhadas/extra vêm de js/i18n.js (as do index têm prioridade)
+  if (window.LermoI18n) ['pt', 'en'].forEach(l => { translations[l] = Object.assign({}, LermoI18n.dict[l], translations[l]); Object.assign(LermoI18n.dict[l], translations[l]); });
+
+  let currentLang = 'pt';
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang] && translations[lang][key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.setAttribute('placeholder', translations[lang][key]);
+        } else if (el.tagName === 'OPTION') {
+          el.textContent = translations[lang][key];
+        } else {
+          el.textContent = translations[lang][key];
+        }
+      }
+    });
+    document.getElementById('langLabel').textContent = lang.toUpperCase();
+    document.querySelectorAll('.lang-row button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+    try { localStorage.setItem('lermo-lang', lang); } catch (e) {}
+    if (window.LermoI18n) LermoI18n.set(lang);  // atributos (aria, placeholder, título, meta) e lang do <html>
+  }
+
+  // Language toggle
+  document.getElementById('langToggle').addEventListener('click', () => {
+    const nextLang = currentLang === 'pt' ? 'en' : 'pt';
+    setLanguage(nextLang);
+  });
+
+  document.querySelectorAll('.lang-row button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setLanguage(btn.dataset.lang);
+    });
+  });
+
+  // Load saved language
+  let savedLang = null;
+  try { savedLang = localStorage.getItem('lermo-lang'); } catch (e) {}
+  if (window.LermoI18n) savedLang = LermoI18n.lang();  // respeita também ?lang=en
+  if (savedLang && translations[savedLang] && (savedLang !== 'pt' || localStorage.getItem('lermo-lang'))) {
+    setLanguage(savedLang);
+  }
+
+  // ---- LOADER ----
+  const loader = document.getElementById('loader');
+  const loaderFill = document.getElementById('loaderFill');
+  document.body.style.overflow = 'hidden';
+  let progress = 0;
+  const loadInterval = setInterval(() => {
+    progress += Math.random() * 6 + 2;
+    if (progress > 100) progress = 100;
+    loaderFill.style.width = progress + '%';
+    if (progress >= 100) {
+      clearInterval(loadInterval);
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 350);
+    }
+  }, 140);
+
+  // ---- NAVBAR SCROLL ----
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  // ---- MOBILE MENU ----
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const closeMobile = document.getElementById('closeMobile');
+
+  function openMenu() {
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => closeMobile.focus(), 50);
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  closeMobile.addEventListener('click', closeMenu);
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+  // ---- FAQ ACCORDION ----
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.closest('.faq-item').classList.toggle('open', !expanded);
+      btn.nextElementSibling.classList.toggle('open', !expanded);
+      btn.querySelector('i').className = expanded ? 'fas fa-plus' : 'fas fa-minus';
+    });
+  });
+
+  // ---- FAQ SEARCH ----
+  const faqSearch = document.getElementById('faqSearch');
+  const faqItems = document.querySelectorAll('.faq-item');
+  const faqEmpty = document.getElementById('faqEmpty');
+  if (faqSearch) {
+    faqSearch.addEventListener('input', () => {
+      const term = faqSearch.value.trim().toLowerCase();
+      let visible = 0;
+      faqItems.forEach(item => {
+        const match = item.textContent.toLowerCase().includes(term);
+        item.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      faqEmpty.style.display = visible === 0 ? 'block' : 'none';
+    });
+  }
+
+  // ---- FORM ----
+  const form = document.getElementById('contactForm');
+  const assunto = document.getElementById('assunto');
+  const outroGroup = document.getElementById('outroAssuntoGroup');
+  const outroInput = document.getElementById('outroAssunto');
+  const mensagem = document.getElementById('mensagem');
+  const charCount = document.getElementById('charCount');
+  const formStatus = document.getElementById('formStatus');
+
+  assunto.addEventListener('change', () => {
+    if (assunto.value === 'outro') {
+      outroGroup.style.display = 'block';
+      outroInput.setAttribute('required', 'required');
+      setTimeout(() => outroInput.focus(), 100);
+    } else {
+      outroGroup.style.display = 'none';
+      outroInput.removeAttribute('required');
+      outroInput.value = '';
+    }
+  });
+
+  mensagem.addEventListener('input', () => {
+    charCount.textContent = mensagem.value.length;
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    const assuntoVal = assunto.value;
+    const mensagemVal = mensagem.value.trim();
+    const consent = document.getElementById('consent').checked;
+
+    let valid = true;
+    form.querySelectorAll('.form-group').forEach(g => g.classList.remove('invalid'));
+    if (!nome) { valid = false; document.getElementById('nome').closest('.form-group').classList.add('invalid'); }
+    if (!email || !email.includes('@')) { valid = false; document.getElementById('email').closest('.form-group').classList.add('invalid'); }
+    if (!assuntoVal) { valid = false; assunto.closest('.form-group').classList.add('invalid'); }
+    if (assuntoVal === 'outro' && !outroInput.value.trim()) { valid = false; outroInput.closest('.form-group').classList.add('invalid'); }
+    if (!mensagemVal) { valid = false; mensagem.closest('.form-group').classList.add('invalid'); }
+    if (!consent) { valid = false; document.getElementById('consent').closest('.form-group').classList.add('invalid'); }
+
+    if (!valid) {
+      formStatus.className = 'form-status error';
+      const msg = currentLang === 'pt' ? 'Por favor, preencha todos os campos obrigatórios.' : 'Please fill in all required fields.';
+      formStatus.textContent = msg;
+      formStatus.style.display = 'block';
+      return;
+    }
+
+    formStatus.className = 'form-status loading';
+    const loadingMsg = currentLang === 'pt' ? 'A enviar mensagem...' : 'Sending message...';
+    formStatus.textContent = loadingMsg;
+    formStatus.style.display = 'block';
+
+    const contactEmail = atob('bHV0amFsaWxvNzhAZ21haWwuY29t');
+    const subject = encodeURIComponent('[LERMO Recursos] ' + (assuntoVal === 'outro' ? outroInput.value : assuntoVal));
+    const body = encodeURIComponent(
+      (currentLang === 'pt' ? 'Nome' : 'Name') + ': ' + nome + '\n' +
+      (currentLang === 'pt' ? 'Email' : 'Email') + ': ' + email + '\n' +
+      (currentLang === 'pt' ? 'Telefone' : 'Phone') + ': ' + (telefone || '-') + '\n\n' +
+      (currentLang === 'pt' ? 'Mensagem' : 'Message') + ':\n' + mensagemVal
+    );
+    window.location.href = 'mailto:' + contactEmail + '?subject=' + subject + '&body=' + body;
+
+    setTimeout(() => {
+      formStatus.className = 'form-status success';
+      const successMsg = currentLang === 'pt' ? 'Mensagem enviada com sucesso!' : 'Message sent successfully!';
+      formStatus.textContent = successMsg;
+      formStatus.style.display = 'block';
+      form.reset();
+      charCount.textContent = '0';
+      outroGroup.style.display = 'none';
+      outroInput.removeAttribute('required');
+    }, 800);
+  });
+
+  // ---- BACK TO TOP ----
+  const backBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backBtn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+  backBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ---- SCROLL REVEAL ----
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  } else {
+    document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+  }
+
+  // ---- ACTIVE NAV LINK ----
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      const top = sec.offsetTop - 100;
+      if (window.scrollY >= top) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }, { passive: true });
+
+  // ---- LOGIN (painel sobreposto) ----
+  const loginModal = document.getElementById('loginModal');
+  const loginForm = document.getElementById('loginForm');
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPass = document.getElementById('loginPass');
+  const loginToggle = document.getElementById('loginToggle');
+  const loginSubmit = document.getElementById('loginSubmit');
+  const loginAlert = document.getElementById('loginAlert');
+  let loginOpener = null;
+
+  function openLogin(opener) {
+    document.querySelectorAll('.lm-modal.open').forEach(m => { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); });
+    loginOpener = opener || null;
+    document.getElementById('loginOk').classList.remove('show'); document.getElementById('loginPwOk').classList.remove('show');
+    loginModal.classList.add('open');
+    loginModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => loginEmail.focus(), 60);
+  }
+  function closeLogin() {
+    loginModal.classList.remove('open');
+    loginModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (loginOpener) loginOpener.focus();
+  }
+  // Todos os links para /login abrem o painel (sem JS continuam a ir para /login)
+  document.querySelectorAll('a[href="login.html"]').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); openLogin(a); });
+  });
+  document.getElementById('loginClose').addEventListener('click', closeLogin);
+  loginModal.addEventListener('mousedown', e => { if (e.target === loginModal) closeLogin(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && loginModal.classList.contains('open')) closeLogin(); });
+
+  loginToggle.addEventListener('click', () => {
+    const show = loginPass.type === 'password';
+    loginPass.type = show ? 'text' : 'password';
+    loginToggle.setAttribute('aria-pressed', String(show));
+    loginToggle.setAttribute('aria-label', translations[currentLang][show ? 'login.hide' : 'login.show']);
+    loginToggle.querySelector('i').className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+  });
+
+  function markLogin(input, bad) {
+    input.closest('.lm-field').classList.toggle('invalid', bad);
+    input.setAttribute('aria-invalid', String(bad));
+  }
+  loginForm.addEventListener('submit', e => {
+    const badE = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail.value.trim());
+    const badP = !loginPass.value;
+    markLogin(loginEmail, badE); markLogin(loginPass, badP);
+    if (badE || badP) { e.preventDefault(); (badE ? loginEmail : loginPass).focus(); return; }
+    loginSubmit.disabled = true;
+    loginSubmit.querySelector('.go i').className = 'fas fa-spinner fa-spin';
+    // Pré-visualização local (file:) não submete; com Spring Security o POST /login segue normalmente.
+    if (location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      e.preventDefault();
+      // Sessão simulada (substituir por Spring Security/JWT): entra no ambiente autenticado.
+      localStorage.setItem('lermo-session', JSON.stringify({ utilizador_id: 'u-demo', nome_completo: 'Ana Macuácua', email: loginEmail.value.trim(), tipo: 'candidato', exp: Date.now() + 864e5 }));
+      setTimeout(() => { location.href = 'dashboard-candidato.html'; }, 500);
+    }
+  });
+  [loginEmail, loginPass].forEach(i => i.addEventListener('input', () => markLogin(i, false)));
+
+
+  // ---- REGISTO (painel sobreposto) ----
+  const regModal = document.getElementById('regModal');
+  const regForm = document.getElementById('regForm');
+  const regTipoCand = document.getElementById('regTipoCand');
+  const regTipoEmp = document.getElementById('regTipoEmp');
+  const regCompany = document.getElementById('regCompany');
+  const regPass = document.getElementById('regPass');
+  const regToggle = document.getElementById('regToggle');
+  const regSubmit = document.getElementById('regSubmit');
+  const regCc = document.getElementById('regCc');
+  const $r = id => document.getElementById(id);
+  let regOpener = null;
+
+  // Países e indicativos (tabela paises: pais_id, codigo_telefone) — seletor personalizado com bandeiras
+  const PAISES = window.LERMO_PAISES;  // lista completa (ISO 3166-1), definida em js/paises.js
+  const ccBtn = $r('regCcBtn'), ccList = $r('regCcList');
+  const flagImg = c => '<img class="lm-flag" src="https://flagcdn.com/w40/' + c.toLowerCase() + '.png" srcset="https://flagcdn.com/w80/' + c.toLowerCase() + '.png 2x" width="24" height="18" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">';
+  PAISES.forEach(p => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option'); li.tabIndex = -1; li.dataset.code = p[0];
+    li.innerHTML = flagImg(p[0]) + '<span class="lm-cc-name">' + LermoI18n.country(p[0], p[2]) + '</span><span class="lm-cc-dial">' + p[1] + '</span>';
+    ccList.appendChild(li);
+  });
+  function setCountry(code, silent) {
+    const p = PAISES.find(x => x[0] === code) || PAISES[0];
+    regCc.value = p[0];
+    ccBtn.querySelector('.lm-flag-slot').innerHTML = flagImg(p[0]);
+    ccBtn.querySelector('.lm-dial').textContent = p[1];
+    ccBtn.title = LermoI18n.country(p[0], p[2]);
+    ccList.querySelectorAll('li').forEach(li => li.setAttribute('aria-selected', String(li.dataset.code === p[0])));
+    if (!silent) regCc.dispatchEvent(new Event('change'));
+  }
+  function toggleCc(open) {
+    ccList.classList.toggle('open', open);
+    ccBtn.setAttribute('aria-expanded', String(open));
+    if (open) { const sel = ccList.querySelector('[aria-selected="true"]') || ccList.firstChild; sel.scrollIntoView({ block: 'nearest' }); sel.focus(); }
+  }
+  ccBtn.addEventListener('click', () => toggleCc(!ccList.classList.contains('open')));
+  ccBtn.addEventListener('keydown', e => { if (e.key === 'ArrowDown') { e.preventDefault(); toggleCc(true); } });
+  ccList.addEventListener('click', e => { const li = e.target.closest('li'); if (li) { setCountry(li.dataset.code); toggleCc(false); ccBtn.focus(); } });
+  ccList.addEventListener('keydown', e => {
+  if (e.key.length === 1 && /\S/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+  // escrever uma letra salta para o próximo país que começa por ela
+  const k = e.key.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const items = [...ccList.querySelectorAll('li')];
+  const cur = items.indexOf(e.target.closest('li'));
+  const norm = li => li.querySelector('.lm-cc-name').textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const hit = items.slice(cur + 1).concat(items.slice(0, cur + 1)).find(li => norm(li).startsWith(k));
+  if (hit) { e.preventDefault(); hit.focus(); }
+  return;
+  }
+  });
+  ccList.addEventListener('keydown', e => {
+    const li = e.target.closest('li'); if (!li) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); (li.nextElementSibling || li).focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); (li.previousElementSibling || li).focus(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCountry(li.dataset.code); toggleCc(false); ccBtn.focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); toggleCc(false); ccBtn.focus(); }
+  });
+  document.addEventListener('mousedown', e => { if (ccList.classList.contains('open') && !e.target.closest('.lm-cc-wrap')) toggleCc(false); });
+  // País por omissão: Moçambique
+  setCountry('MZ', true);
+  const dialCode = () => (PAISES.find(p => p[0] === regCc.value) || PAISES[0])[1];
+
+  // Identificação fiscal conforme o país: MZ → NUIT; restantes → Tax ID / VAT
+  function syncFiscal() {
+    const mz = regCc.value === 'MZ';
+    const lab = $r('regFiscalLabel'), err = $r('regFiscalErr'), inp = $r('regFiscal');
+    lab.setAttribute('data-i18n', mz ? 'reg.nuit' : 'reg.taxId');
+    err.setAttribute('data-i18n', mz ? 'reg.nuitErr' : 'reg.taxIdErr');
+    lab.textContent = translations[currentLang][mz ? 'reg.nuit' : 'reg.taxId'];
+    err.textContent = translations[currentLang][mz ? 'reg.nuitErr' : 'reg.taxIdErr'];
+    inp.setAttribute('inputmode', mz ? 'numeric' : 'text');
+    inp.maxLength = mz ? 9 : 20;
+    $r('regTipoId').value = mz ? 'NUIT' : 'TAX_ID';
+  }
+  regCc.addEventListener('change', () => { syncFiscal(); markReg($r('regFiscal'), false); });
+  syncFiscal();
+
+  function syncTipo() {
+    const emp = regTipoEmp.checked;
+    regCompany.classList.toggle('show', emp); $r('regFiscalBlock').classList.toggle('show', emp);
+    $r('regEmpresa').required = emp; $r('regFiscal').required = emp;
+    $r('regNomeField').style.display = emp ? 'none' : ''; $r('regNome').required = !emp;
+  }
+  function openReg(opener, tipo) {
+    document.querySelectorAll('.lm-modal.open').forEach(m => { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); });
+    regOpener = opener || null;
+    if (tipo === 'empresa') regTipoEmp.checked = true; else if (tipo === 'candidato') regTipoCand.checked = true;
+    syncTipo();
+    regModal.classList.add('open');
+    regModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => $r('regNome').focus(), 60);
+  }
+  // Redirecciona do registo para o login, com mensagem de sucesso e email preenchido
+  function showRegistered(email) {
+    openLogin(null);
+    document.getElementById('loginOk').classList.add('show');
+    if (email) loginEmail.value = email.trim();
+    setTimeout(() => (email ? loginPass : loginEmail).focus(), 120);
+  }
+  function closeReg() {
+    regModal.classList.remove('open');
+    regModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (regOpener) regOpener.focus();
+  }
+  // Todos os links para o registo (incluindo ?tipo=) abrem o painel
+  document.querySelectorAll('a[href^="registo.html"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const q = a.getAttribute('href').split('?')[1] || '';
+      openReg(a, new URLSearchParams(q).get('tipo'));
+    });
+  });
+  $r('regClose').addEventListener('click', closeReg);
+  regModal.addEventListener('mousedown', e => { if (e.target === regModal) closeReg(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && regModal.classList.contains('open')) closeReg(); });
+  [regTipoCand, regTipoEmp].forEach(r => r.addEventListener('change', syncTipo));
+
+  regToggle.addEventListener('click', () => {
+    const show = regPass.type === 'password';
+    regPass.type = show ? 'text' : 'password';
+    regToggle.setAttribute('aria-pressed', String(show));
+    regToggle.setAttribute('aria-label', translations[currentLang][show ? 'login.hide' : 'login.show']);
+    regToggle.querySelector('i').className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+  });
+
+  function passScore(v) {
+    let s = 0;
+    if (v.length >= 8) s++;
+    if (/[a-z]/.test(v) && /[A-Z]/.test(v)) s++;
+    if (/\d/.test(v)) s++;
+    if (/[^A-Za-z0-9]/.test(v) || v.length >= 12) s++;
+    return v ? Math.max(1, s) : 0;
+  }
+  function regMeter() {
+    const s = passScore(regPass.value), bar = $r('regMeterBar');
+    bar.style.width = (s * 25) + '%';
+    bar.style.background = ['#B03A2E', '#B03A2E', '#D08A1E', '#6FA86B', '#1B4332'][s];
+    $r('regPassHint').textContent = translations[currentLang]['meter.' + s] || '';
+  }
+  regPass.addEventListener('input', regMeter);
+  document.getElementById('langToggle').addEventListener('click', regMeter);
+  document.querySelectorAll('.lang-row button').forEach(b => b.addEventListener('click', regMeter));
+
+  function markReg(el, bad) {
+    el.closest('.lm-field').classList.toggle('invalid', bad);
+    el.setAttribute('aria-invalid', String(bad));
+  }
+  const regRules = {
+    regNome: v => regTipoEmp.checked || (v.trim().length >= 3 && v.trim().split(/\s+/).length >= 2),
+    regEmpresa: v => !regTipoEmp.checked || v.trim().length >= 2,
+    regFiscal: v => !regTipoEmp.checked || (regCc.value === 'MZ' ? /^\d{9}$/.test(v.replace(/\s/g, '')) : /^[A-Za-z0-9][A-Za-z0-9 .\-\/]{3,18}[A-Za-z0-9]$/.test(v.trim())),
+    regEmail: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+    regTel: v => { const d = v.replace(/\D/g, ''); return d.length >= 6 && d.length <= 12; },
+    regPass: v => v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v)
+  };
+  Object.keys(regRules).forEach(id => {
+    const el = $r(id);
+    el.addEventListener('input', () => markReg(el, false));
+    el.addEventListener('blur', () => { if (el.value) markReg(el, !regRules[id](el.value)); });
+  });
+  $r('regTerms').addEventListener('change', () => $r('regTermsWrap').classList.remove('invalid'));
+
+  regForm.addEventListener('submit', e => {
+    let firstBad = null;
+    Object.keys(regRules).forEach(id => {
+      const el = $r(id), bad = !regRules[id](el.value);
+      markReg(el, bad); if (bad && !firstBad) firstBad = el;
+    });
+    const noTerms = !$r('regTerms').checked;
+    $r('regTermsWrap').classList.toggle('invalid', noTerms);
+    if (noTerms && !firstBad) firstBad = $r('regTerms');
+    if (firstBad) { e.preventDefault(); firstBad.focus(); return; }
+    // Identificação fiscal normalizada (NUIT sem espaços; Tax ID em maiúsculas)
+    if (regTipoEmp.checked) $r('regNome').value = $r('regEmpresa').value.trim().slice(0, 150); // conta de empresa: nomeCompleto = nome da empresa
+    $r('regFiscal').value = regCc.value === 'MZ' ? $r('regFiscal').value.replace(/\s/g, '') : $r('regFiscal').value.trim().toUpperCase();
+    // Telefone completo (indicativo + número sem zeros à esquerda), ex.: +258841234567
+    const digits = $r('regTel').value.replace(/\D/g, '').replace(/^0+/, '');
+    $r('regTelFull').value = digits ? dialCode() + digits : '';
+    regSubmit.disabled = true;
+    regSubmit.querySelector('.go i').className = 'fas fa-spinner fa-spin';
+    // Pré-visualização local (file:) não submete; com Spring MVC o POST /registo segue normalmente.
+    if (location.protocol === 'file:') {
+      e.preventDefault();
+      setTimeout(() => {
+        regSubmit.disabled = false; regSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
+        const em = $r('regEmail').value;
+        regForm.reset(); syncFiscal(); syncTipo(); regMeter();
+        showRegistered(em);
+      }, 900);
+    }
+  });
+
+  // Abre automaticamente com #registo (ou #registo-empresa)
+  if (location.hash === '#registo' || location.hash === '#registo-empresa') {
+    openReg(null, location.hash === '#registo-empresa' ? 'empresa' : null);
+  }
+
+  // Abre automaticamente após erro de autenticação (/?error) ou com #entrar
+  if (/[?&]error\b/.test(location.search) || location.hash === '#entrar') {
+    loginAlert.classList.toggle('show', /[?&]error\b/.test(location.search));
+    openLogin(null);
+  }
+  // Depois de registar (servidor: redirect:/?registo=ok) abre o login com a mensagem de sucesso
+  if (/[?&]registo=ok\b/.test(location.search)) showRegistered('');
+
+
+  // ---- RECUPERAR / NOVA SENHA (painéis sobrepostos) ----
+  const fpModal = $r('fpModal'), rpModal = $r('rpModal');
+  const fpForm = $r('fpForm'), fpEmail = $r('fpEmail'), fpSubmit = $r('fpSubmit');
+  const rpForm = $r('rpForm'), rpPass = $r('rpPass'), rpPass2 = $r('rpPass2'), rpSubmit = $r('rpSubmit'), rpToggle = $r('rpToggle');
+  let pwOpener = null;
+  const busy = b => { b.disabled = true; b.querySelector('.go i').className = 'fas fa-spinner fa-spin'; };
+  const idle = b => { b.disabled = false; b.querySelector('.go i').className = 'fas fa-arrow-right'; };
+  const markF = (el, bad) => { el.closest('.lm-field').classList.toggle('invalid', bad); el.setAttribute('aria-invalid', String(bad)); };
+  function openPw(modal, focusEl, opener) {
+    document.querySelectorAll('.lm-modal.open').forEach(m => { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); });
+    pwOpener = opener || null;
+    modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => focusEl.focus(), 60);
+  }
+  function closePw(modal) {
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (pwOpener) pwOpener.focus();
+  }
+  const openFp = opener => { $r('fpSent').classList.remove('show'); openPw(fpModal, fpEmail, opener); };
+  const openRp = opener => openPw(rpModal, rpPass, opener);
+  document.querySelectorAll('a[href^="recuperar-senha.html"]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openFp(a); }));
+  document.querySelectorAll('a[href^="redefinir-senha.html"]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openRp(a); }));
+  [[fpModal, 'fpClose'], [rpModal, 'rpClose']].forEach(([m, id]) => {
+    $r(id).addEventListener('click', () => closePw(m));
+    m.addEventListener('mousedown', e => { if (e.target === m) closePw(m); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && m.classList.contains('open')) closePw(m); });
+  });
+  [fpEmail, rpPass, rpPass2].forEach(i => i.addEventListener('input', () => markF(i, false)));
+
+  fpForm.addEventListener('submit', e => {
+    const bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fpEmail.value.trim());
+    markF(fpEmail, bad);
+    if (bad) { e.preventDefault(); fpEmail.focus(); return; }
+    busy(fpSubmit);
+    // Pré-visualização local (file:) não envia; com Spring o POST /recuperar-senha segue normalmente.
+    if (location.protocol === 'file:') { e.preventDefault(); setTimeout(() => { idle(fpSubmit); $r('fpSent').classList.add('show'); }, 900); }
+  });
+
+  rpToggle.addEventListener('click', () => {
+    const show = rpPass.type === 'password';
+    rpPass.type = rpPass2.type = show ? 'text' : 'password';
+    rpToggle.setAttribute('aria-pressed', String(show));
+    rpToggle.setAttribute('aria-label', translations[currentLang][show ? 'login.hide' : 'login.show']);
+    rpToggle.querySelector('i').className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+  });
+  function rpMeter() {
+    const s = passScore(rpPass.value), bar = $r('rpMeterBar');
+    bar.style.width = (s * 25) + '%';
+    bar.style.background = ['#B03A2E', '#B03A2E', '#D08A1E', '#6FA86B', '#1B4332'][s];
+    $r('rpPassHint').textContent = translations[currentLang]['meter.' + s] || '';
+  }
+  rpPass.addEventListener('input', rpMeter);
+  document.getElementById('langToggle').addEventListener('click', rpMeter);
+  document.querySelectorAll('.lang-row button').forEach(b => b.addEventListener('click', rpMeter));
+
+  // Mudança de idioma: actualiza o que depende do estado (botões de senha e nomes de países)
+  LermoI18n.onChange(() => {
+    [[loginToggle, loginPass], [regToggle, regPass], [rpToggle, rpPass]].forEach(([b, p]) => b.setAttribute('aria-label', translations[currentLang][p.type === 'password' ? 'login.show' : 'login.hide']));
+    const sel = ccList.querySelector('[aria-selected="true"]');
+    ccList.querySelectorAll('li').forEach(li => {
+      const p = PAISES.find(x => x[0] === li.dataset.code);
+      li.querySelector('.lm-cc-name').textContent = LermoI18n.country(p[0], p[2]);
+      if (li === sel) ccBtn.title = LermoI18n.country(p[0], p[2]);
+    });
+  });
+
+
+  rpForm.addEventListener('submit', e => {
+    const b1 = !(rpPass.value.length >= 8 && /[A-Za-z]/.test(rpPass.value) && /\d/.test(rpPass.value));
+    const b2 = !rpPass2.value || rpPass.value !== rpPass2.value;
+    markF(rpPass, b1); markF(rpPass2, b2);
+    if (b1 || b2) { e.preventDefault(); (b1 ? rpPass : rpPass2).focus(); return; }
+    busy(rpSubmit);
+    // Pré-visualização local: simula o sucesso. Com Spring o controlador faz redirect:/?senha=ok
+    if (location.protocol === 'file:') { e.preventDefault(); setTimeout(() => { idle(rpSubmit); rpForm.reset(); rpMeter(); showPwChanged(); }, 900); }
+  });
+  function showPwChanged() {
+    openLogin(null);
+    $r('loginPwOk').classList.add('show');
+    setTimeout(() => loginEmail.focus(), 120);
+  }
+
+  // Abertura automática: #recuperar-senha | #redefinir-senha ou ?token=... (link do email) | ?senha=ok
+  const qsPw = new URLSearchParams(location.search);
+  if (location.hash === '#recuperar-senha') openFp(null);
+  if (location.hash === '#redefinir-senha' || qsPw.has('token') || qsPw.has('invalido')) {
+    if (qsPw.get('token')) $r('rpToken').value = qsPw.get('token');
+    if (qsPw.has('invalido') || (!qsPw.get('token') && location.protocol !== 'file:')) { $r('rpInvalid').classList.add('show'); rpForm.style.display = 'none'; }
+    openRp(null);
+  }
+  if (qsPw.get('senha') === 'ok') showPwChanged();
+
+})();

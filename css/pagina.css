@@ -1,0 +1,13 @@
+:root{--p:#1B4332;--pd:#0F2A1E;--g:#C9A03A;--gs:#E4C878;--bg:#FAF9F6;--t:#0F2A1E;--m:#5C6D63}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+.hero{background:radial-gradient(ellipse at 15% 0,rgba(201,160,58,.18),transparent 55%),var(--pd);color:#fff;padding:3rem 0 4.5rem}
+.wrap{width:min(100% - 2rem,1200px);margin-inline:auto}
+.hero .logo{display:inline-block;font-weight:800;font-size:1.15rem;color:#fff;text-decoration:none;margin-bottom:2.2rem}
+.hero .logo em{font-style:normal;color:var(--gs)}
+.hero h1{font-size:clamp(1.9rem,4vw,3rem);letter-spacing:-.03em;line-height:1.15;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--gs)}
+.hero p{color:rgba(255,255,255,.75);max-width:52ch;margin-top:.7rem}
+main{padding:2.5rem 0;text-align:center;color:var(--m)}
+main a{display:inline-block;margin-top:.6rem;padding:.8rem 1.6rem;border-radius:9999px;background:var(--g);color:var(--pd);font-weight:700;text-decoration:none}
+main a:hover{background:var(--gs)}

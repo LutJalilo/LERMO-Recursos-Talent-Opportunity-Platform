@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-PT" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="op.det.title">Oportunidade — LERMO Recursos</title>
+<meta name="description" content="Detalhes da oportunidade na LERMO Recursos." data-i18n-content="op.det.desc" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="css/oportunidades.css" th:href="@{/css/oportunidades.css}" />
+<link rel="stylesheet" href="css/detalhe.css" th:href="@{/css/detalhe.css}" />
+</head>
+<body>
+<header><div class="wrap">
+  <a href="index.html" th:href="@{/}" class="logo" aria-label="LERMO Recursos — Início" data-i18n-aria="op.logoAria"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="150" cy="144" r="82" stroke-width="9"/><line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/><line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/><g class="lermo-orbit"><circle cx="185" cy="106" r="32" stroke-width="7"/><circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/></g><circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/></svg><span class="lt">LERMO <span>Recursos</span></span></a>
+  <nav class="links" aria-label="Navegação principal" data-i18n-aria="op.navAria"><a href="index.html" th:href="@{/}" data-i18n="nav.home">Início</a><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="nav.about">Sobre Nós</a><a href="oportunidades.html" th:href="@{/oportunidades}" class="on" data-i18n="nav.opportunities">Oportunidades</a><a href="index.html#servicos" th:href="@{/#servicos}" data-i18n="nav.services">Serviços</a><a href="index.html#comofunciona" th:href="@{/#comofunciona}" data-i18n="nav.how">Como Funciona</a><a href="index.html#contactos" th:href="@{/#contactos}" data-i18n="nav.contact">Contactos</a></nav>
+  <div class="hact">
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Alternar idioma" data-i18n-aria="op.langAria"><i class="fas fa-globe" aria-hidden="true"></i> <span id="langLabel">PT</span></button>
+    <div id="authBtns">
+      <a class="btn btn-o" data-auth="login" href="login.html" th:href="@{/login}" data-i18n="nav.login">Entrar</a>
+      <a class="btn btn-g" data-auth="reg" href="registo.html?tipo=candidato" th:href="@{/registo(tipo='candidato')}" data-i18n="nav.register">Registar</a>
+    </div>
+  </div>
+  <button class="hamb" id="hamb" type="button" aria-label="Abrir menu" data-i18n-aria="op.menuOpen" aria-expanded="false" aria-controls="mm"><i class="fas fa-bars"></i></button>
+</div></header>
+<div class="mm" id="mm" role="dialog" aria-modal="true" aria-label="Menu" data-i18n-aria="op.mobileNavAria">
+  <div class="tb"><a href="index.html" th:href="@{/}" class="logo"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="150" cy="144" r="82" stroke-width="9"/><line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/><line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/><g class="lermo-orbit"><circle cx="185" cy="106" r="32" stroke-width="7"/><circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/></g><circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/></svg><span class="lt">LERMO <span>Recursos</span></span></a><button class="cl" id="mmClose" type="button" aria-label="Fechar menu" data-i18n-aria="op.menuClose"><i class="fas fa-xmark"></i></button></div>
+  <nav aria-label="Menu mobile" data-i18n-aria="op.mobileNavAria"><a href="index.html" th:href="@{/}"><i class="fas fa-home"></i> <span data-i18n="nav.home">Início</span></a><a href="index.html#sobre" th:href="@{/#sobre}"><i class="fas fa-info-circle"></i> <span data-i18n="nav.about">Sobre Nós</span></a><a href="oportunidades.html" th:href="@{/oportunidades}" class="on"><i class="fas fa-briefcase"></i> <span data-i18n="nav.opportunities">Oportunidades</span></a><a href="index.html#servicos" th:href="@{/#servicos}"><i class="fas fa-cogs"></i> <span data-i18n="nav.services">Serviços</span></a><a href="index.html#comofunciona" th:href="@{/#comofunciona}"><i class="fas fa-route"></i> <span data-i18n="nav.how">Como Funciona</span></a><a href="index.html#contactos" th:href="@{/#contactos}"><i class="fas fa-envelope"></i> <span data-i18n="nav.contact">Contactos</span></a></nav>
+  <div class="ba" id="mmAuth">
+    <a class="btn btn-o" href="login.html" th:href="@{/login}"><i class="fas fa-right-to-bracket"></i> <span data-i18n="nav.login">Entrar</span></a>
+    <a class="btn btn-g" href="registo.html?tipo=candidato" th:href="@{/registo(tipo='candidato')}"><i class="fas fa-user-plus"></i> <span data-i18n="nav.register">Registar</span></a>
+  </div>
+  <div class="lang-row" role="group" aria-label="Idioma" data-i18n-aria="op.langAria">
+    <button type="button" class="active" data-lang="pt">PT</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+</div>
+
+<section class="hero dhero"><div class="wrap" id="dHero"></div></section>
+<div class="wrap"><noscript><p class="empty">Active o JavaScript para ver esta oportunidade. / Turn on JavaScript to see this opportunity.</p></noscript><div class="dlayout" id="dLayout"></div></div>
+<section class="dsim" id="dSimWrap" hidden><div class="wrap"><h2 data-i18n="op.det.similar">Oportunidades semelhantes</h2><div class="grid" id="dSim"></div></div></section>
+
+<footer>
+    <div class="container">
+      <div class="grid-4">
+        <div>
+          <h4>LERMO Recursos</h4>
+          <p style="font-size:0.8rem; opacity:0.5;" data-i18n="op.footerDesc">Conectamos talento a oportunidades em vários países.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div><h4 data-i18n="footer.company">Empresa</h4><ul><li><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="footer.about">Sobre</a></li><li><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="footer.mission">Missão</a></li><li><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="footer.vision">Visão</a></li><li><a href="index.html#equipa" th:href="@{/#equipa}" data-i18n="footer.team">Equipa</a></li></ul></div>
+        <div><h4 data-i18n="footer.opportunities">Oportunidades</h4><ul><li><a href="oportunidades.html?tipo=estagio" data-i18n="footer.internships">Estágios</a></li><li><a href="oportunidades.html?cat=vaga" data-i18n="footer.firstjob">Primeiro Emprego</a></li><li><a href="oportunidades.html?tipo=emprego_efectivo" data-i18n="footer.jobs">Emprego</a></li><li><a href="registo.html?tipo=empresa" th:href="@{/registo(tipo='empresa')}" data-i18n="footer.companies">Empresas</a></li></ul></div>
+        <div><h4 data-i18n="footer.support">Suporte</h4><ul><li><a href="index.html#faq" th:href="@{/#faq}" data-i18n="footer.faq">FAQ</a></li><li><a href="index.html#contactos" th:href="@{/#contactos}" data-i18n="footer.contact">Contactos</a></li><li><a href="legal.html#privacidade" th:href="@{/legal#privacidade}" data-i18n="footer.privacy">Privacidade</a></li><li><a href="legal.html#termos" th:href="@{/legal#termos}" data-i18n="footer.terms">Termos</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 LERMO Recursos</span>
+        <span data-i18n="op.footerCity">Nampula, Moçambique</span>
+      </div>
+    </div>
+  </footer>
+
+<button id="backToTop" type="button" aria-label="Voltar ao topo" data-i18n-aria="op.top"><i class="fas fa-arrow-up"></i></button>
+<div class="toast" id="toast" role="status"></div>
+
+<!-- ===== AVISO: ENTRAR OU CRIAR CONTA (candidatura) ===== -->
+  <div class="lm-modal" id="gateModal" role="dialog" aria-modal="true" aria-labelledby="gateTitle" aria-hidden="true">
+    <div class="lm-box lm-gate">
+      <button type="button" class="lm-close" id="gateClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <div class="gate-ic" aria-hidden="true"><i class="fas fa-lock"></i></div>
+      <h2 id="gateTitle" data-i18n="op.gate.titleApply">Entre para se candidatar</h2>
+      <p class="lm-sub" id="gateTxt" data-i18n="op.gate.txtApply">Para se candidatar precisa de uma conta. Entre na sua conta ou crie uma gratuitamente.</p>
+      <div class="lm-scroll">
+        <button type="button" class="lm-submit" data-gate="login"><span data-i18n="nav.login">Entrar</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+        <button type="button" class="gate-alt" data-gate="reg"><i class="fas fa-user-plus" aria-hidden="true"></i> <span data-i18n="op.gate.reg">Criar conta</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LOGIN (painel sobreposto) ===== -->
+  <div class="lm-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle" aria-hidden="true">
+    <div class="lm-box">
+      <button type="button" class="lm-close" id="loginClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="loginTitle" data-i18n="login.title">Entrar</h2>
+      <p class="lm-sub" data-i18n="login.sub">Aceda à sua conta LERMO Recursos.</p>
+      <div class="lm-scroll">
+
+      <!-- Spring: th:if="${param.error}" mostra o erro de autenticação -->
+      <!-- Após registo: o servidor redirecciona para /?registo=ok e mostra esta mensagem -->
+      <div class="lm-alert ok" id="loginOk" role="status" th:classappend="${param.registo} ? 'show'">
+        <i class="fas fa-circle-check" aria-hidden="true"></i><span data-i18n="login.registered">Conta criada com sucesso! Entre com as suas credenciais.</span>
+      </div>
+      <div class="lm-alert ok" id="loginPwOk" role="status">
+        <i class="fas fa-circle-check" aria-hidden="true"></i><span data-i18n="login.pwChanged">Senha alterada com sucesso! Entre com a nova senha.</span>
+      </div>
+      <div class="lm-alert" id="loginAlert" role="alert" th:classappend="${param.error} ? 'show'">
+        <i class="fas fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="login.error">Email ou senha incorrectos.</span>
+      </div>
+
+      <!-- Spring Security form-login: POST /login com username (email) e password; CSRF automático com th:action -->
+      <form id="loginForm" method="post" action="/login" th:action="@{/login}" novalidate>
+        <div class="lm-field">
+          <input type="email" id="loginEmail" name="username" placeholder=" " autocomplete="username" inputmode="email" required aria-describedby="loginEmailErr" />
+          <label for="loginEmail" data-i18n="login.email">Email</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+          <div class="lm-err" id="loginEmailErr" data-i18n="login.emailErr">Introduza um email válido.</div>
+        </div>
+
+        <div class="lm-field">
+          <input type="password" id="loginPass" name="password" class="has-toggle" placeholder=" " autocomplete="current-password" required aria-describedby="loginPassErr" />
+          <label for="loginPass" data-i18n="login.password">Senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <button type="button" class="lm-toggle" id="loginToggle" aria-label="Mostrar senha" data-i18n-aria="login.show" aria-pressed="false"><i class="fas fa-eye" aria-hidden="true"></i></button>
+          <div class="lm-err" id="loginPassErr" data-i18n="login.passErr">Introduza a sua senha.</div>
+        </div>
+
+        <div class="lm-row">
+          <label class="lm-check"><input type="checkbox" name="remember-me" /> <span data-i18n="login.remember">Manter sessão iniciada</span></label>
+          <a href="recuperar-senha.html" th:href="@{/recuperar-senha}" class="lm-link" data-i18n="login.forgot">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit" class="lm-submit" id="loginSubmit"><span data-i18n="login.submit">Entrar</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+
+      <p class="lm-switch"><span data-i18n="login.noAccount">Ainda não tem conta?</span> <a href="registo.html" th:href="@{/registo}" class="lm-link" data-i18n="login.register">Registar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REGISTO (painel sobreposto) ===== -->
+  <div class="lm-modal" id="regModal" role="dialog" aria-modal="true" aria-labelledby="regTitle" aria-hidden="true">
+    <div class="lm-box lm-wide">
+      <button type="button" class="lm-close" id="regClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="regTitle" data-i18n="reg.title">Criar conta</h2>
+      <p class="lm-sub" data-i18n="reg.sub">Junte-se à LERMO Recursos em poucos passos.</p>
+      <div class="lm-scroll">
+
+      <!-- Spring: th:if mostra erros devolvidos pelo controlador -->
+      <div class="lm-alert" id="regAlert" role="alert" th:classappend="${param.regError} ? 'show'">
+        <i class="fas fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="reg.error">Não foi possível criar a conta. Verifique os dados e tente novamente.</span>
+      </div>
+
+      <!-- Spring MVC: POST /registo (CSRF automático com th:action). Os "name" correspondem às colunas de utilizadores/empresas. -->
+      <form id="regForm" method="post" action="/registo" th:action="@{/registo}" novalidate>
+        <div class="lm-seg" role="radiogroup" aria-label="Tipo de conta" data-i18n-aria="reg.accountType">
+          <input type="radio" name="tipo" id="regTipoCand" value="candidato" checked />
+          <label for="regTipoCand"><i class="fas fa-user-graduate" aria-hidden="true"></i> <span data-i18n="reg.candidate">Candidato</span></label>
+          <input type="radio" name="tipo" id="regTipoEmp" value="empresa" />
+          <label for="regTipoEmp"><i class="fas fa-building" aria-hidden="true"></i> <span data-i18n="reg.company">Empresa</span></label>
+        </div>
+
+        <div class="lm-grid2">
+          <div class="lm-field" id="regNomeField">
+            <input type="text" id="regNome" name="nomeCompleto" placeholder=" " autocomplete="name" maxlength="150" required aria-describedby="regNomeErr" />
+            <label for="regNome" id="regNomeLabel" data-i18n="reg.name">Nome completo</label>
+            <span class="lm-lead" aria-hidden="true"><i class="fas fa-user"></i></span>
+            <div class="lm-err" id="regNomeErr" data-i18n="reg.nameErr">Introduza o seu nome completo.</div>
+          </div>
+          <div class="lm-field">
+            <input type="email" id="regEmail" name="email" placeholder=" " autocomplete="email" inputmode="email" maxlength="255" required aria-describedby="regEmailErr" />
+            <label for="regEmail" data-i18n="reg.email">Email</label>
+            <span class="lm-lead" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+            <div class="lm-err" id="regEmailErr" data-i18n="reg.emailErr">Introduza um email válido.</div>
+          </div>
+        </div>
+
+        <div class="lm-company" id="regCompany">
+            <div class="lm-field">
+              <input type="text" id="regEmpresa" name="nomeEmpresa" placeholder=" " autocomplete="organization" maxlength="200" aria-describedby="regEmpresaErr" />
+              <label for="regEmpresa" data-i18n="reg.companyName">Nome da empresa</label>
+              <span class="lm-lead" aria-hidden="true"><i class="fas fa-building"></i></span>
+              <div class="lm-err" id="regEmpresaErr" data-i18n="reg.companyErr">Introduza o nome da empresa.</div>
+            </div>
+        </div>
+
+        <!-- País (pais_id ISO) + indicativo (paises.codigo_telefone) + número; o servidor recebe telefone completo (ex.: +258841234567) -->
+        <div class="lm-phone">
+          <div class="lm-cc-wrap">
+            <button type="button" class="lm-cc" id="regCcBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="regCcList" aria-label="País e indicativo" data-i18n-aria="reg.ccAria"><span class="lm-flag-slot"></span><span class="lm-dial"></span><i class="fas fa-chevron-down lm-caret" aria-hidden="true"></i></button>
+            <ul class="lm-cc-list" id="regCcList" role="listbox" aria-label="País e indicativo" data-i18n-aria="reg.ccAria"></ul>
+            <input type="hidden" id="regCc" name="paisId" value="MZ" />
+          </div>
+          <div class="lm-field">
+            <input type="tel" id="regTel" name="telefoneNacional" placeholder=" " autocomplete="tel-national" inputmode="tel" maxlength="16" required aria-describedby="regTelErr" />
+            <label for="regTel" data-i18n="reg.phone">Telefone</label>
+            <span class="lm-lead" aria-hidden="true"><i class="fas fa-phone"></i></span>
+            <div class="lm-err" id="regTelErr" data-i18n="reg.phoneErr">Introduza um número válido (6 a 12 dígitos).</div>
+          </div>
+        </div>
+        <input type="hidden" id="regTelFull" name="telefone" />
+
+        <div class="lm-company" id="regFiscalBlock">
+            <!-- País = Moçambique → NUIT (9 dígitos); outro país → identificação fiscal estrangeira (Tax ID / VAT) -->
+            <div class="lm-field">
+              <input type="text" id="regFiscal" name="identificacaoFiscal" placeholder=" " maxlength="20" aria-describedby="regFiscalErr" />
+              <label for="regFiscal" id="regFiscalLabel" data-i18n="reg.nuit">NUIT</label>
+              <span class="lm-lead" aria-hidden="true"><i class="fas fa-id-card"></i></span>
+              <div class="lm-err" id="regFiscalErr" data-i18n="reg.nuitErr">O NUIT deve ter 9 dígitos.</div>
+              <input type="hidden" id="regTipoId" name="tipoIdentificacao" value="NUIT" />
+            </div>
+        </div>
+
+        <div class="lm-field">
+          <input type="password" id="regPass" name="password" class="has-toggle" placeholder=" " autocomplete="new-password" minlength="8" required aria-describedby="regPassErr regPassHint" />
+          <label for="regPass" data-i18n="reg.password">Senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <button type="button" class="lm-toggle" id="regToggle" aria-label="Mostrar senha" data-i18n-aria="login.show" aria-pressed="false"><i class="fas fa-eye" aria-hidden="true"></i></button>
+          <div class="lm-meter" aria-hidden="true"><i id="regMeterBar"></i></div>
+          <div class="lm-meter-txt" id="regPassHint" aria-live="polite"></div>
+          <div class="lm-err" id="regPassErr" data-i18n="reg.passErr">A senha deve ter pelo menos 8 caracteres, com letras e números.</div>
+        </div>
+
+        <div class="lm-terms" id="regTermsWrap">
+          <label class="lm-check"><input type="checkbox" id="regTerms" name="aceitaTermos" required /> <span data-i18n-html="reg.termsHtml">Li e aceito os <a href="legal.html#termos" th:href="@{/legal#termos}" target="_blank" rel="noopener">Termos de Utilização</a> e a <a href="legal.html#privacidade" th:href="@{/legal#privacidade}" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+          <div class="lm-err" data-i18n="reg.termsErr">Precisa de aceitar os termos para continuar.</div>
+        </div>
+
+        <button type="submit" class="lm-submit" id="regSubmit"><span data-i18n="reg.submit">Criar conta</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+
+      <p class="lm-switch"><span data-i18n="reg.haveAccount">Já tem conta?</span> <a href="login.html" th:href="@{/login}" class="lm-link" data-i18n="reg.login">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lm-modal" id="fpModal" role="dialog" aria-modal="true" aria-labelledby="fpTitle" aria-hidden="true">
+    <div class="lm-box">
+      <button type="button" class="lm-close" id="fpClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="fpTitle" data-i18n="fp.title">Recuperar senha</h2>
+      <p class="lm-sub" data-i18n="fp.sub">Introduza o email da sua conta e enviamos um link para definir uma nova senha.</p>
+      <div class="lm-scroll">
+      <div class="lm-alert ok" id="fpSent" role="status">
+        <i class="fas fa-circle-check" aria-hidden="true"></i><span data-i18n="fp.sent">Se existir uma conta com este email, enviámos um link para definir uma nova senha.</span>
+      </div>
+      <form id="fpForm" method="post" action="/recuperar-senha" th:action="@{/recuperar-senha}" novalidate>
+        <div class="lm-field">
+          <input type="email" id="fpEmail" name="email" placeholder=" " autocomplete="email" inputmode="email" maxlength="255" required aria-describedby="fpEmailErr" />
+          <label for="fpEmail" data-i18n="login.email">Email</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+          <div class="lm-err" id="fpEmailErr" data-i18n="login.emailErr">Introduza um email válido.</div>
+        </div>
+        <button type="submit" class="lm-submit" id="fpSubmit"><span data-i18n="fp.submit">Enviar link</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+      <p class="lm-switch"><span data-i18n="fp.remember">Lembrou-se da senha?</span> <a href="login.html" th:href="@{/login}" class="lm-link" data-i18n="reg.login">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NOVA SENHA (painel sobreposto; abre com ?token=... ou #redefinir-senha) ===== -->
+  <div class="lm-modal" id="rpModal" role="dialog" aria-modal="true" aria-labelledby="rpTitle" aria-hidden="true">
+    <div class="lm-box">
+      <button type="button" class="lm-close" id="rpClose" aria-label="Fechar" data-i18n-aria="op.close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+      <h2 id="rpTitle" data-i18n="rp.title">Definir nova senha</h2>
+      <p class="lm-sub" data-i18n="rp.sub">Escolha uma nova senha para a sua conta.</p>
+      <div class="lm-scroll">
+      <div class="lm-alert" id="rpInvalid" role="alert">
+        <i class="fas fa-circle-exclamation" aria-hidden="true"></i><span><span data-i18n="rp.invalid">Este link é inválido ou expirou.</span> <a href="recuperar-senha.html" th:href="@{/recuperar-senha}" class="lm-link" data-i18n="rp.request">Pedir novo link</a></span>
+      </div>
+      <form id="rpForm" method="post" action="/redefinir-senha" th:action="@{/redefinir-senha}" novalidate>
+        <input type="hidden" id="rpToken" name="token" th:value="${param.token}" />
+        <div class="lm-field">
+          <input type="password" id="rpPass" name="password" class="has-toggle" placeholder=" " autocomplete="new-password" minlength="8" required aria-describedby="rpPassErr rpPassHint" />
+          <label for="rpPass" data-i18n="rp.password">Nova senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <button type="button" class="lm-toggle" id="rpToggle" aria-label="Mostrar senha" data-i18n-aria="login.show" aria-pressed="false"><i class="fas fa-eye" aria-hidden="true"></i></button>
+          <div class="lm-meter" aria-hidden="true"><i id="rpMeterBar"></i></div>
+          <div class="lm-meter-txt" id="rpPassHint" aria-live="polite"></div>
+          <div class="lm-err" id="rpPassErr" data-i18n="reg.passErr">A senha deve ter pelo menos 8 caracteres, com letras e números.</div>
+        </div>
+        <div class="lm-field">
+          <input type="password" id="rpPass2" name="confirmarPassword" placeholder=" " autocomplete="new-password" required aria-describedby="rpPass2Err" />
+          <label for="rpPass2" data-i18n="rp.password2">Confirmar nova senha</label>
+          <span class="lm-lead" aria-hidden="true"><i class="fas fa-lock"></i></span>
+          <div class="lm-err" id="rpPass2Err" data-i18n="rp.pass2Err">As senhas não coincidem.</div>
+        </div>
+        <button type="submit" class="lm-submit" id="rpSubmit"><span data-i18n="rp.submit">Guardar nova senha</span><span class="go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span></button>
+      </form>
+      <p class="lm-switch"><span data-i18n="fp.remember">Lembrou-se da senha?</span> <a href="login.html" th:href="@{/login}" class="lm-link" data-i18n="reg.login">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+<script src="js/i18n.js" th:src="@{/js/i18n.js}"></script>
+<script src="js/paises.js" th:src="@{/js/paises.js}"></script>
+<script src="js/oportunidades-auth.js" th:src="@{/js/oportunidades-auth.js}"></script>
+
+<script th:inline="javascript">
+/* Thymeleaf: define se há sessão. Em ficheiro estático fica false. */
+var LOGGED_IN = /*[[${#authentication != null and #authentication.authenticated and !(#authentication instanceof T(org.springframework.security.authentication.AnonymousAuthenticationToken))}]]*/ false;
+</script>
+<script src="js/dados.js" th:src="@{/js/dados.js}"></script>
+<script src="js/detalhe.js" th:src="@{/js/detalhe.js}"></script>
+</body>
+</html>

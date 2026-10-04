@@ -1,0 +1,1 @@
+document.querySelectorAll("#oportunidades .card[data-href]").forEach(function(c){c.setAttribute("tabindex","0");c.setAttribute("role","link");c.addEventListener("click",function(){location.href=c.dataset.href});c.addEventListener("keydown",function(e){if(e.key==="Enter")location.href=c.dataset.href})});

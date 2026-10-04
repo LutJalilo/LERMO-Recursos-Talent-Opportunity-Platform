@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Painel — LERMO Recursos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/dashboard-candidato.css">
+</head>
+<body>
+<a class="sr" href="#main">Saltar para o conteúdo</a>
+<div class="scrim" id="scrim"></div>
+<aside class="side" id="side" aria-label="Navegação">
+ <div class="brand"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="150" cy="144" r="82" stroke-width="9"/><line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/><line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/><g class="lermo-orbit"><circle cx="185" cy="106" r="32" stroke-width="7"/><circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/></g><circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/></svg><span>LERMO <em>Recursos</em></span>
+  <button class="ib" id="closeBtn" type="button" style="margin-left:auto;background:rgba(255,255,255,.08);border:0;color:#fff" data-a="close-menu"><i class="fas fa-xmark"></i></button></div>
+ <nav class="nav" id="nav"></nav>
+ <div class="sfoot"><button type="button" data-a="logout"><i class="fas fa-right-from-bracket" aria-hidden="true"></i><span data-i="logout"></span></button></div>
+</aside>
+<div class="main">
+ <header class="top">
+  <button class="ib" id="menuBtn" type="button" aria-controls="side" aria-expanded="false" data-a="open-menu"><i class="fas fa-bars"></i></button>
+  <button class="ib" id="railBtn" type="button" data-a="rail" aria-pressed="false"><i class="fas fa-angles-left"></i></button>
+  <div class="sp"></div>
+  <button class="lang" type="button" data-a="lang"><i class="fas fa-globe" aria-hidden="true"></i><span id="langL">PT</span></button>
+  <div class="dd"><button class="who" type="button" id="whoBtn" aria-haspopup="true" aria-expanded="false" data-a="menu:who"><span class="av" id="av"></span><span class="n" id="wn"></span></button>
+   <div class="menu" id="who" role="menu"><a href="#/perfil" role="menuitem"><i class="fas fa-user"></i><span data-i="n.perfil"></span></a><a href="#/definicoes" role="menuitem"><i class="fas fa-gear"></i><span data-i="n.def"></span></a><button class="mi" type="button" role="menuitem" data-a="logout"><i class="fas fa-right-from-bracket"></i><span data-i="logout"></span></button></div></div>
+ </header>
+ <main class="page" id="main" tabindex="-1"></main>
+</div>
+<button id="top" type="button" data-a="top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/dashboard-candidato.js"></script>
+</body>
+</html>
