@@ -1,0 +1,147 @@
+'use strict';
+/* Vagas da empresa (Fase 12): lista com filtros, criar/editar/duplicar, publicar, fechar, prolongar, eliminar e quota mensal do plano.
+   Começa SEM vagas de exemplo. Depende de dashboard-empresa.js: MOCK, wait, norm, t, esc, crumbs, Views, Actions, Modal, toast, D, lang, Session, $.
+   Tabelas SQL: vagas (estado: rascunho|aberta|fechada), vagas_competencias, vagas_idiomas, tipos_vaga, regimes_trabalho, moedas, vagas_mensais_consumidas.
+   Cada vaga no mock: {vaga_id,titulo,titulo_en,descricao,responsabilidades,requisitos[],tipo_id,regime_id,pais_id,provincia,cidade,remuneracao_minima,remuneracao_maxima,
+   remuneracao_visivel,moeda,data_limite,estado,vagas_disponiveis,visualizacoes,criado_em,competencias:[competencia_id],idiomas:[idioma_id]} */
+(()=>{
+const CAT={"c":[[1,"Microsoft Excel","Microsoft Excel"],[2,"Microsoft Word","Microsoft Word"],[3,"HTML e CSS","HTML and CSS"],[4,"JavaScript","JavaScript"],[5,"Python","Python"],[6,"SQL","SQL"],[7,"Contabilidade","Accounting"],[8,"Gestão de projectos","Project management"],[9,"Design gráfico","Graphic design"],[10,"Marketing digital","Digital marketing"],[11,"Redes sociais","Social media"],[12,"Atendimento ao cliente","Customer service"],[13,"Tradução","Translation"],[14,"Agronomia","Agronomy"],[15,"Comunicação","Communication"],[16,"Trabalho em equipa","Teamwork"],[17,"Liderança","Leadership"],[18,"Resolução de problemas","Problem solving"],[19,"Gestão do tempo","Time management"],[20,"Criatividade","Creativity"],[21,"Adaptabilidade","Adaptability"],[22,"Pensamento crítico","Critical thinking"],[23,"Microsoft Office (pacote completo)","Microsoft Office suite"],[24,"Microsoft PowerPoint","Microsoft PowerPoint"],[25,"Microsoft Outlook","Microsoft Outlook"],[26,"Microsoft Access","Microsoft Access"],[27,"Microsoft Teams","Microsoft Teams"],[28,"Microsoft OneNote","Microsoft OneNote"],[29,"Microsoft Project","Microsoft Project"],[30,"Microsoft Visio","Microsoft Visio"],[31,"Power BI","Power BI"],[32,"Google Workspace (Docs, Sheets, Slides)","Google Workspace (Docs, Sheets, Slides)"],[33,"LibreOffice / OpenOffice","LibreOffice / OpenOffice"],[34,"Dactilografia","Typing"],[35,"Gestão documental e arquivo","Document management and filing"],[36,"Secretariado e apoio administrativo","Secretarial and administrative support"],[37,"Java","Java"],[38,"C#","C#"],[39,"PHP","PHP"],[40,"C++","C++"],[41,"React","React"],[42,"Node.js","Node.js"],[43,"Spring Boot","Spring Boot"],[44,"Desenvolvimento móvel (Android)","Mobile development (Android)"],[45,"Git e GitHub","Git and GitHub"],[46,"Linux","Linux"],[47,"Windows Server e Active Directory","Windows Server and Active Directory"],[48,"Redes de computadores","Computer networking"],[49,"Cibersegurança","Cybersecurity"],[50,"Administração de bases de dados","Database administration"],[51,"Computação em nuvem (AWS, Azure)","Cloud computing (AWS, Azure)"],[52,"DevOps e Docker","DevOps and Docker"],[53,"Suporte técnico e helpdesk","Technical support and helpdesk"],[54,"Manutenção de computadores","Computer maintenance"],[55,"Análise de dados","Data analysis"],[56,"Inteligência artificial e machine learning","Artificial intelligence and machine learning"],[57,"Desenvolvimento web (WordPress)","Web development (WordPress)"],[58,"Design UX/UI","UX/UI design"],[59,"Testes de software","Software testing"],[60,"Virtualização (VMware, Hyper-V)","Virtualisation (VMware, Hyper-V)"],[61,"Gestão de recursos humanos","Human resources management"],[62,"Recrutamento e selecção","Recruitment and selection"],[63,"Finanças","Finance"],[64,"Auditoria","Auditing"],[65,"Fiscalidade e impostos","Taxation"],[66,"Banca e serviços financeiros","Banking and financial services"],[67,"Análise financeira","Financial analysis"],[68,"Orçamentação e planeamento","Budgeting and planning"],[69,"Logística e cadeia de abastecimento","Logistics and supply chain"],[70,"Gestão de stocks e armazém","Inventory and warehouse management"],[71,"Compras e aprovisionamento","Procurement"],[72,"Vendas","Sales"],[73,"Negociação","Negotiation"],[74,"Gestão comercial","Commercial management"],[75,"Elaboração de relatórios","Report writing"],[76,"Gestão da qualidade","Quality management"],[77,"Segurança e saúde no trabalho","Occupational health and safety"],[78,"Monitoria e avaliação","Monitoring and evaluation"],[79,"Elaboração de projectos e propostas","Project and proposal writing"],[80,"Estatística e investigação (SPSS)","Statistics and research (SPSS)"],[81,"Ensino e formação","Teaching and training"],[82,"Assessoria jurídica","Legal advisory"],[83,"Contratação pública","Public procurement"],[84,"Engenharia civil e construção","Civil engineering and construction"],[85,"Electricidade","Electrical work"],[86,"Mecânica","Mechanics"],[87,"Condução (carta de condução)","Driving (driving licence)"],[88,"Enfermagem e primeiros socorros","Nursing and first aid"],[89,"Fotografia e edição de vídeo","Photography and video editing"],[90,"Redacção e revisão de textos","Writing and proofreading"],[91,"Relações públicas","Public relations"],[92,"Gestão de eventos","Event management"],[93,"Empreendedorismo e criação de negócios","Entrepreneurship and business creation"],[94,"Turismo e hotelaria","Tourism and hospitality"],[95,"Organização","Organisation"],[96,"Proactividade","Proactivity"],[97,"Ética profissional","Professional ethics"],[98,"Capacidade de aprendizagem","Learning ability"],[99,"Trabalho sob pressão","Working under pressure"],[100,"Empatia","Empathy"],[101,"Tomada de decisão","Decision making"],[102,"Autonomia","Autonomy"],[103,"Atenção ao detalhe","Attention to detail"],[104,"Orientação para resultados","Results orientation"]],"i":[[1,"Português","Portuguese"],[2,"Inglês","English"],[3,"Espanhol","Spanish"],[4,"Francês","French"],[5,"Alemão","German"],[6,"Italiano","Italian"],[7,"Suaíli","Swahili"],[8,"Changana","Changana"],[9,"Ronga","Ronga"]]},MOE=["AOA", "BRL", "EUR", "GBP", "MZN", "USD", "ZAR"];
+const TIPOS=[[1,'Estágio','Internship'],[2,'Emprego efectivo','Full-time job'],[3,'Trainee','Trainee'],[4,'Freelance','Freelance']];
+const REG=[[1,'Presencial','On-site'],[2,'Híbrido','Hybrid'],[3,'Remoto','Remote']];
+const QUOTA={gratuito:3,basico:10,premium:25,enterprise:999};   /* planos_assinatura.vagas_mensais */
+const FILT=['todas','aberta','rascunho','fechada'];
+const nm=a=>lang==='en'?a[2]:a[1],cat=(L,id)=>(L.find(x=>x[0]===+id)||[])
+const hoje=()=>new Date().toISOString().slice(0,10);
+const lim=()=>QUOTA[MOCK.plano]||3;
+const exp=v=>v.estado==='aberta'&&v.data_limite<hoje();
+const fmtD=d=>{try{return new Intl.DateTimeFormat(lang==='en'?'en-GB':'pt-PT',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(d+'T00:00:00'))}catch(e){return d}};
+const fmtM=(n,m)=>{try{return new Intl.NumberFormat(lang==='en'?'en-GB':'pt-PT',{style:'currency',currency:m,maximumFractionDigits:0}).format(n)}catch(e){return n+' '+m}};
+let id0=0;const nid=()=>'v'+Date.now().toString(36)+(id0++);
+const S={f:'todas',q:'',s:'rec',v:'row'};
+const dias=v=>Math.round((new Date(v.data_limite+'T00:00:00')-new Date(hoje()+'T00:00:00'))/864e5);
+const soon=v=>v.estado==='aberta'&&!exp(v)&&dias(v)<=7;
+if(!Array.isArray(MOCK.vagas))MOCK.vagas=[];
+
+Object.assign(D.pt,{'v.h':'Vagas','v.new':'Nova vaga','v.q':'Pesquisar vagas…','v.f.todas':'Todas','v.f.aberta':'Abertas','v.f.rascunho':'Rascunhos','v.f.fechada':'Fechadas',
+ 'v.e.aberta':'Aberta','v.e.rascunho':'Rascunho','v.e.fechada':'Fechada','v.e.exp':'Prazo terminado','v.cand':'candidaturas','v.views':'visualizações','v.lim':'Prazo','v.n':'{n} vaga(s)',
+ 'v.quota':'Quota mensal do plano','v.quota.u':'{u} de {l} vagas publicadas este mês','v.quota.full':'Atingiu o limite de vagas do plano este mês.','v.quota.up':'Ver planos',
+ 'v.none':'Ainda não criou vagas.','v.vw.row':'Linha','v.vw.col':'Colunas','v.vw':'Vista','v.none.p':'Crie a primeira vaga e comece a receber candidaturas.','v.nores':'Nenhuma vaga corresponde à pesquisa.',
+ 'v.m':'Acções','v.edit':'Editar','v.dup':'Duplicar','v.close':'Fechar vaga','v.reopen':'Reabrir','v.ext':'Prolongar prazo','v.pub':'Publicar','v.del':'Eliminar',
+ 'v.s.base':'Informação da vaga','v.s.local':'Local e regime','v.s.pay':'Remuneração e prazo','v.s.req':'Requisitos','v.s.sk':'Competências e idiomas',
+ 'v.l.tit':'Título','v.l.tite':'Título em inglês (opcional)','v.l.desc':'Descrição','v.l.resp':'Responsabilidades','v.l.reqs':'Requisitos (um por linha)','v.l.tipo':'Tipo de vaga','v.l.reg':'Regime de trabalho',
+ 'v.l.pais':'País','v.l.prov':'Província / região','v.l.cid':'Cidade','v.l.min':'Remuneração mínima','v.l.max':'Remuneração máxima','v.l.moe':'Moeda','v.l.vis':'Mostrar a remuneração aos candidatos',
+ 'v.l.lim':'Data limite','v.l.n':'Número de vagas','v.l.sk':'Competências','v.l.lg':'Idiomas','v.sk.q':'Filtrar competências…','v.sel':'{n} seleccionada(s)','v.pick':'Seleccione',
+ 'v.draft':'Guardar rascunho','v.publish':'Publicar vaga','v.save':'Guardar','v.cancel':'Cancelar','v.saved':'Vaga guardada.','v.published':'Vaga publicada.','v.closed':'Vaga fechada.','v.opened':'Vaga reaberta.','v.extd':'Prazo actualizado.','v.dupd':'Vaga duplicada como rascunho.','v.deld':'Vaga eliminada.',
+ 'v.ext.t':'Prolongar prazo','v.ext.ok':'Confirmar','v.del.t':'Eliminar vaga','v.del.q':'Eliminar a vaga «{t}»? Esta acção não pode ser desfeita.','v.del.has':'Esta vaga já tem candidaturas e não pode ser eliminada. Feche-a em vez disso.',
+ 'v.k.open':'Abertas','v.k.draft':'Rascunhos','v.k.cand':'Candidaturas','v.k.soon':'A terminar em 7 dias','v.s.rec':'Mais recentes','v.s.prazo':'Prazo mais próximo','v.s.cand':'Mais candidaturas','v.dl':'Termina em {n} dias','v.dl1':'Termina amanhã','v.dl0':'Termina hoje','v.n1':'1 vaga','v.nn':'{n} vagas','v.seecand':'Ver candidaturas','v.sort':'Ordenar','v.err.req':'Campo obrigatório.','v.err.date':'Indique uma data posterior a hoje.','v.err.pay':'O máximo não pode ser inferior ao mínimo.','v.err.n':'Indique um número entre 1 e 999.','v.err.num':'Indique um valor válido.','v.copy':'(cópia)'});
+Object.assign(D.en,{'v.h':'Jobs','v.new':'New job','v.q':'Search jobs…','v.f.todas':'All','v.f.aberta':'Open','v.f.rascunho':'Drafts','v.f.fechada':'Closed',
+ 'v.e.aberta':'Open','v.e.rascunho':'Draft','v.e.fechada':'Closed','v.e.exp':'Deadline passed','v.cand':'applications','v.views':'views','v.lim':'Deadline','v.n':'{n} job(s)',
+ 'v.quota':'Monthly plan quota','v.quota.u':'{u} of {l} jobs published this month','v.quota.full':'You reached the plan job limit this month.','v.quota.up':'See plans',
+ 'v.none':'You have not created any jobs yet.','v.vw.row':'Row','v.vw.col':'Columns','v.vw':'View','v.none.p':'Create your first job and start receiving applications.','v.nores':'No job matches your search.',
+ 'v.m':'Actions','v.edit':'Edit','v.dup':'Duplicate','v.close':'Close job','v.reopen':'Reopen','v.ext':'Extend deadline','v.pub':'Publish','v.del':'Delete',
+ 'v.s.base':'Job information','v.s.local':'Location and work mode','v.s.pay':'Pay and deadline','v.s.req':'Requirements','v.s.sk':'Skills and languages',
+ 'v.l.tit':'Title','v.l.tite':'Title in English (optional)','v.l.desc':'Description','v.l.resp':'Responsibilities','v.l.reqs':'Requirements (one per line)','v.l.tipo':'Job type','v.l.reg':'Work mode',
+ 'v.l.pais':'Country','v.l.prov':'Province / region','v.l.cid':'City','v.l.min':'Minimum pay','v.l.max':'Maximum pay','v.l.moe':'Currency','v.l.vis':'Show pay to candidates',
+ 'v.l.lim':'Deadline','v.l.n':'Number of openings','v.l.sk':'Skills','v.l.lg':'Languages','v.sk.q':'Filter skills…','v.sel':'{n} selected','v.pick':'Select',
+ 'v.draft':'Save draft','v.publish':'Publish job','v.save':'Save','v.cancel':'Cancel','v.saved':'Job saved.','v.published':'Job published.','v.closed':'Job closed.','v.opened':'Job reopened.','v.extd':'Deadline updated.','v.dupd':'Job duplicated as a draft.','v.deld':'Job deleted.',
+ 'v.ext.t':'Extend deadline','v.ext.ok':'Confirm','v.del.t':'Delete job','v.del.q':'Delete the job "{t}"? This cannot be undone.','v.del.has':'This job already has applications and cannot be deleted. Close it instead.','v.k.open':'Open','v.k.draft':'Drafts','v.k.cand':'Applications','v.k.soon':'Ending in 7 days','v.s.rec':'Most recent','v.s.prazo':'Nearest deadline','v.s.cand':'Most applications','v.dl':'Ends in {n} days','v.dl1':'Ends tomorrow','v.dl0':'Ends today','v.n1':'1 job','v.nn':'{n} jobs','v.seecand':'View applications','v.sort':'Sort','v.err.req':'Required field.','v.err.date':'Enter a date after today.','v.err.pay':'The maximum cannot be lower than the minimum.','v.err.n':'Enter a number between 1 and 999.','v.err.num':'Enter a valid value.','v.copy':'(copy)'});
+
+const nCand=v=>MOCK.candidaturas.filter(c=>c.vaga_id===v.vaga_id).length;
+const loadPaises=()=>window.LERMO_PAISES?Promise.resolve():new Promise(ok=>{const s=document.createElement('script');s.src='js/paises.js';s.onload=ok;s.onerror=ok;document.head.append(s)});
+const paisN=c=>{try{const n=new Intl.DisplayNames(lang==='en'?'en':'pt-PT',{type:'region'}).of(c);if(n&&n!==c)return n}catch(e){}return c};
+const paises=()=>(window.LERMO_PAISES||[]).map(p=>p[0]).sort((a,b)=>a==='MZ'?-1:b==='MZ'?1:paisN(a).localeCompare(paisN(b),lang));
+const titulo=v=>lang==='en'&&v.titulo_en?v.titulo_en:v.titulo;
+
+/* ---------- lista ---------- */
+const visiveis=()=>MOCK.vagas.filter(v=>(S.f==='todas'||v.estado===S.f)&&(!S.q||norm([v.titulo,v.titulo_en,v.cidade,v.provincia].join(' ')).includes(norm(S.q)))).sort((a,b)=>S.s==='prazo'?String(a.data_limite).localeCompare(b.data_limite):S.s==='cand'?nCand(b)-nCand(a):String(b.criado_em).localeCompare(String(a.criado_em)));
+function menu(v){const i='vm-'+v.vaga_id,b=(a,ic,k,c='')=>`<button class="mi${c}" type="button" role="menuitem" data-a="${a}:${v.vaga_id}"><i class="fas ${ic}" aria-hidden="true"></i><span>${t(k)}</span></button>`;
+ return `<div class="dd"><button class="ib" type="button" data-a="menu:${i}" aria-haspopup="true" aria-expanded="false" aria-label="${t('v.m')}: ${esc(v.titulo)}"><i class="fas fa-ellipsis-vertical" aria-hidden="true"></i></button><div class="menu vg-m" id="${i}" role="menu">`+
+ b('vg-edit','fa-pen','v.edit')+(v.estado==='rascunho'?b('vg-pub','fa-paper-plane','v.pub'):'')+b('vg-dup','fa-copy','v.dup')+(v.estado==='aberta'?b('vg-ext','fa-calendar-plus','v.ext')+b('vg-close','fa-lock','v.close'):'')+(v.estado==='fechada'?b('vg-ext','fa-rotate-left','v.reopen'):'')+b('vg-del','fa-trash','v.del',' vg-d')+`</div></div>`}
+function item(v){const e=exp(v),loc=[v.cidade,v.provincia,paisN(v.pais_id)].filter(Boolean).join(', ');
+ const pay=v.remuneracao_visivel&&(v.remuneracao_minima!=null||v.remuneracao_maxima!=null)?[...new Set([v.remuneracao_minima,v.remuneracao_maxima].filter(x=>x!=null))].map(x=>fmtM(x,v.moeda)).join(' – '):'';
+ const dl=v.estado==="aberta"&&!e?dias(v):null;
+ const st=v.estado==='aberta'&&!e?'ok':v.estado==='fechada'||e?'no':'in';
+ return `<article class="card vgc vg--${e?"fechada":v.estado}"><div class="vgc-h"><span class="vgc-ic" aria-hidden="true"><i class="fas fa-briefcase"></i></span><div class="vgc-ti"><h3><a href="#/vagas" data-a="vg-edit:${v.vaga_id}">${esc(titulo(v))}</a></h3><small>${esc((MOCK.empresa&&MOCK.empresa.nome)||'')}</small></div>${menu(v)}</div>
+ <div class="vg-tags"><span class="tag ${st}">${t(e?'v.e.exp':'v.e.'+v.estado)}</span><span class="tag in">${esc(nm(cat(TIPOS,v.tipo_id)))}</span><span class="tag in">${esc(nm(cat(REG,v.regime_id)))}</span></div>
+ <ul class="vgc-l"><li><i class="fas fa-location-dot" aria-hidden="true"></i><span>${esc(loc)}</span></li><li><i class="fas fa-clock" aria-hidden="true"></i><span>${t('v.lim')}: ${fmtD(v.data_limite)}${dl!=null?` · <b class="vg-dl${dl<=7?' warn':''}">${t(dl===0?'v.dl0':dl===1?'v.dl1':'v.dl',{n:dl})}</b>`:''}</span></li>${pay?`<li><i class="fas fa-coins" aria-hidden="true"></i><span>${esc(pay)}</span></li>`:''}</ul>
+ <p class="vgc-st"><span><i class="fas fa-file-signature" aria-hidden="true"></i> <strong>${nCand(v)}</strong> ${t('v.cand')}</span><span><i class="fas fa-eye" aria-hidden="true"></i> <strong>${v.visualizacoes||0}</strong> ${t('v.views')}</span></p>
+ <a class="btn btn-l vgc-bt" href="#/candidaturas/${v.vaga_id}">${t('v.seecand')}</a></article>`}
+function quota(){const u=MOCK.vagasConsumidas||0,l=lim(),full=u>=l,p=Math.min(100,Math.round(u/l*100));
+ return `<section class="card vg-q"><div class="ch"><h2>${t('v.quota')}</h2><a class="btn btn-l btn-s" href="#/plano">${t('v.quota.up')}</a></div><div class="vg-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${l}" aria-valuenow="${u}"><span class="${full?'full':''}" style="width:${p}%"></span></div><p class="vg-qt">${t('v.quota.u',{u,l:l>=999?'∞':l})}${full?` — <strong>${t('v.quota.full')}</strong>`:''}</p></section>`}
+function kpis(){const k=[['fa-bullhorn','v.k.open',MOCK.vagas.filter(v=>v.estado==='aberta'&&!exp(v)).length],['fa-pen-ruler','v.k.draft',MOCK.vagas.filter(v=>v.estado==='rascunho').length],['fa-file-signature','v.k.cand',MOCK.candidaturas.length],['fa-hourglass-half','v.k.soon',MOCK.vagas.filter(soon).length,1]];
+ return `<div class="stats">${k.map(([i,l,n,w])=>`<div class="stat${w&&n?' warn':''}"><span class="ic"><i class="fas ${i}" aria-hidden="true"></i></span><div><b>${n}</b><span>${t(l)}</span></div></div>`).join('')}</div>`}
+function corpo(L){const nada=`<div class="state card"><p>${t('v.nores')}</p></div>`;
+ if(S.v==='col'){const g=[['aberta','v.f.aberta'],['rascunho','v.f.rascunho'],['fechada','v.f.fechada']],of=v=>exp(v)?'fechada':v.estado;
+  return `<div class="vg-cols" id="vgL">${g.map(([k,l])=>{const X=L.filter(v=>of(v)===k);return `<section class="vg-col vg-col--${k}" aria-label="${t(l)}"><h3><span>${t(l)}</span><b>${X.length}</b></h3><div class="vg-cb">${X.length?X.map(item).join(''):`<p class="vg-ce">${t('v.nores')}</p>`}</div></section>`}).join('')}</div>`}
+ return `<div class="vg-row" id="vgL" tabindex="0" role="region" aria-label="${t('n.vagas')}">${L.length?L.map(item).join(''):nada}</div>`}
+function listaHtml(){const L=visiveis(),all=MOCK.vagas.length;
+ const seg=FILT.map(f=>`<button type="button" data-a="vg-f:${f}" aria-pressed="${S.f===f}">${t('v.f.'+f)} (${f==='todas'?all:MOCK.vagas.filter(v=>v.estado===f).length})</button>`).join('');
+ const body=!all?`<div class="state card"><i class="fas fa-briefcase" aria-hidden="true"></i><strong>${t('v.none')}</strong><p>${t('v.none.p')}</p><button class="btn btn-g" type="button" data-a="vg-new"><i class="fas fa-plus" aria-hidden="true"></i> ${t('v.new')}</button></div>`
+  :`<div class="vg-bar2"><div class="seg" role="group">${seg}</div><div class="vg-ctl"><select id="vgS" aria-label="${t('v.sort')}">${[['rec','v.s.rec'],['prazo','v.s.prazo'],['cand','v.s.cand']].map(([k,l])=>`<option value="${k}"${S.s===k?' selected':''}>${t(l)}</option>`).join('')}</select>${S.v==="row"?`<span class="vg-arr"><button class="ib" type="button" data-a="vg-sc:l" aria-label="←"><i class="fas fa-chevron-left" aria-hidden="true"></i></button><button class="ib" type="button" data-a="vg-sc:r" aria-label="→"><i class="fas fa-chevron-right" aria-hidden="true"></i></button></span>`:''}<div class="seg vg-vw" role="group" aria-label="${t('v.vw')}">${['row','col'].map(k=>`<button type="button" data-a="vg-v:${k}" aria-pressed="${S.v===k}">${t('v.vw.'+k)}</button>`).join('')}</div><input id="vgQ" class="vg-q2" type="search" value="${esc(S.q)}" placeholder="${t('v.q')}" aria-label="${t('v.q')}"></div></div>${corpo(L)}`;
+ return `<h1 class="sr">${t('v.h')}</h1>`+crumbs([[t('n.dash'),'#/dashboard'],[t('n.vagas')]])+`<section class="hello vg-hello"><div><h1>${t('n.vagas')}</h1><p>${all?t(all===1?'v.n1':'v.nn',{n:all}):t('v.none.p')}</p></div><button class="btn btn-g" type="button" data-a="vg-new"><i class="fas fa-plus" aria-hidden="true"></i> ${t('v.new')}</button></section>`+kpis()+quota()+body}
+Views.vagas=async()=>{await loadPaises();await wait(0,200);return{title:t('n.vagas'),html:listaHtml()}};
+const refresh=()=>{if(/^#\/vagas/.test(location.hash))$('#main').innerHTML=listaHtml();else dispatchEvent(new HashChangeEvent('hashchange'))};
+
+/* ---------- formulário ---------- */
+const F=(id,l,c,req)=>`<div class="fld"><label for="${id}">${l}${req?'<span aria-hidden="true"> *</span>':''}</label>${c}<p class="ferr" id="${id}E" role="alert" hidden></p></div>`;
+const inp=(id,v,x='')=>`<input id="${id}" value="${esc(v??'')}" autocomplete="off" ${/type=/.test(x)?'':'type="text" '}${x}>`;
+const sel=(id,o,v)=>`<select id="${id}">${o.map(([k,l])=>`<option value="${esc(k)}"${String(k)===String(v)?' selected':''}>${esc(l)}</option>`).join('')}</select>`;
+const pick=(k,L,sv)=>`<div class="vg-pk" data-k="${k}">${k==='sk'?`<input type="search" class="vg-pq" placeholder="${t('v.sk.q')}" aria-label="${t('v.sk.q')}">`:''}<div class="vg-pl">${L.map(x=>`<label data-n="${esc(norm(x[1]+' '+x[2]))}"><input type="checkbox" name="${k}" value="${x[0]}"${sv.includes(x[0])?' checked':''}> <span>${esc(nm(x))}</span></label>`).join('')}</div></div>`;
+function formHtml(v){const o=v||{},sk=o.competencias||[],lg=o.idiomas||[];
+ return `<form id="vgF" novalidate data-id="${o.vaga_id||''}"><fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-briefcase"></i></span>${t('v.s.base')}</legend>${F('vTit',t('v.l.tit'),inp('vTit',o.titulo,'maxlength="200"'),1)}${F('vTitE2',t('v.l.tite'),inp('vTitE2',o.titulo_en,'maxlength="200"'))}
+ ${F('vDesc',t('v.l.desc'),`<textarea id="vDesc" rows="5">${esc(o.descricao||'')}</textarea>`)}${F('vResp',t('v.l.resp'),`<textarea id="vResp" rows="4">${esc(o.responsabilidades||'')}</textarea>`)}</fieldset>
+ <fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-circle-check"></i></span>${t('v.s.req')}</legend>${F('vReq',t('v.l.reqs'),`<textarea id="vReq" rows="4">${esc((o.requisitos||[]).join('\n'))}</textarea>`)}</fieldset>
+ <fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-location-dot"></i></span>${t('v.s.local')}</legend><div class="vg-r">${F('vTipo',t('v.l.tipo'),sel('vTipo',TIPOS.map(x=>[x[0],nm(x)]),o.tipo_id||2),1)}${F('vReg',t('v.l.reg'),sel('vReg',REG.map(x=>[x[0],nm(x)]),o.regime_id||1),1)}</div>
+ <div class="vg-r3">${F('vPais',t('v.l.pais'),sel('vPais',paises().map(c=>[c,paisN(c)]),o.pais_id||MOCK.empresa.pais||(Session.get()||{}).pais||'MZ'),1)}${F('vProv',t('v.l.prov'),inp('vProv',o.provincia,'maxlength="150"'))}${F('vCid',t('v.l.cid'),inp('vCid',o.cidade,'maxlength="150"'))}</div></fieldset>
+ <fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-coins"></i></span>${t('v.s.pay')}</legend><div class="vg-r3">${F('vMin',t('v.l.min'),inp('vMin',o.remuneracao_minima,'inputmode="decimal"'))}${F('vMax',t('v.l.max'),inp('vMax',o.remuneracao_maxima,'inputmode="decimal"'))}${F('vMoe',t('v.l.moe'),sel('vMoe',MOE.map(c=>[c,c]),o.moeda||'MZN'))}</div>
+ <label class="vg-ck"><input type="checkbox" id="vVis"${o.remuneracao_visivel?' checked':''}> <span>${t('v.l.vis')}</span></label>
+ <div class="vg-r">${F('vLim',t('v.l.lim'),inp('vLim',o.data_limite,'type="date"'),1)}${F('vN',t('v.l.n'),inp('vN',o.vagas_disponiveis||1,'type="number" min="1" max="999"'),1)}</div></fieldset>
+ <fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-star"></i></span>${t('v.s.sk')}</legend><div class="vg-r"><div><p class="vg-pt">${t('v.l.sk')}</p>${pick('sk',CAT.c,sk)}</div><div><p class="vg-pt">${t('v.l.lg')}</p>${pick('lg',CAT.i,lg)}</div></div></fieldset>
+ <p class="ferr box" id="vFail" role="alert" hidden></p><div class="mod-f"><button class="btn btn-l" type="button" data-a="modal-close">${t('v.cancel')}</button>${!o.vaga_id||o.estado==='rascunho'?`<button class="btn btn-l" type="submit" value="draft">${t('v.draft')}</button><button class="btn btn-g" type="submit" value="pub"><i class="fas fa-paper-plane" aria-hidden="true"></i> ${t('v.publish')}</button>`:`<button class="btn btn-g" type="submit" value="keep"><i class="fas fa-check" aria-hidden="true"></i> ${t('v.save')}</button>`}</div></form>`}
+const mk=(id,m)=>{const el=$('#'+id),w=el.closest('.fld'),e=$('#'+id+'E');w.classList.toggle('invalid',!!m);el.setAttribute('aria-invalid',String(!!m));e.textContent=m||'';e.hidden=!m;return m?el:null};
+const num=s=>{s=String(s).trim().replace(/\s/g,'').replace(',','.');return s===''?null:/^\d+(\.\d{1,2})?$/.test(s)?+s:NaN};
+const val=id=>$('#'+id).value.trim(),checked=k=>[...document.querySelectorAll(`#vgF input[name=${k}]:checked`)].map(x=>+x.value);
+function save(modo){
+ const f=$('#vgF'),id=f.dataset.id,old=MOCK.vagas.find(x=>x.vaga_id===id),pub=modo==='pub'||(modo==='keep'&&old&&old.estado!=='rascunho');
+ const mi=num(val('vMin')),ma=num(val('vMax')),n=+val('vN'),lg=val('vLim');
+ const bad=[mk('vTit',val('vTit')?'':t('v.err.req')),mk('vMin',Number.isNaN(mi)?t('v.err.num'):''),mk('vMax',Number.isNaN(ma)?t('v.err.num'):(mi!=null&&ma!=null&&ma<mi?t('v.err.pay'):'')),
+  mk('vLim',!lg?t('v.err.req'):(modo!=='draft'&&lg<=hoje()&&!(old&&old.estado!=='rascunho'&&lg===old.data_limite)?t('v.err.date'):'')),mk('vN',Number.isInteger(n)&&n>=1&&n<=999?'':t('v.err.n'))].filter(Boolean);
+ if(bad.length){bad[0].focus();return}
+ const fail=$('#vFail');fail.hidden=true;
+ const publica=modo==='pub'&&(!old||old.estado==='rascunho');
+ if(publica&&(MOCK.vagasConsumidas||0)>=lim()){fail.innerHTML=`${t('v.quota.full')} <a href="#/plano">${t('v.quota.up')}</a>`;fail.hidden=false;return}
+ const v={...(old||{}),vaga_id:id||nid(),titulo:val('vTit'),titulo_en:val('vTitE2')||null,descricao:val('vDesc')||null,responsabilidades:val('vResp')||null,
+  requisitos:val('vReq').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,30),tipo_id:+val('vTipo'),regime_id:+val('vReg'),pais_id:val('vPais'),provincia:val('vProv')||null,cidade:val('vCid')||null,
+  remuneracao_minima:mi,remuneracao_maxima:ma,remuneracao_visivel:$('#vVis').checked,moeda:val('vMoe'),data_limite:lg,vagas_disponiveis:n,competencias:checked('sk'),idiomas:checked('lg'),
+  estado:publica?'aberta':(old?old.estado:'rascunho'),visualizacoes:old?old.visualizacoes:0,criado_em:old?old.criado_em:new Date().toISOString()};
+ if(old)Object.assign(old,v);else MOCK.vagas.push(v);
+ if(publica)MOCK.vagasConsumidas=(MOCK.vagasConsumidas||0)+1;
+ Modal.close(true);refresh();toast(t(publica?'v.published':'v.saved'));
+}
+document.addEventListener('submit',e=>{if(e.target.id==='vgF'){e.preventDefault();save(e.submitter?e.submitter.value:'draft')}});
+document.addEventListener('change',e=>{if(e.target.id==='vgS'){S.s=e.target.value;$('#vgL').innerHTML=visiveis().map(item).join('')}});
+document.addEventListener('input',e=>{
+ if(e.target.id==='vgQ'){S.q=e.target.value;const p=e.target.selectionStart;$('#vgL').innerHTML=visiveis().map(item).join('')||`<div class="state card"><p>${t('v.nores')}</p></div>`}
+ if(e.target.classList.contains('vg-pq')){const q=norm(e.target.value);e.target.nextElementSibling.querySelectorAll('label').forEach(l=>l.hidden=!!q&&!l.dataset.n.includes(q))}});
+const vaga=x=>MOCK.vagas.find(v=>v.vaga_id===x);
+const open=v=>loadPaises().then(()=>{const m=Modal.open({title:t(v?'v.edit':'v.new'),body:formHtml(v)});m&&m.querySelector('.mod').classList.add('vg-mod')});
+function dlg(title,body){Modal.open({title,body})}
+Actions['vg-new']=()=>open();
+Actions['vg-sc']=(b,x)=>{const r=$('#vgL');if(r)r.scrollBy({left:(x==='l'?-1:1)*r.clientWidth*.9,behavior:'smooth'})};
+Actions['vg-edit']=(b,x)=>{const v=vaga(x);if(v)open(v)};
+Actions['vg-v']=(b,x)=>{S.v=x;refresh()};
+Actions['vg-f']=(b,x)=>{S.f=x;refresh()};
+Actions['vg-pub']=(b,x)=>open(vaga(x));
+Actions['vg-dup']=(b,x)=>{const v=vaga(x);if(!v)return;MOCK.vagas.push({...structuredClone(v),vaga_id:nid(),titulo:v.titulo+' '+t('v.copy'),estado:'rascunho',visualizacoes:0,criado_em:new Date().toISOString()});refresh();toast(t('v.dupd'))};
+Actions['vg-close']=(b,x)=>{const v=vaga(x);if(v){v.estado='fechada';refresh();toast(t('v.closed'))}};
+Actions['vg-ext']=(b,x)=>{const v=vaga(x);if(!v)return;const min=new Date(Date.now()+864e5).toISOString().slice(0,10);
+ dlg(t(v.estado==='fechada'?'v.reopen':'v.ext.t'),`<form id="vgX" novalidate data-id="${x}">${F('vXd',t('v.l.lim'),inp('vXd',v.data_limite>=min?v.data_limite:min,`type="date" min="${min}"`),1)}<div class="mod-f"><button class="btn btn-l" type="button" data-a="modal-close">${t('v.cancel')}</button><button class="btn btn-g" type="submit">${t('v.ext.ok')}</button></div></form>`)};
+document.addEventListener('submit',e=>{if(e.target.id!=='vgX')return;e.preventDefault();const v=vaga(e.target.dataset.id),d=val('vXd');
+ if(!d||d<=hoje()){mk('vXd',t('v.err.date'));return}
+ const reab=v.estado==='fechada';if(reab&&(MOCK.vagasConsumidas||0)>=lim()){mk('vXd',t('v.quota.full'));return}
+ v.data_limite=d;if(reab){v.estado='aberta';MOCK.vagasConsumidas=(MOCK.vagasConsumidas||0)+1}Modal.close(true);refresh();toast(t(reab?'v.opened':'v.extd'))});
+Actions['vg-del']=(b,x)=>{const v=vaga(x);if(!v)return;const has=nCand(v)>0;
+ dlg(t('v.del.t'),`<p>${has?t('v.del.has'):esc(t('v.del.q',{t:v.titulo}))}</p><div class="mod-f"><button class="btn btn-l" type="button" data-a="modal-close">${t('v.cancel')}</button>${has?'':`<button class="btn btn-g vg-danger" type="button" data-a="vg-del-ok:${x}">${t('v.del')}</button>`}</div>`)};
+Actions['vg-del-ok']=(b,x)=>{MOCK.vagas=MOCK.vagas.filter(v=>v.vaga_id!==x);Modal.close(true);refresh();toast(t('v.deld'))};
+window.VagaCard={item};window.LERMO_CAT=CAT;
+})();

@@ -46,13 +46,31 @@ function filtered(skipCat){
   return r;
 }
 function cardHtml(o){
-  var c=CATS[o.cat],pz=prazo(o),open=pz[1]!=='off',sal=L(o,'sal');
-  return '<article class="card'+(open?'':' closed')+'"><div class="top"><div class="ic"><i class="fas '+c[1]+'"></i></div><span class="tag">'+esc(o.tipo?TIPOS[o.tipo]:c[0])+'</span></div>'+
-  '<div><h3>'+esc(L(o,'t'))+'</h3><div class="emp">'+esc(o.emp)+'</div></div>'+
-  '<div class="meta"><span><i class="fas fa-location-dot"></i>'+esc(loc(o))+'</span><span><i class="fas fa-building"></i>'+esc(cap(o.reg))+'</span>'+(sal?'<span><i class="fas fa-coins"></i>'+esc(sal)+'</span>':'')+'</div>'+
-  '<p class="d">'+esc(L(o,'desc'))+'</p>'+
-  '<div class="foot"><small class="'+pz[1]+'"><i class="far fa-clock"></i> '+esc(pz[0])+'</small><div style="display:flex;gap:.4rem"><a class="btn btn-l" href="detalhe.html?id='+o.id+'">'+esc(t('op.details'))+'</a>'+
-  (open?'<button class="btn btn-g" data-apply="'+o.id+'">'+esc(t(o.cat==='vaga'?'op.apply':'op.enroll'))+'</button>':'<button class="btn btn-g" disabled>'+esc(t('op.closed'))+'</button>')+'</div></div></article>';
+  var c=CATS[o.cat],pz=prazo(o),open=pz[1]!=='off',sal=L(o,'sal'),d=dias(o),mid='om-'+o.id;
+  var mi=function(a,ic,k){return '<button class="mi" type="button" role="menuitem" '+a+'><i class="fas '+ic+'" aria-hidden="true"></i><span>'+esc(t(k))+'</span></button>'};
+  var menu='<div class="dd"><button class="ib" type="button" data-menu="'+mid+'" aria-haspopup="true" aria-expanded="false" aria-label="'+esc(t('op.more.opts')+': '+L(o,'t'))+'"><i class="fas fa-ellipsis-vertical" aria-hidden="true"></i></button>'+
+   '<div class="menu" id="'+mid+'" role="menu">'+mi('data-view="'+o.id+'"','fa-eye','op.details')+(open?mi('data-apply="'+o.id+'"',o.cat==='vaga'?'fa-paper-plane':'fa-user-plus',o.cat==='vaga'?'op.apply':'op.enroll'):'')+mi('data-share="'+o.id+'"','fa-share-nodes','op.share')+'</div></div>';
+  var tags='<span class="tag '+(open?'ok':'no')+'">'+esc(open?t('op.status.open'):t('op.closed'))+'</span>'+(o.tipo?'<span class="tag in">'+esc(TIPOS[o.tipo])+'</span>':'<span class="tag in">'+esc(c[0])+'</span>')+'<span class="tag in">'+esc(cap(o.reg))+'</span>';
+  var prazoTxt=esc(t('op.fact.deadline'))+': '+esc(fmt(o.lim))+(open&&d<=35?' · <b class="dl'+(d<=7?' warn':'')+'">'+esc(d===0?t('op.dl.today'):t(d===1?'op.dl.day':'op.dl.days',{n:d}))+'</b>':'');
+  return '<article class="card oc'+(open?'':' closed')+'"><div class="oc-h"><span class="oc-ic" aria-hidden="true"><i class="fas '+c[1]+'"></i></span><div class="oc-ti"><h3><a href="detalhe.html?id='+encodeURIComponent(o.id)+'">'+esc(L(o,'t'))+'</a></h3><small>'+esc(o.emp)+'</small></div>'+menu+'</div>'+
+  '<div class="oc-tags">'+tags+'</div>'+
+  '<ul class="oc-l"><li><i class="fas fa-location-dot" aria-hidden="true"></i><span>'+esc(loc(o))+'</span></li><li><i class="fas fa-clock" aria-hidden="true"></i><span>'+prazoTxt+'</span></li>'+(sal?'<li><i class="fas fa-coins" aria-hidden="true"></i><span>'+esc(sal)+'</span></li>':'')+'</ul>'+
+  '<div class="oc-bt"><a class="btn btn-l" href="detalhe.html?id='+encodeURIComponent(o.id)+'">'+esc(t('op.details'))+'</a>'+
+  (open?'<button class="btn btn-g" type="button" data-apply="'+o.id+'">'+esc(t(o.cat==='vaga'?'op.apply':'op.enroll'))+'</button>':'<button class="btn btn-g" type="button" disabled>'+esc(t('op.closed'))+'</button>')+'</div></article>';
+}
+function closeMenus(except){
+  document.querySelectorAll('.oc .menu.on').forEach(function(m){
+    if(m===except)return;
+    m.classList.remove('on');m.closest('.oc').classList.remove('menu-open');
+    var b=m.previousElementSibling;if(b)b.setAttribute('aria-expanded','false');
+  });
+}
+function toggleMenu(btn){
+  var m=document.getElementById(btn.dataset.menu),on=!m.classList.contains('on');
+  closeMenus(on?m:null);
+  m.classList.toggle('on',on);m.closest('.oc').classList.toggle('menu-open',on);
+  btn.setAttribute('aria-expanded',String(on));
+  if(on){var f=m.querySelector('.mi');if(f)f.focus()}
 }
 function renderTabs(){
   var base=filtered(true),h='<button class="tab'+(st.cat?'':' on')+'" role="tab" aria-selected="'+(!st.cat)+'" data-cat="">'+esc(t('op.tabs.all'))+' <b>'+base.length+'</b></button>';
@@ -146,9 +164,14 @@ function init(){
   $('q').value=p.get('q')||'';$('fReg').value=p.get('regime')||'';
   readForm();
   document.addEventListener('click',function(e){
-    var x=e.target.closest('[data-cat],[data-apply],[data-share],[data-more],[data-rm]');
+    var mb=e.target.closest('[data-menu]');
+    if(mb){toggleMenu(mb);return}
+    if(!e.target.closest('.oc .menu'))closeMenus();
+    var x=e.target.closest('[data-cat],[data-apply],[data-share],[data-view],[data-more],[data-rm]');
     if(!x)return;
-    if(x.hasAttribute('data-share'))share(x.dataset.share);
+    if(x.closest('.menu'))closeMenus();
+    if(x.hasAttribute('data-view'))view(x.dataset.view);
+    else if(x.hasAttribute('data-share'))share(x.dataset.share);
     else if(x.hasAttribute('data-more')){st.n+=PAGE;render()}
     else if(x.hasAttribute('data-rm'))removeChip(x.dataset.rm,x.dataset.v||'');
     else if(x.dataset.apply)apply(x.dataset.apply);
@@ -175,7 +198,7 @@ function init(){
   $('hamb').addEventListener('click',function(){mm(true)});
   $('mmClose').addEventListener('click',function(){mm(false)});
   $('mm').addEventListener('click',function(e){if(e.target.closest('a'))mm(false)});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')mm(false)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){mm(false);var o=document.querySelector('.oc .menu.on');if(o){var b=o.previousElementSibling;closeMenus();if(b)b.focus()}}});
   /* Aviso de candidatura: Entrar / Criar conta */
   $('gateClose').addEventListener('click',closeGate);
   $('gateModal').addEventListener('mousedown',function(e){if(e.target===$('gateModal'))closeGate()});

@@ -11,8 +11,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <link rel="stylesheet" href="css/oportunidades.css" th:href="@{/css/oportunidades.css}" />
 <link rel="stylesheet" href="css/detalhe.css" th:href="@{/css/detalhe.css}" />
+<link rel="stylesheet" href="css/loader.css" th:href="@{/css/loader.css}" />
+<script src="js/seguranca.js"></script>
 </head>
 <body>
+<script src="js/loader.js" th:src="@{/js/loader.js}"></script>
+
 <header><div class="wrap">
   <a href="index.html" th:href="@{/}" class="logo" aria-label="LERMO Recursos — Início" data-i18n-aria="op.logoAria"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="150" cy="144" r="82" stroke-width="9"/><line x1="42" y1="144" x2="58" y2="144" stroke-width="7"/><line x1="242" y1="144" x2="258" y2="144" stroke-width="7"/><g class="lermo-orbit"><circle cx="185" cy="106" r="32" stroke-width="7"/><circle cx="193" cy="82" r="5" fill="currentColor" stroke="none"/></g><circle cx="150" cy="144" r="2.6" fill="currentColor" stroke="none"/></svg><span class="lt">LERMO <span>Recursos</span></span></a>
   <nav class="links" aria-label="Navegação principal" data-i18n-aria="op.navAria"><a href="index.html" th:href="@{/}" data-i18n="nav.home">Início</a><a href="index.html#sobre" th:href="@{/#sobre}" data-i18n="nav.about">Sobre Nós</a><a href="oportunidades.html" th:href="@{/oportunidades}" class="on" data-i18n="nav.opportunities">Oportunidades</a><a href="index.html#servicos" th:href="@{/#servicos}" data-i18n="nav.services">Serviços</a><a href="index.html#comofunciona" th:href="@{/#comofunciona}" data-i18n="nav.how">Como Funciona</a><a href="index.html#contactos" th:href="@{/#contactos}" data-i18n="nav.contact">Contactos</a></nav>
@@ -287,6 +291,7 @@
 
 <script src="js/i18n.js" th:src="@{/js/i18n.js}"></script>
 <script src="js/paises.js" th:src="@{/js/paises.js}"></script>
+<script src="js/conta.js" th:src="@{/js/conta.js}"></script>
 <script src="js/oportunidades-auth.js" th:src="@{/js/oportunidades-auth.js}"></script>
 
 <script th:inline="javascript">

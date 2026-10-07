@@ -1,0 +1,17 @@
+/* Loader comum a todas as páginas LERMO (js/loader.js): carregamento da página, mudança de página e terminar sessão.
+   Autónomo (não depende das variáveis de cada página). */
+.lmgl{position:fixed;inset:0;z-index:10000;background:#0F2A1E;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:0 1.5rem;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+.lmgl.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.lmgl .lgo{font-size:clamp(1.3rem,7vw,2rem);font-weight:800;letter-spacing:.06em;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.6rem;max-width:100%;text-align:center;color:#fff}
+.lmgl .lgo svg{width:clamp(32px,9vw,44px);height:clamp(32px,9vw,44px);flex-shrink:0;color:#C9A03A}
+.lmgl .lgo span{color:#C9A03A}
+.lmgl .orb{transform-origin:150px 144px;animation:lmglOrb 2.4s linear infinite}
+.lmgl p{margin:1rem 0 0;font-weight:300;color:#E4C878;font-size:.9rem;text-align:center;max-width:90vw}
+.lmgl .sp{display:inline-block;width:20px;height:20px;margin-right:.6rem;vertical-align:-4px;border:3px solid rgba(255,255,255,.28);border-top-color:#C9A03A;border-radius:50%;animation:lmglSp .8s linear infinite}
+.lmgl .bar{margin-top:1.5rem;width:200px;height:3px;background:rgba(255,255,255,.1);border-radius:9999px;overflow:hidden}
+.lmgl .bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#C9A03A,#E4C878);border-radius:9999px;animation:lmglBar 1.3s ease-in-out infinite}
+html.lm-busy{overflow:hidden}
+@keyframes lmglSp{to{transform:rotate(360deg)}}
+@keyframes lmglOrb{to{transform:rotate(360deg)}}
+@keyframes lmglBar{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
+@media (prefers-reduced-motion:reduce){.lmgl{transition:none}.lmgl .sp{animation-duration:2s}.lmgl .orb{animation:none}.lmgl .bar i{animation-duration:2.6s}}

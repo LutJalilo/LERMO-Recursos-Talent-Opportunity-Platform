@@ -345,3 +345,32 @@ header .btn-g{border:1.5px solid var(--g);box-shadow:0 4px 14px rgba(201,160,58,
 @media(min-width:1100px){.hact{display:flex}}
 .lang-toggle{display:flex;align-items:center;gap:.3rem;background:none;border:0;border-radius:6px;padding:.3rem .6rem;font-size:.7rem;font-weight:600;color:var(--m);line-height:1.4;transition:.35s}
 .lang-toggle:hover{background:rgba(201,160,58,.08);color:var(--g)}
+
+/* Cards de oportunidade (mesmo estilo dos cards de vagas do painel da empresa) */
+.card.oc{border-top:4px solid var(--pl);padding:1.1rem;gap:.8rem;min-height:300px;position:relative}
+.card.oc.closed{border-top-color:#b03a2e}
+.card.oc.menu-open{z-index:5}
+.oc-h{display:flex;gap:.8rem;align-items:flex-start}
+.oc-ic{width:46px;height:46px;border-radius:12px;background:rgba(27,67,50,.08);color:var(--p);display:grid;place-items:center;flex:none;font-size:1rem}
+.oc-ti{flex:1;min-width:0}.oc-ti h3{font-size:1rem;line-height:1.3}.oc-ti h3 a:hover{text-decoration:underline}
+.oc-ti small{display:block;color:var(--m);font-size:.82rem;margin-top:.15rem}
+.oc .ib{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--s);display:grid;place-items:center;color:var(--p);flex:none;cursor:pointer}
+.oc .ib:hover,.oc .ib[aria-expanded="true"]{border-color:var(--p);background:rgba(27,67,50,.05)}
+.oc .dd{position:relative}
+.oc .menu{position:absolute;right:0;top:calc(100% + 8px);min-width:200px;background:var(--s);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:.4rem;display:none;z-index:70}
+.oc .menu.on{display:block}
+.oc .menu .mi{display:flex;gap:.7rem;align-items:center;width:100%;text-align:left;padding:.6rem .7rem;border:0;background:none;border-radius:10px;font:inherit;font-size:.88rem;color:var(--t);cursor:pointer}
+.oc .menu .mi i{width:1rem;text-align:center;color:var(--pl)}
+.oc .menu .mi:hover,.oc .menu .mi:focus-visible{background:rgba(27,67,50,.06)}
+.oc-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.oc-tags .tag{background:rgba(27,67,50,.08);color:var(--p)}
+.oc-tags .tag.ok{background:rgba(45,107,79,.14);color:var(--pl)}
+.oc-tags .tag.no{background:rgba(176,58,46,.12);color:#b03a2e}
+.oc-l{list-style:none;margin:0;padding:0;display:grid;gap:.45rem;font-size:.86rem;color:var(--t)}
+.oc-l li{display:flex;gap:.55rem;align-items:flex-start}
+.oc-l i{color:var(--pl);width:1rem;margin-top:.2rem;flex:none;text-align:center}
+.oc-l .dl{color:var(--pl);font-weight:600}.oc-l .dl.warn{color:#b45309}
+.oc-bt{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:.5rem;padding-top:.8rem;border-top:1px solid var(--line)}
+.oc-bt .btn{padding:.55rem 1rem;font-size:.82rem;width:100%}
+.card.oc.closed .menu{opacity:1}
+.oc-bt .btn{padding:.55rem .5rem;white-space:nowrap}

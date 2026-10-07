@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verificar certificado · LERMO Recursos</title>
+<style>
+:root{--p:#1B4332;--g:#C9A03A;--bg:#FAF9F6;--t:#0F2A1E;--m:#5C6D63;--line:rgba(27,67,50,.14)}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t)}
+header{background:var(--p);color:#fff;padding:18px 20px;border-bottom:4px solid var(--g);font-weight:700}
+main{max-width:520px;margin:28px auto;padding:0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+h1{font-size:1.25rem;margin:0 0 6px}p{color:var(--m);margin:0 0 16px}
+form{display:flex;gap:8px}input{flex:1;min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+button{padding:12px 18px;border:0;border-radius:10px;background:var(--p);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+#res{margin-top:18px}.ok,.no{border-radius:12px;padding:16px}.ok{background:#EAF5EE;border:1px solid #9CCFB0}.no{background:#FDF0EE;border:1px solid #E7B1A9}
+.ok h2,.no h2{font-size:1.05rem;margin:0 0 10px}dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px}dt{color:var(--m)}dd{margin:0;font-weight:600}
+small{display:block;margin-top:14px;color:var(--m)}
+</style>
+<link rel="stylesheet" href="css/loader.css?v=20261008" />
+<script src="js/seguranca.js"></script>
+</head>
+<body>
+<script src="js/loader.js?v=20261008"></script>
+
+<header>LERMO Recursos</header>
+<main><div class="card">
+<h1>Verificar certificado</h1>
+<p>Introduza o código impresso no certificado ou digitalize o código QR.</p>
+<form id="f"><input id="c" placeholder="LRM-FM-2026-00417" autocomplete="off" aria-label="Código do certificado"><button>Verificar</button></form>
+<div id="res" aria-live="polite"></div>
+<small>Por privacidade, esta página mostra apenas o nome, o programa e a data.</small>
+</div></main>
+<script>
+/* DEMO: em produção trocar por GET /api/formacao/certificados/{codigo}, que devolve só {valido,nome,programa,entidade,horas,emitido_em,signatario_nome,signatario_cargo,assinatura_digital (primeiros 24 caracteres, em grupos de 4)}. */
+const REG={'LRM-FM-2026-00417':{nome:'Candidato (demonstração)',programa:'Elaboração de Plano de Negócio',entidade:'Centro de Formação Técnica',horas:60,emitido:'2026-09-02',assinado:'Guinelson Ernesto',cargo:'Director Administrativo',id:'7B89 5786 8B61 5696 B9DA D37D'}};
+const $=i=>document.getElementById(i),res=$('res');
+function mostra(cod){
+ cod=(cod||'').trim().toUpperCase();res.textContent='';if(!cod)return;
+ const r=REG[cod],box=document.createElement('div');
+ if(r){box.className='ok';const h=document.createElement('h2');h.textContent='✔ Certificado válido';box.append(h);
+  const dl=document.createElement('dl');
+  [['Código',cod],['Titular',r.nome],['Programa',r.programa],['Entidade',r.entidade],['Duração',r.horas+' horas'],['Emitido em',r.emitido.split('-').reverse().join('/')],['Assinado digitalmente por',r.assinado+' — '+r.cargo],['ID da assinatura',r.id]]
+   .forEach(([k,v])=>{const a=document.createElement('dt'),b=document.createElement('dd');a.textContent=k;b.textContent=v;dl.append(a,b)});box.append(dl)}
+ else{box.className='no';const h=document.createElement('h2');h.textContent='✖ Código não encontrado';const p=document.createElement('p');p.style.margin=0;p.textContent='Confirme o código ou contacte a LERMO Recursos.';box.append(h,p)}
+ res.append(box)}
+$('f').addEventListener('submit',e=>{e.preventDefault();mostra($('c').value)});
+const q=new URLSearchParams(location.search).get('c');if(q){$('c').value=q;mostra(q)}
+</script>
+</body></html>

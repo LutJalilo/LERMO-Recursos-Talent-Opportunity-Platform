@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="css/loader.css" th:href="@{/css/loader.css}" />
+<script src="js/seguranca.js"></script>
 </head>
 <body>
 
@@ -388,29 +390,29 @@
     <div class="container">
       <div class="team-grid mt-2">
         <div class="team-card fade-up delay-1">
-          <div class="avatar">GA</div>
-          <h4>Guinelson Alkebulan</h4>
-          <div class="role"><i class="fas fa-user-tie"></i> <span data-i18n="idx.role.ceo">CEO · Sócio-Gerente</span></div>
+          <div class="avatar">FA</div>
+          <h4>Farid Abobacar</h4>
+          <div class="role"><i class="fas fa-user-tie"></i> <span data-i18n="idx.role.ceo">CEO · Sócio</span></div>
         </div>
         <div class="team-card fade-up delay-2">
-          <div class="avatar">FM</div>
-          <h4>Farid Abobacar</h4>
-          <div class="role"><i class="fas fa-tasks"></i> <span data-i18n="idx.role.coo">COO · Sócio-Gerente</span></div>
+          <div class="avatar">GE</div>
+          <h4>Guinelson Ernesto</h4>
+          <div class="role"><i class="fas fa-clipboard-list"></i> <span data-i18n="idx.role.admin">Director Administrativo · Sócio</span></div>
         </div>
         <div class="team-card fade-up delay-3">
+          <div class="avatar">VP</div>
+          <h4>Vivaldo Patuá</h4>
+          <div class="role"><i class="fas fa-tasks"></i> <span data-i18n="idx.role.coo">COO · Sócio</span></div>
+        </div>
+        <div class="team-card fade-up delay-1">
           <div class="avatar">LJ</div>
           <h4>Lut Jalilo</h4>
           <div class="role"><i class="fas fa-code"></i> <span data-i18n="idx.role.cto">CTO · Sócio</span></div>
         </div>
-        <div class="team-card fade-up delay-1">
-          <div class="avatar">VP</div>
-          <h4>Vivaldo Patuá</h4>
-          <div class="role"><i class="fas fa-bullhorn"></i> <span data-i18n="idx.role.cmo">CMO · Sócio</span></div>
-        </div>
         <div class="team-card fade-up delay-2">
           <div class="avatar">RB</div>
           <h4>Rikisha Bênesse</h4>
-          <div class="role"><i class="fas fa-clipboard-list"></i> <span data-i18n="idx.role.admin">Directora Administrativa · Sócia</span></div>
+          <div class="role"><i class="fas fa-bullhorn"></i> <span data-i18n="idx.role.cmo">CMO · Sócia</span></div>
         </div>
         <div class="team-card fade-up delay-3">
           <div class="avatar">LH</div>
@@ -737,9 +739,11 @@
   </div>
 
   <!-- ===== SCRIPTS ===== -->
-  <script src="js/paises.js"></script>
+  <script src="js/loader.js" th:src="@{/js/loader.js}"></script>
+<script src="js/paises.js"></script>
   <script src="js/i18n.js" th:src="@{/js/i18n.js}"></script>
-<script src="js/index.js"></script>
+  <script src="js/conta.js" th:src="@{/js/conta.js}"></script>
+<script src="js/index.js?v=2"></script>
 <script src="js/index-cards.js"></script>
 </body>
 </html>

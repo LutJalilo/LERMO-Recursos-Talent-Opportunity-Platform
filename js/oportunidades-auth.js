@@ -57,9 +57,18 @@
     loginSubmit.disabled = true;
     loginSubmit.querySelector('.go i').className = 'fas fa-spinner fa-spin';
     // Pré-visualização local (file:) não submete; com Spring Security o POST /login segue normalmente.
-    if (location.protocol === 'file:') {
+    if (LermoConta.TEST) {
       e.preventDefault();
-      setTimeout(() => { loginSubmit.disabled = false; loginSubmit.querySelector('.go i').className = 'fas fa-arrow-right'; }, 900);
+      LermoConta.login(loginEmail.value, loginPass.value).then(r => {
+        if (r.ok) { const dest = LermoConta.startSession(r.conta); setTimeout(() => { location.href = dest; }, 300); return; }
+        loginSubmit.disabled = false;
+        loginSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
+        const sp = loginAlert.querySelector('span');
+        if (r.locked) { sp.removeAttribute('data-i18n'); sp.textContent = I.t('login.locked').replace('{n}', r.wait); }
+        else { sp.setAttribute('data-i18n', 'login.error'); sp.textContent = I.t('login.error'); }
+        loginAlert.classList.add('show');
+        loginPass.value = ''; loginPass.focus();
+      });
     }
   });
   [loginEmail, loginPass].forEach(i => i.addEventListener('input', () => markLogin(i, false)));
@@ -81,7 +90,7 @@
   // Países e indicativos (tabela paises: pais_id, codigo_telefone) — seletor personalizado com bandeiras
   const PAISES = window.LERMO_PAISES;  // lista completa (ISO 3166-1) definida acima
   const ccBtn = $r('regCcBtn'), ccList = $r('regCcList');
-  const flagImg = c => '<img class="lm-flag" src="https://flagcdn.com/w40/' + c.toLowerCase() + '.png" srcset="https://flagcdn.com/w80/' + c.toLowerCase() + '.png 2x" width="24" height="18" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">';
+  const flagImg = c => '<img class="lm-flag" src="https://flagcdn.com/w40/' + c.toLowerCase() + '.png" srcset="https://flagcdn.com/w80/' + c.toLowerCase() + '.png 2x" width="24" height="18" alt="" loading="lazy">';
   PAISES.forEach(p => {
     const li = document.createElement('li');
     li.setAttribute('role', 'option'); li.tabIndex = -1; li.dataset.code = p[0];
@@ -248,14 +257,15 @@
     regSubmit.disabled = true;
     regSubmit.querySelector('.go i').className = 'fas fa-spinner fa-spin';
     // Pré-visualização local (file:) não submete; com Spring MVC o POST /registo segue normalmente.
-    if (location.protocol === 'file:') {
+    if (LermoConta.TEST || location.protocol === 'file:') {
       e.preventDefault();
-      setTimeout(() => {
+      const em = $r('regEmail').value;
+      LermoConta.register({ email: em, password: regPass.value, nome_completo: $r('regNome').value.trim(), telefone: $r('regTelFull').value, pais: regCc.value, tipo: regTipoEmp.checked ? 'empresa' : 'candidato' }).then(r => {
         regSubmit.disabled = false; regSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
-        const em = $r('regEmail').value;
+        const ra = $r('regAlert'); if (!r.ok) { if (ra) ra.classList.add('show'); return; } if (ra) ra.classList.remove('show');
         regForm.reset(); syncFiscal(); syncTipo(); regMeter();
         showRegistered(em);
-      }, 900);
+      });
     }
   });
 
@@ -310,7 +320,7 @@
     if (bad) { e.preventDefault(); fpEmail.focus(); return; }
     busy(fpSubmit);
     // Pré-visualização local (file:) não envia; com Spring o POST /recuperar-senha segue normalmente.
-    if (location.protocol === 'file:') { e.preventDefault(); setTimeout(() => { idle(fpSubmit); $r('fpSent').classList.add('show'); }, 900); }
+    if (LermoConta.TEST || location.protocol === 'file:') { e.preventDefault(); setTimeout(() => { idle(fpSubmit); $r('fpSent').classList.add('show'); }, 900); }
   });
 
   rpToggle.addEventListener('click', () => {
@@ -335,7 +345,7 @@
     if (b1 || b2) { e.preventDefault(); (b1 ? rpPass : rpPass2).focus(); return; }
     busy(rpSubmit);
     // Pré-visualização local: simula o sucesso. Com Spring o controlador faz redirect:/?senha=ok
-    if (location.protocol === 'file:') { e.preventDefault(); setTimeout(() => { idle(rpSubmit); rpForm.reset(); rpMeter(); showPwChanged(); }, 900); }
+    if (LermoConta.TEST || location.protocol === 'file:') { e.preventDefault(); setTimeout(() => { idle(rpSubmit); rpForm.reset(); rpMeter(); showPwChanged(); }, 900); }
   });
   function showPwChanged() {
     openLogin(null);
@@ -348,7 +358,7 @@
   if (location.hash === '#recuperar-senha') openFp(null);
   if (location.hash === '#redefinir-senha' || qsPw.has('token') || qsPw.has('invalido')) {
     if (qsPw.get('token')) $r('rpToken').value = qsPw.get('token');
-    if (qsPw.has('invalido') || (!qsPw.get('token') && location.protocol !== 'file:')) { $r('rpInvalid').classList.add('show'); rpForm.style.display = 'none'; }
+    if (qsPw.has('invalido') || (!qsPw.get('token') && !LermoConta.TEST && location.protocol !== 'file:')) { $r('rpInvalid').classList.add('show'); rpForm.style.display = 'none'; }
     openRp(null);
   }
   if (qsPw.get('senha') === 'ok') showPwChanged();
