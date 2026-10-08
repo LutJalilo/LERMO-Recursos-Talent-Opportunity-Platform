@@ -37,7 +37,7 @@ const D={pt:{
  'n.form':'Formação','n.fin':'Financiamento','n.emp':'Empreendedorismo','n.equipa':'Equipa','g.rec':'Recrutamento','g.pub':'Publicar e gerir','g.gest':'Gestão','st.sql':'Alterações ao SQL (v5.9)',
  'n.dash':'Dashboard','n.vagas':'Vagas','n.cand':'Candidaturas','n.tal':'Talentos','n.ev':'Eventos','n.mkt':'Marketplace','n.rel':'Relatórios','n.plano':'Plano e pagamentos','n.perfil':'Perfil da empresa','n.def':'Definições',
  'hi':'Olá, {n}','hi.p':'Este é o centro de controlo do recrutamento e dos negócios da sua empresa. Escolha uma área no menu.','hi.cta':'Gerir vagas','map.h':'Áreas do painel','open':'Abrir',
- 'st.h':'Secções previstas','st.db':'Dados (SQL v5.12)','st.next':'Próxima etapa','plan':'Plano {p}',
+ 'st.h':'Secções previstas','st.db':'Dados (SQL v5.13)','st.next':'Próxima etapa','plan':'Plano {p}',
  'plano.gratuito':'Gratuito','plano.basico':'Básico','plano.premium':'Premium','plano.enterprise':'Enterprise',
  'err':'Não foi possível carregar os dados.','retry':'Tentar novamente','top':'Voltar ao topo','menuOpen':'Abrir menu','menuClose':'Fechar menu','rail':'Recolher ou expandir menu','userAria':'Conta da empresa','langAria':'Alternar idioma'},
 en:{
@@ -47,7 +47,7 @@ en:{
  'n.form':'Training','n.fin':'Funding','n.emp':'Entrepreneurship','n.equipa':'Team','g.rec':'Recruitment','g.pub':'Publish and manage','g.gest':'Management','st.sql':'SQL changes (v5.9)',
  'n.dash':'Dashboard','n.vagas':'Jobs','n.cand':'Applications','n.tal':'Talent','n.ev':'Events','n.mkt':'Marketplace','n.rel':'Reports','n.plano':'Plan and payments','n.perfil':'Company profile','n.def':'Settings',
  'hi':'Hello, {n}','hi.p':'This is the control centre for your company recruitment and business. Pick an area in the menu.','hi.cta':'Manage jobs','map.h':'Dashboard areas','open':'Open',
- 'st.h':'Planned sections','st.db':'Data (SQL v5.12)','st.next':'Next step','plan':'{p} plan',
+ 'st.h':'Planned sections','st.db':'Data (SQL v5.13)','st.next':'Next step','plan':'{p} plan',
  'plano.gratuito':'Free','plano.basico':'Basic','plano.premium':'Premium','plano.enterprise':'Enterprise',
  'err':'Could not load the data.','retry':'Try again','top':'Back to top','menuOpen':'Open menu','menuClose':'Close menu','rail':'Collapse or expand menu','userAria':'Company account','langAria':'Switch language'}};
 let lang='pt';try{lang=localStorage.getItem('lermo-lang')==='en'?'en':'pt'}catch(e){}
@@ -55,7 +55,7 @@ const t=(k,v)=>{let s=(D[lang][k]??D.pt[k]??k);if(v)for(const x in v)s=s.replace
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=s=>document.querySelector(s);
 
-/* ===== 4. Mapa de navegação: cada menu corresponde a tabelas do SQL v5.12 (lermo_database_v5_12.sql) ===== */
+/* ===== 4. Mapa de navegação: cada menu corresponde a tabelas do SQL v5.13 (lermo_database_v5_13.sql) ===== */
 const NAV=[
  {id:'dashboard',i:'fa-gauge-high',k:'n.dash',g:'g.menu'},
  {id:'vagas',i:'fa-briefcase',k:'n.vagas',g:'g.rec'},
@@ -72,7 +72,7 @@ const NAV=[
  {id:'perfil',i:'fa-building',k:'n.perfil'},
  {id:'definicoes',i:'fa-gear',k:'n.def'}
 ];
-/* db = tabelas do SQL (lermo_database_v5_12.sql) que a área usa; novo = o que a secção «v5.9 — Painel da empresa» desse ficheiro acrescenta */
+/* db = tabelas do SQL (lermo_database_v5_13.sql) que a área usa; novo = o que a secção «v5.9 — Painel da empresa» desse ficheiro acrescenta */
 const AREAS={
  dashboard:{db:['vagas','candidaturas','assinaturas_empresas','vagas_mensais_consumidas'],
   pt:{d:'Resumo da actividade de recrutamento, publicações e negócios da empresa.',s:[]},en:{d:'Summary of the recruitment, publishing and business activity of the company.',s:[]}},
@@ -106,7 +106,7 @@ const AREAS={
  equipa:{db:['empresas','utilizadores','planos_assinatura','vagas'],novo:['empresa_membros (nova tabela)'],
   pt:{d:'Recrutadores e gestores que trabalham na conta da empresa.',s:['Convidar membros até ao limite do plano (max_recrutadores)','Papéis: administrador, recrutador e analista','Atribuir o recrutador responsável a cada vaga','Remover ou suspender acessos']},
   en:{d:'Recruiters and managers working on the company account.',s:['Invite members up to the plan limit (max_recrutadores)','Roles: administrator, recruiter and analyst','Assign the responsible recruiter to each job','Remove or suspend access']}},
- plano:{db:['planos_assinatura','assinaturas_empresas','vagas_mensais_consumidas','pagamentos','cronograma_pagamentos','metodos_pagamento','moedas'],
+ plano:{db:['planos_assinatura','assinaturas_empresas','mudancas_plano','vagas_mensais_consumidas','pagamentos','cronograma_pagamentos','metodos_pagamento','moedas'],
   pt:{d:'Plano de assinatura, consumo mensal e pagamentos.',s:['Plano actual e comparação dos planos','Vagas consumidas no mês','Pagamento por M-Pesa, e-Mola, mKesh, cartão, PayPal ou transferência','Cronograma e histórico de pagamentos']},
   en:{d:'Subscription plan, monthly usage and payments.',s:['Current plan and plan comparison','Jobs used this month','Payment by M-Pesa, e-Mola, mKesh, card, PayPal or bank transfer','Payment schedule and history']}},
  perfil:{db:['empresas','paises','provincias','distritos'],
@@ -177,7 +177,7 @@ function setMenu(on){body.classList.toggle('drawer',on);$('#scrim').classList.to
 function closeMenus(){document.querySelectorAll('.menu.on').forEach(m=>{m.classList.remove('on');m.parentElement.querySelector('button').setAttribute('aria-expanded','false')})}
 function closeAll(){setMenu(false);closeMenus();Modal.close(true)}
 function toast(m){const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2500)}
-/* Terminar sessão: loader «A terminar sessão…» → apaga a sessão → login.html. Em produção: POST /logout (Spring) → encerrar_sessao(sessao_id,'logout') no SQL v5.12, antes de redirecionar. */
+/* Terminar sessão: loader «A terminar sessão…» → apaga a sessão → login.html. Em produção: POST /logout (Spring) → encerrar_sessao(sessao_id,'logout') no SQL v5.13, antes de redirecionar. */
 function logout(){if(window.LermoLoader)LermoLoader.logout('login.html',()=>Session.end(),t('ld.out'));else{Session.end();location.href='login.html'}}
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');

@@ -68,7 +68,7 @@
         else { sp.setAttribute('data-i18n', 'login.error'); sp.textContent = I.t('login.error'); }
         loginAlert.classList.add('show');
         loginPass.value = ''; loginPass.focus();
-      });
+      }).catch(() => { loginSubmit.disabled = false; loginSubmit.querySelector('.go i').className = 'fas fa-arrow-right'; loginAlert.classList.add('show'); });
     }
   });
   [loginEmail, loginPass].forEach(i => i.addEventListener('input', () => markLogin(i, false)));
@@ -159,6 +159,14 @@
     $r('regEmpresa').required = emp; $r('regFiscal').required = emp;
     $r('regNomeField').style.display = emp ? 'none' : ''; $r('regNome').required = !emp;
   }
+  // Registo fechado (modo de teste): mostra aviso e bloqueia o envio
+  function regBlocked() {
+    const closed = !!(window.LermoConta && LermoConta.registoFechado && LermoConta.registoFechado());
+    const ra = $r('regAlert');
+    if (closed && ra) { const k = 'reg.closed', sp = ra.querySelector('span'); sp.setAttribute('data-i18n', k); sp.textContent = I.t(k) || ''; ra.classList.add('show'); }
+    regSubmit.disabled = closed;
+    return closed;
+  }
   function openReg(opener, tipo) {
     document.querySelectorAll('.lm-modal.open').forEach(m => { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); });
     regOpener = opener || null;
@@ -167,6 +175,7 @@
     regModal.classList.add('open');
     regModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    regBlocked();
     setTimeout(() => $r('regNome').focus(), 60);
   }
   // Redirecciona do registo para o login, com mensagem de sucesso e email preenchido
@@ -239,6 +248,7 @@
   $r('regTerms').addEventListener('change', () => $r('regTermsWrap').classList.remove('invalid'));
 
   regForm.addEventListener('submit', e => {
+    if (regBlocked()) { e.preventDefault(); return; }
     let firstBad = null;
     Object.keys(regRules).forEach(id => {
       const el = $r(id), bad = !regRules[id](el.value);
@@ -260,12 +270,25 @@
     if (LermoConta.TEST || location.protocol === 'file:') {
       e.preventDefault();
       const em = $r('regEmail').value;
-      LermoConta.register({ email: em, password: regPass.value, nome_completo: $r('regNome').value.trim(), telefone: $r('regTelFull').value, pais: regCc.value, tipo: regTipoEmp.checked ? 'empresa' : 'candidato' }).then(r => {
+      const ra = $r('regAlert');
+      if (ra) ra.classList.remove('show');
+      const regFail = key => {
         regSubmit.disabled = false; regSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
-        const ra = $r('regAlert'); if (!r.ok) { if (ra) ra.classList.add('show'); return; } if (ra) ra.classList.remove('show');
+        if (!ra) return;
+        const sp = ra.querySelector('span'), k = key || 'reg.error';
+        sp.setAttribute('data-i18n', k); sp.textContent = I.t(k) || '';
+        ra.classList.add('show');
+        if (ra.scrollIntoView) ra.scrollIntoView({ block: 'nearest' });
+      };
+      LermoConta.register({ email: em, password: regPass.value, nome_completo: $r('regNome').value.trim(), telefone: $r('regTelFull').value, pais: regCc.value, tipo: regTipoEmp.checked ? 'empresa' : 'candidato' }).then(r => {
+        if (!r || !r.ok) {
+          regFail(r && r.exists ? 'reg.exists' : r && r.motivo === 'storage' ? 'reg.noStorage' : r && r.motivo === 'crypto' ? 'reg.noCrypto' : 'reg.error');
+          return;
+        }
+        regSubmit.disabled = false; regSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
         regForm.reset(); syncFiscal(); syncTipo(); regMeter();
         showRegistered(em);
-      });
+      }).catch(() => regFail('reg.error'));
     }
   });
 

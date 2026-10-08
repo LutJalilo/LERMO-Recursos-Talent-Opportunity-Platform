@@ -13,7 +13,7 @@
       'reg.email': 'Email', 'reg.emailErr': 'Introduza um email válido.', 'reg.phone': 'Telefone', 'reg.phoneErr': 'Introduza um número válido (6 a 12 dígitos).',
       'reg.password': 'Senha', 'reg.passErr': 'A senha deve ter pelo menos 8 caracteres, com letras e números.', 'reg.password2': 'Confirmar senha', 'reg.pass2Err': 'As senhas não coincidem.',
       'reg.terms': 'Li e aceito os Termos de Utilização e a Política de Privacidade.', 'reg.termsErr': 'Precisa de aceitar os termos para continuar.', 'reg.submit': 'Criar conta',
-      'reg.haveAccount': 'Já tem conta?', 'reg.login': 'Entrar', 'reg.error': 'Não foi possível criar a conta. Verifique os dados e tente novamente.',
+      'reg.haveAccount': 'Já tem conta?', 'reg.login': 'Entrar', 'reg.error': 'Não foi possível criar a conta. Verifique os dados e tente novamente.', 'reg.closed': 'O registo de novas contas está temporariamente fechado. Por agora só entram as contas autorizadas.', 'reg.exists': 'Este email já está registado. Entre na sua conta ou use outro email.', 'reg.noStorage': 'O navegador não permite guardar a conta. Saia do modo privado ou active o armazenamento e tente novamente.', 'reg.noCrypto': 'Este navegador não suporta o registo seguro. Abra o site com https:// ou use um navegador actualizado.',
       'meter.0': '', 'meter.1': 'Senha fraca', 'meter.2': 'Senha razoável', 'meter.3': 'Senha boa', 'meter.4': 'Senha forte',
       'nav.register': 'Registar',
       'how.c1d': 'O candidato cria e completa o seu perfil profissional.',
@@ -190,7 +190,8 @@
       'footer.faq': 'FAQ',
       'footer.contact': 'Contactos',
       'footer.privacy': 'Privacidade',
-      'footer.terms': 'Termos'
+      'footer.terms': 'Termos',
+      'footer.verify': 'Verificar certificado'
     },
     en: {
       'nav.login': 'Log in',
@@ -202,7 +203,7 @@
       'reg.email': 'Email', 'reg.emailErr': 'Enter a valid email.', 'reg.phone': 'Phone', 'reg.phoneErr': 'Enter a valid number (6 to 12 digits).',
       'reg.password': 'Password', 'reg.passErr': 'Password must be at least 8 characters, with letters and numbers.', 'reg.password2': 'Confirm password', 'reg.pass2Err': 'Passwords do not match.',
       'reg.terms': 'I have read and accept the Terms of Use and the Privacy Policy.', 'reg.termsErr': 'You must accept the terms to continue.', 'reg.submit': 'Create account',
-      'reg.haveAccount': 'Already have an account?', 'reg.login': 'Log in', 'reg.error': 'Could not create the account. Check your details and try again.',
+      'reg.haveAccount': 'Already have an account?', 'reg.login': 'Log in', 'reg.error': 'Could not create the account. Check your details and try again.', 'reg.closed': 'Sign-up for new accounts is temporarily closed. For now only authorised accounts can log in.', 'reg.exists': 'This email is already registered. Log in or use a different email.', 'reg.noStorage': 'Your browser does not allow saving the account. Leave private mode or enable storage and try again.', 'reg.noCrypto': 'This browser does not support secure sign-up. Open the site over https:// or use an up-to-date browser.',
       'meter.0': '', 'meter.1': 'Weak password', 'meter.2': 'Fair password', 'meter.3': 'Good password', 'meter.4': 'Strong password',
       'nav.register': 'Sign up',
       'how.c1d': 'Candidates create and complete their professional profile.',
@@ -379,7 +380,8 @@
       'footer.faq': 'FAQ',
       'footer.contact': 'Contact',
       'footer.privacy': 'Privacy',
-      'footer.terms': 'Terms'
+      'footer.terms': 'Terms',
+      'footer.verify': 'Verify certificate'
     }
   };
 
@@ -688,7 +690,7 @@
         else { sp.setAttribute('data-i18n', 'login.error'); sp.textContent = translations[currentLang]['login.error']; }
         loginAlert.classList.add('show');
         loginPass.value = ''; loginPass.focus();
-      });
+      }).catch(() => { loginSubmit.disabled = false; loginSubmit.querySelector('.go i').className = 'fas fa-arrow-right'; loginAlert.classList.add('show'); });
     }
   });
   [loginEmail, loginPass].forEach(i => i.addEventListener('input', () => markLogin(i, false)));
@@ -779,6 +781,14 @@
     $r('regEmpresa').required = emp; $r('regFiscal').required = emp;
     $r('regNomeField').style.display = emp ? 'none' : ''; $r('regNome').required = !emp;
   }
+  // Registo fechado (modo de teste): mostra aviso e bloqueia o envio
+  function regBlocked() {
+    const closed = !!(window.LermoConta && LermoConta.registoFechado && LermoConta.registoFechado());
+    const ra = $r('regAlert');
+    if (closed && ra) { const k = 'reg.closed', sp = ra.querySelector('span'); sp.setAttribute('data-i18n', k); sp.textContent = translations[currentLang][k] || ''; ra.classList.add('show'); }
+    regSubmit.disabled = closed;
+    return closed;
+  }
   function openReg(opener, tipo) {
     document.querySelectorAll('.lm-modal.open').forEach(m => { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); });
     regOpener = opener || null;
@@ -787,6 +797,7 @@
     regModal.classList.add('open');
     regModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    regBlocked();
     setTimeout(() => $r('regNome').focus(), 60);
   }
   // Redirecciona do registo para o login, com mensagem de sucesso e email preenchido
@@ -861,6 +872,7 @@
   $r('regTerms').addEventListener('change', () => $r('regTermsWrap').classList.remove('invalid'));
 
   regForm.addEventListener('submit', e => {
+    if (regBlocked()) { e.preventDefault(); return; }
     let firstBad = null;
     Object.keys(regRules).forEach(id => {
       const el = $r(id), bad = !regRules[id](el.value);
@@ -882,12 +894,25 @@
     if (LermoConta.TEST || location.protocol === 'file:') {
       e.preventDefault();
       const em = $r('regEmail').value;
-      LermoConta.register({ email: em, password: regPass.value, nome_completo: $r('regNome').value.trim(), telefone: $r('regTelFull').value, pais: regCc.value, tipo: regTipoEmp.checked ? 'empresa' : 'candidato' }).then(r => {
+      const ra = $r('regAlert');
+      if (ra) ra.classList.remove('show');
+      const regFail = key => {
         regSubmit.disabled = false; regSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
-        const ra = $r('regAlert'); if (!r.ok) { if (ra) ra.classList.add('show'); return; } if (ra) ra.classList.remove('show');
+        if (!ra) return;
+        const sp = ra.querySelector('span'), k = key || 'reg.error';
+        sp.setAttribute('data-i18n', k); sp.textContent = translations[currentLang][k] || '';
+        ra.classList.add('show');
+        if (ra.scrollIntoView) ra.scrollIntoView({ block: 'nearest' });
+      };
+      LermoConta.register({ email: em, password: regPass.value, nome_completo: $r('regNome').value.trim(), telefone: $r('regTelFull').value, pais: regCc.value, tipo: regTipoEmp.checked ? 'empresa' : 'candidato' }).then(r => {
+        if (!r || !r.ok) {
+          regFail(r && r.exists ? 'reg.exists' : r && r.motivo === 'storage' ? 'reg.noStorage' : r && r.motivo === 'crypto' ? 'reg.noCrypto' : 'reg.error');
+          return;
+        }
+        regSubmit.disabled = false; regSubmit.querySelector('.go i').className = 'fas fa-arrow-right';
         regForm.reset(); syncFiscal(); syncTipo(); regMeter();
         showRegistered(em);
-      });
+      }).catch(() => regFail('reg.error'));
     }
   });
 

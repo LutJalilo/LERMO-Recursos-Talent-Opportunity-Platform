@@ -10,7 +10,7 @@ window.LermoConta=(function(){
              'candidato@lermo.test':{email:'candidato@lermo.test',nome_completo:'Lut Jalilo',telefone:'+258840000000',pais:'MZ',tipo:'candidato'}};
  const norm=e=>String(e||'').trim().toLowerCase();
  const rd=k=>{try{return JSON.parse(localStorage.getItem(k))||{}}catch(e){return{}}};
- const wr=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+ const wr=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
  const b64=u=>btoa(String.fromCharCode.apply(null,u)),unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
  async function pbkdf2(pw,salt){
   const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
@@ -21,15 +21,24 @@ window.LermoConta=(function(){
  const pause=ms=>new Promise(r=>setTimeout(r,ms));
  return{
   TEST:true,
+  /* Registo fechado por agora: so as contas de teste (DEMO) entram. Para reabrir: REGISTO_ABERTO:true */
+  REGISTO_ABERTO:false,
+  registoFechado(){return this.TEST&&!this.REGISTO_ABERTO},
   all(){return rd(KEY)},
-  find(email){const k=norm(email),c=rd(KEY)[k];if(c){const o=Object.assign({},c);delete o.h;delete o.s;return o}return DEMO[k]||null},
+  find(email){const k=norm(email),c=this.registoFechado()?null:rd(KEY)[k];if(c){const o=Object.assign({},c);delete o.h;delete o.s;return o}return DEMO[k]||null},
   /* registo: guarda a conta com hash da senha (nunca a senha) */
   async register(c){
-   const k=norm(c.email),a=rd(KEY);
-   if(a[k]||DEMO[k])return{ok:false,exists:true};
-   const salt=crypto.getRandomValues(new Uint8Array(16)),h=await pbkdf2(c.password,salt);
-   a[k]={email:k,nome_completo:c.nome_completo,telefone:c.telefone,pais:c.pais,tipo:c.tipo,s:b64(salt),h:b64(h)};
-   wr(KEY,a);return{ok:true};
+   try{
+    if(this.registoFechado())return{ok:false,fechado:true};
+    if(!c||!norm(c.email)||!c.password)return{ok:false,erro:true,motivo:'dados'};
+    if(!(window.crypto&&crypto.subtle&&crypto.getRandomValues))return{ok:false,erro:true,motivo:'crypto'};
+    const k=norm(c.email),a=rd(KEY);
+    if(a[k]||DEMO[k])return{ok:false,exists:true};
+    const salt=crypto.getRandomValues(new Uint8Array(16)),h=await pbkdf2(c.password,salt);
+    a[k]={email:k,nome_completo:c.nome_completo,telefone:c.telefone,pais:c.pais,tipo:c.tipo,s:b64(salt),h:b64(h)};
+    if(!wr(KEY,a)||!rd(KEY)[k])return{ok:false,erro:true,motivo:'storage'};
+    return{ok:true};
+   }catch(e){return{ok:false,erro:true,motivo:'excepcao'}}
   },
   /* login: devolve {ok,conta} | {ok:false,locked,wait} | {ok:false} */
   async login(email,password){
@@ -37,7 +46,7 @@ window.LermoConta=(function(){
    if(st.until>now)return{ok:false,locked:true,wait:Math.ceil((st.until-now)/1000)};
    let conta=null;
    try{
-    const reg=rd(KEY)[k];
+    const reg=this.registoFechado()?null:rd(KEY)[k];
     if(reg&&reg.h){const h=await pbkdf2(password,unb64(reg.s));if(same(h,unb64(reg.h))){conta=Object.assign({},reg);delete conta.h;delete conta.s}}
     else if(DEMO[k]){if(sameStr(password,DEMO_PW))conta=DEMO[k]}
     else{await pbkdf2(password,new Uint8Array(16))} /* tempo semelhante quando o email não existe */

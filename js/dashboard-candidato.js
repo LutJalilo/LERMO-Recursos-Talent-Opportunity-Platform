@@ -122,6 +122,7 @@ const NAV=[
  {id:'dashboard',i:'fa-gauge-high',k:'n.dash',g:'g.menu'},
  {id:'oportunidades',i:'fa-briefcase',k:'n.op'},   /* vagas, tipos_vaga */
  {id:'candidaturas',i:'fa-file-signature',k:'n.cand'}, /* candidaturas */
+ {id:'convites',i:'fa-envelope-open-text',k:'n.conv'}, /* convites_talento (SQL v5.14) */
  {id:'formacao',i:'fa-graduation-cap',k:'n.form'}, /* programas/turmas/inscricoes/certificados_formacao */
  {id:'eventos',i:'fa-calendar-days',k:'n.ev'},  /* eventos */
  {id:'financiamento',i:'fa-seedling',k:'n.fin'},  /* linhas/solicitacoes_financiamento */

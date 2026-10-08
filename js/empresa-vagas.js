@@ -28,7 +28,7 @@ Object.assign(D.pt,{'v.h':'Vagas','v.new':'Nova vaga','v.q':'Pesquisar vagas…'
  'v.none':'Ainda não criou vagas.','v.vw.row':'Linha','v.vw.col':'Colunas','v.vw':'Vista','v.none.p':'Crie a primeira vaga e comece a receber candidaturas.','v.nores':'Nenhuma vaga corresponde à pesquisa.',
  'v.m':'Acções','v.edit':'Editar','v.dup':'Duplicar','v.close':'Fechar vaga','v.reopen':'Reabrir','v.ext':'Prolongar prazo','v.pub':'Publicar','v.del':'Eliminar',
  'v.s.base':'Informação da vaga','v.s.local':'Local e regime','v.s.pay':'Remuneração e prazo','v.s.req':'Requisitos','v.s.sk':'Competências e idiomas',
- 'v.l.tit':'Título','v.l.tite':'Título em inglês (opcional)','v.l.desc':'Descrição','v.l.resp':'Responsabilidades','v.l.reqs':'Requisitos (um por linha)','v.l.tipo':'Tipo de vaga','v.l.reg':'Regime de trabalho',
+ 'v.l.tit':'Título','v.l.desc':'Descrição','v.l.resp':'Responsabilidades','v.l.reqs':'Requisitos (um por linha)','v.l.tipo':'Tipo de vaga','v.l.reg':'Regime de trabalho',
  'v.l.pais':'País','v.l.prov':'Província / região','v.l.cid':'Cidade','v.l.min':'Remuneração mínima','v.l.max':'Remuneração máxima','v.l.moe':'Moeda','v.l.vis':'Mostrar a remuneração aos candidatos',
  'v.l.lim':'Data limite','v.l.n':'Número de vagas','v.l.sk':'Competências','v.l.lg':'Idiomas','v.sk.q':'Filtrar competências…','v.sel':'{n} seleccionada(s)','v.pick':'Seleccione',
  'v.draft':'Guardar rascunho','v.publish':'Publicar vaga','v.save':'Guardar','v.cancel':'Cancelar','v.saved':'Vaga guardada.','v.published':'Vaga publicada.','v.closed':'Vaga fechada.','v.opened':'Vaga reaberta.','v.extd':'Prazo actualizado.','v.dupd':'Vaga duplicada como rascunho.','v.deld':'Vaga eliminada.',
@@ -40,7 +40,7 @@ Object.assign(D.en,{'v.h':'Jobs','v.new':'New job','v.q':'Search jobs…','v.f.t
  'v.none':'You have not created any jobs yet.','v.vw.row':'Row','v.vw.col':'Columns','v.vw':'View','v.none.p':'Create your first job and start receiving applications.','v.nores':'No job matches your search.',
  'v.m':'Actions','v.edit':'Edit','v.dup':'Duplicate','v.close':'Close job','v.reopen':'Reopen','v.ext':'Extend deadline','v.pub':'Publish','v.del':'Delete',
  'v.s.base':'Job information','v.s.local':'Location and work mode','v.s.pay':'Pay and deadline','v.s.req':'Requirements','v.s.sk':'Skills and languages',
- 'v.l.tit':'Title','v.l.tite':'Title in English (optional)','v.l.desc':'Description','v.l.resp':'Responsibilities','v.l.reqs':'Requirements (one per line)','v.l.tipo':'Job type','v.l.reg':'Work mode',
+ 'v.l.tit':'Title','v.l.desc':'Description','v.l.resp':'Responsibilities','v.l.reqs':'Requirements (one per line)','v.l.tipo':'Job type','v.l.reg':'Work mode',
  'v.l.pais':'Country','v.l.prov':'Province / region','v.l.cid':'City','v.l.min':'Minimum pay','v.l.max':'Maximum pay','v.l.moe':'Currency','v.l.vis':'Show pay to candidates',
  'v.l.lim':'Deadline','v.l.n':'Number of openings','v.l.sk':'Skills','v.l.lg':'Languages','v.sk.q':'Filter skills…','v.sel':'{n} selected','v.pick':'Select',
  'v.draft':'Save draft','v.publish':'Publish job','v.save':'Save','v.cancel':'Cancel','v.saved':'Job saved.','v.published':'Job published.','v.closed':'Job closed.','v.opened':'Job reopened.','v.extd':'Deadline updated.','v.dupd':'Job duplicated as a draft.','v.deld':'Job deleted.',
@@ -88,7 +88,7 @@ const inp=(id,v,x='')=>`<input id="${id}" value="${esc(v??'')}" autocomplete="of
 const sel=(id,o,v)=>`<select id="${id}">${o.map(([k,l])=>`<option value="${esc(k)}"${String(k)===String(v)?' selected':''}>${esc(l)}</option>`).join('')}</select>`;
 const pick=(k,L,sv)=>`<div class="vg-pk" data-k="${k}">${k==='sk'?`<input type="search" class="vg-pq" placeholder="${t('v.sk.q')}" aria-label="${t('v.sk.q')}">`:''}<div class="vg-pl">${L.map(x=>`<label data-n="${esc(norm(x[1]+' '+x[2]))}"><input type="checkbox" name="${k}" value="${x[0]}"${sv.includes(x[0])?' checked':''}> <span>${esc(nm(x))}</span></label>`).join('')}</div></div>`;
 function formHtml(v){const o=v||{},sk=o.competencias||[],lg=o.idiomas||[];
- return `<form id="vgF" novalidate data-id="${o.vaga_id||''}"><fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-briefcase"></i></span>${t('v.s.base')}</legend>${F('vTit',t('v.l.tit'),inp('vTit',o.titulo,'maxlength="200"'),1)}${F('vTitE2',t('v.l.tite'),inp('vTitE2',o.titulo_en,'maxlength="200"'))}
+ return `<form id="vgF" novalidate data-id="${o.vaga_id||''}"><fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-briefcase"></i></span>${t('v.s.base')}</legend>${F('vTit',t('v.l.tit'),inp('vTit',o.titulo,'maxlength="200"'),1)}
  ${F('vDesc',t('v.l.desc'),`<textarea id="vDesc" rows="5">${esc(o.descricao||'')}</textarea>`)}${F('vResp',t('v.l.resp'),`<textarea id="vResp" rows="4">${esc(o.responsabilidades||'')}</textarea>`)}</fieldset>
  <fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-circle-check"></i></span>${t('v.s.req')}</legend>${F('vReq',t('v.l.reqs'),`<textarea id="vReq" rows="4">${esc((o.requisitos||[]).join('\n'))}</textarea>`)}</fieldset>
  <fieldset class="vg-fs"><legend><span class="ep-hi" aria-hidden="true"><i class="fas fa-location-dot"></i></span>${t('v.s.local')}</legend><div class="vg-r">${F('vTipo',t('v.l.tipo'),sel('vTipo',TIPOS.map(x=>[x[0],nm(x)]),o.tipo_id||2),1)}${F('vReg',t('v.l.reg'),sel('vReg',REG.map(x=>[x[0],nm(x)]),o.regime_id||1),1)}</div>
@@ -110,7 +110,7 @@ function save(modo){
  const fail=$('#vFail');fail.hidden=true;
  const publica=modo==='pub'&&(!old||old.estado==='rascunho');
  if(publica&&(MOCK.vagasConsumidas||0)>=lim()){fail.innerHTML=`${t('v.quota.full')} <a href="#/plano">${t('v.quota.up')}</a>`;fail.hidden=false;return}
- const v={...(old||{}),vaga_id:id||nid(),titulo:val('vTit'),titulo_en:val('vTitE2')||null,descricao:val('vDesc')||null,responsabilidades:val('vResp')||null,
+ const v={...(old||{}),vaga_id:id||nid(),titulo:val('vTit'),titulo_en:(old&&old.titulo===val('vTit')&&old.titulo_en)||null, /* o título em inglês é traduzido pelo sistema (em produção: serviço de tradução no servidor); se o título mudar, a tradução anterior é descartada */descricao:val('vDesc')||null,responsabilidades:val('vResp')||null,
   requisitos:val('vReq').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,30),tipo_id:+val('vTipo'),regime_id:+val('vReg'),pais_id:val('vPais'),provincia:val('vProv')||null,cidade:val('vCid')||null,
   remuneracao_minima:mi,remuneracao_maxima:ma,remuneracao_visivel:$('#vVis').checked,moeda:val('vMoe'),data_limite:lg,vagas_disponiveis:n,competencias:checked('sk'),idiomas:checked('lg'),
   estado:publica?'aberta':(old?old.estado:'rascunho'),visualizacoes:old?old.visualizacoes:0,criado_em:old?old.criado_em:new Date().toISOString()};

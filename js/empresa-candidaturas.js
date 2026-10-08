@@ -240,6 +240,7 @@ function pdfEntry(S,tit,dt,sub,desc){
  if(sub){S.y-=13.5;S.put(sub,10,0,PD.q,M)}
  li.forEach(z=>S.wrap(z,10,false,S.TW-(bl?12:0)).forEach((l,j)=>{S.room(14);S.y-=13.6;if(bl&&!j)S.put('\u2022',10,0,PD.t,M+2);S.put(l,10,0,PD.t,M+(bl?12:0))}));S.y-=3}
 function pdfFim(S,c,d){const n=S.pages.length;S.pages.forEach((q,i)=>{S.pg=q;S.y=28;S.put(c.nome+'   |   '+(i+1)+'/'+n,8,0,'0.5 0.5 0.5',S.M)});return S.out(d.nome_ficheiro,c.nome)}
+window.LERMO_PDF={pdfMk,pdfSec,pdfEntry,PD};   /* reutilizado pelo perfil dos talentos (empresa-talentos.js) */
 function pdfCV(c,d){
  const p=perfil(c),S=pdfMk(595,842,54);S.nova();pdfTopo(S,c);
  const E=[...p.experiencias].sort((a,b)=>(b.actual-a.actual)||b.inicio.localeCompare(a.inicio)),F=[...p.formacoes].sort((a,b)=>b.inicio.localeCompare(a.inicio));
