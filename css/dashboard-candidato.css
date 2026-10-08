@@ -625,3 +625,26 @@ i.ico.fa-spin svg{animation:icspin .9s linear infinite}@keyframes icspin{to{tran
 /* convites: cartões de estatísticas com a mesma altura dos do dashboard (lá o texto ocupa duas linhas) */
 .stats.cvs .stat{min-height:108px}
 @media(max-width:560px){.stats.cvs .stat{min-height:155px}}
+
+/* Convites: detalhe e cartões sem transbordo horizontal.
+   Causa: .det usava 1fr (= minmax(auto,1fr)) abaixo de 1024px, pelo que URLs, emails ou palavras longas da mensagem alargavam a coluna além do ecrã;
+   o overflow-x:hidden do body escondia o problema e o conteúdo ficava cortado. Colunas com minmax(0,…) e quebra de palavras longas. */
+.det.cd{grid-template-columns:minmax(0,1fr) 300px}
+.det.cd>*{min-width:0}
+.det.cd h1,.det.cd h2,.det.cd p,.det.cd .rs,.det.cd .apx,.det.cd .meta li span{overflow-wrap:anywhere}
+@media(max-width:1023px){.det.cd{grid-template-columns:minmax(0,1fr)}}
+.vc .vt,.vc .rs,.vc .meta li{overflow-wrap:anywhere}
+.crumbs li{min-width:0;overflow-wrap:anywhere}
+.det.cd .rs{white-space:normal;overflow:visible;text-overflow:clip}
+
+/* Convites: navegação Anterior / Próximo no detalhe */
+.vtop{align-items:center}
+.cvnav{display:flex;align-items:center;gap:.8rem;margin-left:auto;flex-wrap:wrap;font-size:.8rem;color:var(--m)}
+.cvnav .btn{width:auto}.cvnav .btn[disabled]{opacity:.4;cursor:not-allowed}
+@media(max-width:560px){.cvnav{width:100%;justify-content:space-between;margin-left:0}}
+
+/* Convites: transição suave ao deslizar entre convites */
+@keyframes cvin{from{opacity:0;transform:translateX(var(--cvdx,0))}to{opacity:1;transform:none}}
+.det.cd{animation:cvin .22s ease-out}
+.det.cd,.vgrid{touch-action:pan-y pinch-zoom}
+@media(prefers-reduced-motion:reduce){.det.cd{animation:none}}

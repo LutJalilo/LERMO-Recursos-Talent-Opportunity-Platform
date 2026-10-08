@@ -46,8 +46,8 @@ const tip=v=>lang==='en'&&v.tipo_en?v.tipo_en:v.tipo;
 /* Cartões em grelha, com o mesmo desenho dos outros cartões do painel (barra de estado no topo, etiquetas, lista com ícones, menu de três pontinhos).
    Paginação: 5 cartões por página com Anterior/Próximo; a lista nunca cresce para baixo. */
 const PG=5;
-Object.assign(D.pt,{'cv.menu':'Opções do convite','cv.pg':'Paginação','cv.pg.prev':'Anterior','cv.pg.next':'Próximo','cv.pg.of':'{a}–{b} de {n}'});
-Object.assign(D.en,{'cv.menu':'Invitation options','cv.pg':'Pagination','cv.pg.prev':'Previous','cv.pg.next':'Next','cv.pg.of':'{a}–{b} of {n}'});
+Object.assign(D.pt,{'cv.menu':'Opções do convite','cv.pg':'Paginação','cv.pg.prev':'Anterior','cv.pg.next':'Próximo','cv.pg.of':'{a}–{b} de {n}','cv.nav':'Navegar entre convites','cv.nav.of':'Convite {a} de {n}'});
+Object.assign(D.en,{'cv.menu':'Invitation options','cv.pg':'Pagination','cv.pg.prev':'Previous','cv.pg.next':'Next','cv.pg.of':'{a}–{b} of {n}','cv.nav':'Browse invitations','cv.nav.of':'Invitation {a} of {n}'});
 CV.p=0;
 const sel=()=>{const A=todos();return{A,V:A.filter(c=>CV.f==='all'||(CV.f==='enviado'?pend(c):c.estado===CV.f))}};
 const cor=c=>pend(c)?' ap':c.estado==='recusado'?' vx':'';
@@ -80,6 +80,13 @@ function lista(){
  const A=todos();
  const seg=FIL.map(f=>`<button type="button" data-a="cv-f:${f}" aria-pressed="${CV.f===f}">${t('cv.f.'+f)}${f==='all'?` (${A.length})`:f==='enviado'?` (${A.filter(pend).length})`:''}</button>`).join('');
  return{title:t('n.conv'),html:crumbs([[t('n.dash'),'#/dashboard'],[t('n.conv')]])+`<section class="hello"><div><h1>${t('n.conv')}</h1><p>${t('cv.sub')}</p></div></section>`+(A.length?`<section class="stats cvs" aria-label="${t('n.conv')}">${[['fa-envelope',A.length,'cv.f.all'],['fa-hourglass-half',A.filter(pend).length,'cv.f.enviado'],['fa-circle-check',A.filter(c=>c.estado==='aceite').length,'cv.f.aceite'],['fa-circle-xmark',A.filter(c=>c.estado==='recusado').length,'cv.f.recusado']].map(x=>`<div class="stat"><span class="ic"><i class="fas ${x[0]}" aria-hidden="true"></i></span><span><b>${x[1]}</b><span>${t(x[2])}</span></span></div>`).join('')}</section>`:'')+(A.length?`<div class="seg" role="group" aria-label="${t('cv.f')}">${seg}</div>`:'')+`<div id="cvRes">${resHtml()}</div>`}}
+function navHtml(id){
+ let L=sel().V;if(!L.some(c=>c.id===id))L=todos();
+ const i=L.findIndex(c=>c.id===id);if(i<0||L.length<2)return'';
+ const p=L[i-1],n=L[i+1];
+ const b=(c,k,ic,dir)=>c?`<a class="btn btn-l btn-s" href="#/convites/${esc(c.id)}" rel="${dir}">${dir==='prev'?`<i class="fas ${ic}" aria-hidden="true"></i> ${t(k)}`:`${t(k)} <i class="fas ${ic}" aria-hidden="true"></i>`}</a>`
+  :`<button class="btn btn-l btn-s" type="button" disabled>${dir==='prev'?`<i class="fas ${ic}" aria-hidden="true"></i> ${t(k)}`:`${t(k)} <i class="fas ${ic}" aria-hidden="true"></i>`}</button>`;
+ return `<nav class="cvnav" aria-label="${t('cv.nav')}"><span class="cvnav-n" aria-live="polite">${t('cv.nav.of',{a:i+1,n:L.length})}</span><span class="pg-b">${b(p,'cv.pg.prev','fa-chevron-left','prev')}${b(n,'cv.pg.next','fa-chevron-right','next')}</span></nav>`}
 function detalhe(id){
  const nav=[[t('n.dash'),'#/dashboard'],[t('n.conv'),'#/convites']];
  let c=um(id);
@@ -91,7 +98,7 @@ function detalhe(id){
   :`<div class="apx"><strong>${t('cv.dec')}</strong><p>${t('cv.dec.p')}${c.respondido_em?' '+esc(t('cv.resp',{d:fmtD(c.respondido_em)})):''}</p></div>`;
  const acts=pend(c)?`<button class="btn btn-g" type="button" data-a="cv-yes:${esc(c.id)}"><i class="fas fa-check" aria-hidden="true"></i> ${t('cv.yes')}</button><button class="btn btn-l" type="button" data-a="cv-no:${esc(c.id)}">${t('cv.no')}</button>`
   :c.estado==='aceite'?`<a class="btn btn-g" href="#/oportunidades${MOCK.vagas.some(x=>x.id===v.id)?'/'+esc(v.id):''}">${t('cv.apply')}</a>`:`<a class="btn btn-l" href="#/oportunidades">${t('cv.see')}</a>`;
- return{title:c.assunto,html:crumbs([...nav,[vt(v)]])+`<div class="vtop"><a class="btn btn-l" href="#/convites"><i class="fas fa-arrow-left" aria-hidden="true"></i> ${t('cv.back')}</a></div>
+ return{title:c.assunto,html:crumbs([...nav,[vt(v)]])+`<div class="vtop"><a class="btn btn-l" href="#/convites"><i class="fas fa-arrow-left" aria-hidden="true"></i> ${t('cv.back')}</a>${navHtml(c.id)}</div>
  <div class="det cd"><article class="card"><header><h1>${esc(c.assunto)}</h1><p class="rs wrap">${esc(t('cv.from',{e:c.empresa}))} · ${esc(t('cv.rec',{d:fmtD(c.criado_em)}))}</p><div class="chips"><span class="tag ${tag(c.estado)}">${t('cv.s.'+(c.estado==='enviado'?'visto':c.estado))}</span></div></header>
   ${estado}<h2>${t('cv.msg')}</h2><p class="wrap" style="white-space:pre-line">${esc(c.mensagem)}</p><p class="rs" style="margin-top:1rem"><i class="fas fa-shield-halved" aria-hidden="true"></i> ${t('cv.info')}</p></article>
  <aside class="card cta" aria-label="${t('cv.vaga')}"><strong>${t('cv.vaga')}</strong><p class="rs wrap">${esc(vt(v))}</p><ul class="meta">${fact('fa-building','cv.emp',c.empresa)}${fact('fa-tag','cv.tipo',[tip(v),v.regime].filter(Boolean).join(' · '))}${fact('fa-location-dot','cv.loc',v.local)}${fact('fa-clock','cv.lim',v.data_limite?fmtD(v.data_limite):'')}${fact('fa-users','cv.vg',String(v.vagas||''))}</ul>${acts}</aside></div>`}}
@@ -112,4 +119,21 @@ function resp(id,sim){mudar(id,c=>{c.estado=sim?'aceite':'recusado';c.respondido
 Actions['cv-yes']=(b,id)=>resp(id,true);
 Actions['cv-no']=(b,id)=>{Modal.open({title:t('cv.c.title'),body:`<p>${t('cv.c.q')}</p><div class="mod-f"><button class="btn btn-l" type="button" data-a="modal-close">${t('cv.c.no')}</button><button class="btn btn-g" type="button" data-a="cv-no-ok:${esc(id)}">${t('cv.c.yes')}</button></div>`})};
 Actions['cv-no-ok']=(b,id)=>resp(id,false);
+/* Gesto de deslizar (telemóvel): esquerda = seguinte, direita = anterior. No detalhe passa de convite; na lista muda de página.
+   Só reage a gestos claramente horizontais (≥70px, inclinação máxima 0,6), ignora campos, menus, modais e selecção de texto, e não bloqueia o scroll vertical. */
+(()=>{let T=null;
+ const modo=()=>/^#\/convites\/[^/]+$/.test(location.hash)?'d':naLista()?'l':'';
+ document.addEventListener('touchstart',e=>{
+  if(e.touches.length!==1||!modo()||document.querySelector('.mod-b')||e.target.closest('input,textarea,select,.fx-menu,.fx-dd,[data-noswipe]')){T=null;return}
+  const q=e.touches[0];T={x:q.clientX,y:q.clientY,t:Date.now()}},{passive:true});
+ document.addEventListener('touchend',e=>{
+  if(!T)return;const q=e.changedTouches[0],dx=q.clientX-T.x,dy=q.clientY-T.y,dt=Date.now()-T.t;T=null;
+  if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.6||dt>700)return;
+  const sel=window.getSelection&&String(window.getSelection());if(sel)return;
+  const d=dx<0?1:-1,m=modo();
+  if(m==='d'){const a=document.querySelector('.cvnav a[rel="'+(d>0?'next':'prev')+'"]');
+   if(a){document.documentElement.style.setProperty('--cvdx',(d>0?'28px':'-28px'));location.hash=a.getAttribute('href')}}
+  else if(m==='l'){const b=document.querySelector('#cvRes .pg button[data-a="cv-pg:'+d+'"]:not([disabled])');if(b)b.click()}
+ },{passive:true});
+})();
 })();
