@@ -19,7 +19,7 @@ header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1
 .tabs{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.3rem;margin-top:-1.7rem;position:relative}
 .tab{flex:none;background:var(--s);border:1px solid var(--line);border-radius:var(--rf);padding:.55rem 1.1rem;font-size:.85rem;font-weight:600;color:var(--m);box-shadow:var(--sh)}
 .tab.on{background:var(--g);border-color:var(--g);color:var(--pd)}
-.layout{display:grid;grid-template-columns:270px 1fr;gap:1.8rem;margin:2rem 0 4rem;align-items:start}
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:1.8rem;margin:2rem 0 4rem;align-items:start}
 aside.f{background:var(--s);border:1px solid var(--line);border-radius:var(--r);padding:1.2rem;position:sticky;top:84px}
 aside.f h2{font-size:1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
 aside.f h2 button{background:none;border:0;color:var(--pl);font-size:.78rem;font-weight:600}
@@ -216,7 +216,7 @@ header .btn-g{border:1.5px solid var(--g);box-shadow:0 4px 14px rgba(201,160,58,
 .mm .lang-row button.active{color:var(--gs);background:rgba(201,160,58,.10)}
 .mm .lang-row button:hover{color:#fff}
 @media(max-width:767px){.mm nav a{font-size:1.2rem}}
-@media(max-width:860px){.layout{grid-template-columns:1fr}aside.f{display:none;position:static}aside.f.show{display:block}.mf{display:inline-flex}}
+@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}aside.f{display:none;position:static}aside.f.show{display:block}.mf{display:inline-flex}}
 
 /* ===== LOGIN (painel sobreposto) ===== */
     .lm-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom)); overflow-y: auto; background: radial-gradient(ellipse at 20% 0%, rgba(201,160,58,0.16), transparent 55%), rgba(15,42,30,0.92); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
@@ -374,3 +374,27 @@ header .btn-g{border:1.5px solid var(--g);box-shadow:0 4px 14px rgba(201,160,58,
 .oc-bt .btn{padding:.55rem 1rem;font-size:.82rem;width:100%}
 .card.oc.closed .menu{opacity:1}
 .oc-bt .btn{padding:.55rem .5rem;white-space:nowrap}
+
+
+/* ===== Lista pública: carrossel de cartões — dedo no telemóvel; 3 por página com Anterior/Próximo + barra de rolagem no computador ===== */
+.oc-car{display:block;min-width:0}
+.oc-carw{min-width:0}
+.oc-row{display:flex;gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch;padding:.45rem .2rem 1rem;margin:0 -.2rem;scrollbar-width:thin;scrollbar-color:var(--g) rgba(27,67,50,.1)}
+.oc-row:focus-visible{outline:3px solid rgba(201,160,58,.55);outline-offset:2px;border-radius:12px}
+.oc-row::-webkit-scrollbar{height:10px}.oc-row::-webkit-scrollbar-track{background:rgba(27,67,50,.08);border-radius:99px}.oc-row::-webkit-scrollbar-thumb{background:var(--g);border-radius:99px}
+.oc-row>.card.oc{flex:0 0 calc((100% - 2rem)/3);min-width:270px;min-height:340px;scroll-snap-align:start}
+.oc-row>.card.oc:hover{transform:none}
+.oc-nav{display:flex;justify-content:flex-end;gap:.4rem;margin-top:.2rem}
+.oc-nav .btn{padding:.45rem 1rem;font-size:.8rem;width:auto}
+@media(max-width:700px){.oc-row>.card.oc{flex-basis:85%;min-width:0}}
+@media(pointer:coarse){.oc-nav{display:none}}
+
+/* correcção: a coluna da lista não pode crescer com o conteúdo do carrossel (senão o cartão fica gigante e a página ganha barra horizontal) */
+.layout>main,.layout>aside{min-width:0}
+.oc-row>.card.oc{min-width:0}
+/* cartões por página conforme a largura da coluna: 3 (largo) · 2 (médio) · 1 com um bocado do seguinte (telemóvel) */
+@media(max-width:1180px){.oc-row>.card.oc{flex-basis:calc((100% - 1rem)/2)}}
+@media(max-width:700px){.oc-row>.card.oc{flex-basis:85%}.oc-row{padding-bottom:.8rem}}
+@media(max-width:380px){.oc-row>.card.oc{flex-basis:92%}.oc-bt{grid-template-columns:1fr}}
+.oc-row>.card.oc .oc-ti h3,.oc-row>.card.oc .oc-ti small{overflow-wrap:anywhere}
+.oc-row>.card.oc .oc-bt .btn{white-space:normal;min-width:0}

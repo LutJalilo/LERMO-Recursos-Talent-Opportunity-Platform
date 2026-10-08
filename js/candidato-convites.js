@@ -43,12 +43,10 @@ const pend=c=>c.estado==='enviado'||c.estado==='visto';
 const tag=e=>({enviado:'in',visto:'',aceite:'ok',recusado:'no'}[e]??'');
 const vt=v=>lang==='en'&&v.titulo_en?v.titulo_en:v.titulo;
 const tip=v=>lang==='en'&&v.tipo_en?v.tipo_en:v.tipo;
-/* Cartões em grelha, com o mesmo desenho dos outros cartões do painel (barra de estado no topo, etiquetas, lista com ícones, menu de três pontinhos).
-   Paginação: 5 cartões por página com Anterior/Próximo; a lista nunca cresce para baixo. */
-const PG=5;
+/* Cartões com o mesmo desenho dos outros cartões do painel (barra de estado no topo, etiquetas, lista com ícones, menu de três pontinhos).
+   Carrossel partilhado (LRM_CAR em dashboard-candidato.js): desliza com o dedo; no computador, com 3 ou mais cartões, tem Anterior/Próximo. */
 Object.assign(D.pt,{'cv.menu':'Opções do convite','cv.pg':'Paginação','cv.pg.prev':'Anterior','cv.pg.next':'Próximo','cv.pg.of':'{a}–{b} de {n}','cv.nav':'Navegar entre convites','cv.nav.of':'Convite {a} de {n}'});
 Object.assign(D.en,{'cv.menu':'Invitation options','cv.pg':'Pagination','cv.pg.prev':'Previous','cv.pg.next':'Next','cv.pg.of':'{a}–{b} of {n}','cv.nav':'Browse invitations','cv.nav.of':'Invitation {a} of {n}'});
-CV.p=0;
 const sel=()=>{const A=todos();return{A,V:A.filter(c=>CV.f==='all'||(CV.f==='enviado'?pend(c):c.estado===CV.f))}};
 const cor=c=>pend(c)?' ap':c.estado==='recusado'?' vx':'';
 function menuHtml(c){
@@ -68,14 +66,12 @@ const card=c=>{const v=c.vaga,pz=v.data_limite?fmtD(v.data_limite):'';
  <ul class="meta m0">${v.local?`<li><i class="fas fa-location-dot" aria-hidden="true"></i>${esc(v.local)}</li>`:''}${pz?`<li><i class="fas fa-clock" aria-hidden="true"></i>${esc(t('cv.lim'))}: ${esc(pz)}</li>`:''}</ul>
  <p class="vcs"><span><i class="fas fa-calendar" aria-hidden="true"></i>${esc(t('cv.rec',{d:fmtD(c.criado_em)}))}</span></p>
  <a class="btn btn-l" href="#/convites/${esc(c.id)}">${t('cv.open')}</a></article>`};
-function pager(n){const pg=Math.ceil(n/PG),a=CV.p*PG+1,b=Math.min(n,(CV.p+1)*PG);
- return `<nav class="pg in" aria-label="${t('cv.pg')}"><span class="pg-n" aria-live="polite">${t('cv.pg.of',{a,b,n})}</span><span class="pg-b"><button class="btn btn-l btn-s" type="button" data-a="cv-pg:-1"${CV.p<=0?' disabled':''}><i class="fas fa-chevron-left" aria-hidden="true"></i> ${t('cv.pg.prev')}</button><button class="btn btn-l btn-s" type="button" data-a="cv-pg:1"${CV.p>=pg-1?' disabled':''}>${t('cv.pg.next')} <i class="fas fa-chevron-right" aria-hidden="true"></i></button></span></nav>`}
 function resHtml(){
  const{A,V}=sel();
  if(!A.length)return `<div class="state card"><i class="fas fa-envelope-open" aria-hidden="true"></i><p><strong>${t('cv.none')}</strong></p><p>${t('cv.none.p')}</p><br><a class="btn btn-g" href="#/oportunidades">${t('cv.see')}</a></div>`;
  if(!V.length)return `<div class="state card"><i class="fas fa-filter" aria-hidden="true"></i><p>${t('cv.nores')}</p></div>`;
- CV.p=Math.max(0,Math.min(CV.p,Math.ceil(V.length/PG)-1));
- return `<p class="rs cvn" aria-live="polite">${t(V.length===1?'cv.count.1':'cv.count',{n:V.length})}</p><div class="vgrid">${V.slice(CV.p*PG,CV.p*PG+PG).map(card).join('')}</div>`+pager(V.length)}
+ LRM_CAR.later();
+ return `<p class="rs cvn" aria-live="polite">${t(V.length===1?'cv.count.1':'cv.count',{n:V.length})}</p>`+LRM_CAR.html(V.map(card).join(''),V.length,t('n.conv'),true)}
 function lista(){
  const A=todos();
  const seg=FIL.map(f=>`<button type="button" data-a="cv-f:${f}" aria-pressed="${CV.f===f}">${t('cv.f.'+f)}${f==='all'?` (${A.length})`:f==='enviado'?` (${A.filter(pend).length})`:''}</button>`).join('');
@@ -105,10 +101,7 @@ function detalhe(id){
 Views.convites=id=>id?detalhe(id):lista();
 const naLista=()=>/^#\/convites\/?$/.test(location.hash);
 const repintar=foco=>{if(!naLista())return;$('#main').innerHTML=lista().html;const f=foco&&$(foco);if(f)f.focus({preventScroll:true})};
-Actions['cv-f']=(b,f)=>{CV.f=f;CV.p=0;repintar(`.seg button[data-a="cv-f:${f}"]`)};
-Actions['cv-pg']=(b,d)=>{const r=$('#cvRes');if(!r)return;CV.p+=+d;r.innerHTML=resHtml();
- const f=$(`#cvRes .pg button[data-a="cv-pg:${d}"]:not([disabled])`)||$('#cvRes .pg button:not([disabled])');if(f)f.focus({preventScroll:true});
- if(r.getBoundingClientRect().top<0)r.scrollIntoView({block:'start'})};
+Actions['cv-f']=(b,f)=>{CV.f=f;repintar(`.seg button[data-a="cv-f:${f}"]`)};
 Actions['cv-ver']=(b,id)=>{closeCv();location.hash='#/convites/'+id};
 Actions['cv-apply']=(b,id)=>{closeCv();const c=um(id);if(c)location.hash='#/oportunidades'+(MOCK.vagas.some(x=>x.id===c.vaga.id)?'/'+c.vaga.id:'')};
 Actions['cv-opp']=()=>{closeCv();location.hash='#/oportunidades'};
@@ -119,10 +112,10 @@ function resp(id,sim){mudar(id,c=>{c.estado=sim?'aceite':'recusado';c.respondido
 Actions['cv-yes']=(b,id)=>resp(id,true);
 Actions['cv-no']=(b,id)=>{Modal.open({title:t('cv.c.title'),body:`<p>${t('cv.c.q')}</p><div class="mod-f"><button class="btn btn-l" type="button" data-a="modal-close">${t('cv.c.no')}</button><button class="btn btn-g" type="button" data-a="cv-no-ok:${esc(id)}">${t('cv.c.yes')}</button></div>`})};
 Actions['cv-no-ok']=(b,id)=>resp(id,false);
-/* Gesto de deslizar (telemóvel): esquerda = seguinte, direita = anterior. No detalhe passa de convite; na lista muda de página.
+/* Gesto de deslizar (telemóvel): esquerda = seguinte, direita = anterior. No detalhe passa de convite; na lista o carrossel desliza sozinho (scroll nativo).
    Só reage a gestos claramente horizontais (≥70px, inclinação máxima 0,6), ignora campos, menus, modais e selecção de texto, e não bloqueia o scroll vertical. */
 (()=>{let T=null;
- const modo=()=>/^#\/convites\/[^/]+$/.test(location.hash)?'d':naLista()?'l':'';
+ const modo=()=>/^#\/convites\/[^/]+$/.test(location.hash)?'d':'';
  document.addEventListener('touchstart',e=>{
   if(e.touches.length!==1||!modo()||document.querySelector('.mod-b')||e.target.closest('input,textarea,select,.fx-menu,.fx-dd,[data-noswipe]')){T=null;return}
   const q=e.touches[0];T={x:q.clientX,y:q.clientY,t:Date.now()}},{passive:true});
@@ -133,7 +126,6 @@ Actions['cv-no-ok']=(b,id)=>resp(id,false);
   const d=dx<0?1:-1,m=modo();
   if(m==='d'){const a=document.querySelector('.cvnav a[rel="'+(d>0?'next':'prev')+'"]');
    if(a){document.documentElement.style.setProperty('--cvdx',(d>0?'28px':'-28px'));location.hash=a.getAttribute('href')}}
-  else if(m==='l'){const b=document.querySelector('#cvRes .pg button[data-a="cv-pg:'+d+'"]:not([disabled])');if(b)b.click()}
  },{passive:true});
 })();
 })();

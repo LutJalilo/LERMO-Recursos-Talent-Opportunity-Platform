@@ -72,7 +72,8 @@ function cdRender(){
  box.innerHTML=!CD.list.length
   ?`<div class="state card"><i class="fas fa-folder-open" aria-hidden="true"></i><p>${t('empty.cand')}</p><br><a class="btn btn-g" href="#/oportunidades"><i class="fas fa-magnifying-glass" aria-hidden="true"></i> ${t('hi.cta')}</a></div>`
   :!r.length?`<div class="state card"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><p>${t('cd.none')}</p><br><button class="btn btn-l" type="button" data-a="cd-clear">${t('cd.clear')}</button></div>`
-  :`<div class="vgrid">${r.map(cCard).join('')}</div>`;
+  :LRM_CAR.html(r.map(cCard).join(''),r.length,t('n.cand'));
+ LRM_CAR.later();
 }
 async function lista(){
  CD.list=(await api.candidaturas()).sort((a,b)=>b.criado_em.localeCompare(a.criado_em));

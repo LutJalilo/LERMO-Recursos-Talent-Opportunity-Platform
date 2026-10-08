@@ -144,6 +144,22 @@ function crumbs(items){
 let cache=null,seq=0;
 const Views={};        /* área -> async (id) => {html, after?}  (cada área tem o seu módulo js/candidato-*.js) */
 const Actions={};      /* data-a="nome[:arg]" -> (botão, arg, evento) */
+/* Carrossel partilhado (Convites e Oportunidades): o .vrow desliza com o dedo; no computador, com 3 ou mais cartões, mostra Anterior/Próximo.
+   Uso: CAR.html(cartõesHtml, n, rótuloAcessível) devolve o bloco; depois de o inserir, CAR.sync(). */
+Object.assign(D.pt,{'car.prev':'Anterior','car.next':'Próximo','car.nav':'Navegar nos cartões'});
+Object.assign(D.en,{'car.prev':'Previous','car.next':'Next','car.nav':'Browse cards'});
+const CAR={
+ html(cards,n,label,peek){return `<div class="carw${peek&&n>=3?' peek':''}"><div class="vrow" tabindex="0" role="region" aria-label="${label}">${cards}</div>`+(n<3?'':`<nav class="pg car" aria-label="${t('car.nav')}"><span class="pg-b"><button class="btn btn-l btn-s" type="button" data-a="car:-1" disabled><i class="fas fa-chevron-left" aria-hidden="true"></i> ${t('car.prev')}</button><button class="btn btn-l btn-s" type="button" data-a="car:1">${t('car.next')} <i class="fas fa-chevron-right" aria-hidden="true"></i></button></span></nav>`)+`</div>`},
+ sync(w){(w?[w]:[...document.querySelectorAll('.carw')]).forEach(w=>{const r=w.querySelector('.vrow'),p=w.querySelector('[data-a="car:-1"]'),n=w.querySelector('[data-a="car:1"]');
+  if(!r)return;if(p)p.disabled=r.scrollLeft<=2;if(n)n.disabled=r.scrollLeft+r.clientWidth>=r.scrollWidth-2})},
+ later(){setTimeout(()=>CAR.sync(),60)}
+};
+Actions['car']=(b,d)=>{const w=b.closest('.carw'),r=w&&w.querySelector('.vrow'),c=r&&r.querySelector('.vc');if(!c)return;
+ const w1=c.getBoundingClientRect().width+(parseFloat(getComputedStyle(r).columnGap)||16);
+ r.scrollBy({left:(+d)*w1,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})};
+document.addEventListener('scroll',e=>{const r=e.target;if(r&&r.classList&&r.classList.contains('vrow')){const w=r.closest('.carw');w&&CAR.sync(w)}},{capture:true,passive:true});
+addEventListener('resize',()=>CAR.sync());
+window.LRM_CAR=CAR;
 const invalidate=()=>{cache=null};
 const Modal={prev:null,
  open({title,body}){this.close(true);this.prev=document.activeElement;const b=document.createElement('div');b.className='mod-b';b.id='modal';

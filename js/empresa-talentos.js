@@ -69,7 +69,6 @@ if(!Array.isArray(MOCK.guardados))MOCK.guardados=[];
 if(!Array.isArray(MOCK.convites))MOCK.convites=[];
 const S={q:'',sk:[],pais:'',disp:'',exp:0,o:'rel',tab:'todos',p:0};
 Object.assign(D.pt,{'tl.pg':'Paginação','tl.pg.prev':'Anterior','tl.pg.next':'Próximo','tl.pg.of':'{a}–{b} de {n}'});
-const PG=3; /* talentos: 3 cartões por página, com Anterior/Próximo (a lista não cresce para baixo) */
 
 Object.assign(D.pt,{'tl.h':'Talentos','tl.p':'Encontre candidatos pelas competências, país e disponibilidade, e convide-os para as suas vagas.',
  'tl.k.all':'Perfis disponíveis','tl.k.now':'Disponíveis já','tl.k.sav':'Guardados','tl.k.inv':'Convites enviados',
@@ -144,16 +143,24 @@ function kpis(){
 function chips(){
  return S.sk.map(k=>`<button type="button" class="tl-chip" data-a="tl-rsk:${k}" aria-label="${esc(t('tl.rm',{s:skN(k)}))}">${esc(skN(k))} <i class="fas fa-xmark" aria-hidden="true"></i></button>`).join('')}
 
-function pager(n){const pg=Math.ceil(n/PG),a=S.p*PG+1,b=Math.min(n,(S.p+1)*PG);
- return `<nav class="pg in" aria-label="${t('tl.pg')}"><span class="pg-n" aria-live="polite">${t('tl.pg.of',{a,b,n})}</span><span class="pg-b"><button class="btn btn-l btn-s" type="button" data-a="tl-pg:-1"${S.p<=0?' disabled':''}><i class="fas fa-chevron-left" aria-hidden="true"></i> ${t('tl.pg.prev')}</button><button class="btn btn-l btn-s" type="button" data-a="tl-pg:1"${S.p>=pg-1?' disabled':''}>${t('tl.pg.next')} <i class="fas fa-chevron-right" aria-hidden="true"></i></button></span></nav>`}
+/* Carrossel de talentos: desliza com o dedo (telemóvel); no computador, com 3 ou mais cartões, tem Anterior/Próximo e barra de rolagem */
+function carrossel(L){const n=L.length;
+ return `<div class="tl-carw"><div class="tl-row" id="tlRow" tabindex="0" role="region" aria-label="${esc(t('n.tal'))}">${L.map(card).join('')}</div>`+
+  (n<3?'':`<nav class="pg in tl-car" aria-label="${t('tl.pg')}"><span class="pg-b"><button class="btn btn-l btn-s" type="button" data-a="tl-car:-1" disabled><i class="fas fa-chevron-left" aria-hidden="true"></i> ${t('tl.pg.prev')}</button><button class="btn btn-l btn-s" type="button" data-a="tl-car:1">${t('tl.pg.next')} <i class="fas fa-chevron-right" aria-hidden="true"></i></button></span></nav>`)+`</div>`}
+function carSync(){const w=document.querySelector('.tl-carw'),r=w&&w.querySelector('.tl-row');if(!r)return;
+ const p=w.querySelector('[data-a="tl-car:-1"]'),n=w.querySelector('[data-a="tl-car:1"]');
+ if(p)p.disabled=r.scrollLeft<=2;if(n)n.disabled=r.scrollLeft+r.clientWidth>=r.scrollWidth-2}
 function resultado(){
  const L=filtrar();
  const vazio=`<div class="state card"><i class="fas ${S.tab==='guardados'&&!MOCK.guardados.length?'fa-bookmark':'fa-magnifying-glass'}" aria-hidden="true"></i><p>${t(S.tab==='guardados'&&!MOCK.guardados.length?'tl.none.s':'tl.none')}</p></div>`;
- S.p=Math.max(0,Math.min(S.p,Math.ceil(L.length/PG)-1));
- return `<p class="tl-cnt" aria-live="polite">${t('tl.n',{n:L.length})}</p>`+(L.length?`<div class="tl-grid">${L.slice(S.p*PG,S.p*PG+PG).map(card).join('')}</div>`+pager(L.length):vazio)}
-Actions['tl-pg']=(b,d)=>{const r=$('#tlR');if(!r)return;S.p+=+d;r.innerHTML=resultado();
- const f=$(`#tlR .pg button[data-a="tl-pg:${d}"]:not([disabled])`)||$('#tlR .pg button:not([disabled])');if(f)f.focus({preventScroll:true});
- if(r.getBoundingClientRect().top<0)r.scrollIntoView({block:'start'})};
+ setTimeout(carSync,60);
+ return `<p class="tl-cnt" aria-live="polite">${t('tl.n',{n:L.length})}</p>`+(L.length?carrossel(L):vazio)}
+Actions['tl-car']=(b,d)=>{const w=b.closest('.tl-carw'),r=w&&w.querySelector('.tl-row'),c=r&&r.querySelector('.tl-c');if(!c)return;
+ const w1=c.getBoundingClientRect().width+(parseFloat(getComputedStyle(r).columnGap)||16);
+ const k=Math.max(1,Math.floor((r.clientWidth+1)/w1)); /* uma página = os cartões visíveis (3 no computador) */
+ r.scrollBy({left:(+d)*w1*k,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})};
+document.addEventListener('scroll',e=>{const r=e.target;if(r&&r.classList&&r.classList.contains('tl-row'))carSync()},{capture:true,passive:true});
+addEventListener('resize',carSync);
 
 function filtros(){
  const P=pool(),paises=(window.LERMO_PAISES?window.LERMO_PAISES.map(x=>x[0]):[...new Set(P.map(p=>p.pais))]).sort((a,b)=>a==='MZ'?-1:b==='MZ'?1:paisN(a).localeCompare(paisN(b),lang)); /* lista completa (js/paises.js, 249 países), como em Eventos, Perfil e Registo */

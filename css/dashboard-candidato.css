@@ -614,13 +614,19 @@ i.ico{display:inline-flex;align-items:center;justify-content:center;width:1.1em;
 i.ico::before{content:none!important}i.ico svg{width:100%;height:100%;display:block}
 i.ico.fa-spin svg{animation:icspin .9s linear infinite}@keyframes icspin{to{transform:rotate(360deg)}}
 
-/* Convites: cartões em grelha + paginação Anterior/Próximo */
+/* Convites: carrossel de cartões (.vrow) — desliza com o dedo; botões Anterior/Próximo no computador */
 .cvn{margin-bottom:.8rem}
 #cvRes{scroll-margin-top:5rem}
 .pg{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;font-size:.8rem;color:var(--m)}
 .pg.in{padding:.9rem 0 0;margin-top:1rem;border-top:1px solid var(--line)}
 .pg-b{display:flex;gap:.4rem}.pg .btn[disabled]{opacity:.4;cursor:not-allowed}
 .pg .btn{width:auto}
+/* carrossel partilhado (CAR em dashboard-candidato.js): Convites e Oportunidades */
+.carw .vrow{overscroll-behavior-x:contain;touch-action:pan-x pan-y pinch-zoom;scroll-snap-type:x mandatory}
+.pg.car{justify-content:flex-end;margin-top:0}
+/* com 3+ cartões no computador, mostra uns ~2,5 de cada vez para haver sempre barra de rolagem (como nas Oportunidades) */
+@media(min-width:1024px){.carw.peek .vrow>.vc{flex-basis:calc((100% - 2rem)/2.5)}}
+@media(pointer:coarse){.pg.car{display:none}}
 .hello+.stats+.seg{margin-top:0}
 /* convites: cartões de estatísticas com a mesma altura dos do dashboard (lá o texto ocupa duas linhas) */
 .stats.cvs .stat{min-height:108px}
@@ -646,5 +652,9 @@ i.ico.fa-spin svg{animation:icspin .9s linear infinite}@keyframes icspin{to{tran
 /* Convites: transição suave ao deslizar entre convites */
 @keyframes cvin{from{opacity:0;transform:translateX(var(--cvdx,0))}to{opacity:1;transform:none}}
 .det.cd{animation:cvin .22s ease-out}
-.det.cd,.vgrid{touch-action:pan-y pinch-zoom}
+.det.cd{touch-action:pan-y pinch-zoom}
 @media(prefers-reduced-motion:reduce){.det.cd{animation:none}}
+
+/* Convites: espaçamento entre o cabeçalho (estado «Pendente») e o cartão de aviso, e entre o aviso e a mensagem */
+.det.cd header{margin-bottom:1.1rem}
+.det.cd .apx{margin-bottom:1.4rem}

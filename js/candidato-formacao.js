@@ -3,7 +3,6 @@
    programas de vários países, filtros, detalhe, inscrição, cancelamento e certificado.
    Depende de dashboard-candidato.js: MOCK/api, wait, t, esc, crumbs, fmtD, L, paisN, Views, Actions, Modal, toast, invalidate, $, lang, D, Session. */
 (()=>{
-const PG=4;
 const add=(pt,en)=>{Object.assign(D.pt,pt);Object.assign(D.en,en)};
 add({
  'fm.menu':'Opções','fm.mn.det':'Ver detalhe','fm.mn.enr':'Inscrever-me','fm.mn.closed':'Inscrições encerradas','fm.mn.cx':'Cancelar inscrição','fm.mn.lock':'O programa já começou','fm.mn.cert':'Ver certificado','fm.mn.dl':'Descarregar certificado','fm.mn.nocert':'Disponível após concluir',
@@ -17,7 +16,7 @@ add({
  'fm.toggle':'Filtros','fm.pais':'País','fm.pais.all':'Todos','fm.mod':'Modalidade','fm.mod.all':'Todas','fm.mod.presencial':'Presencial','fm.mod.online':'Online','fm.mod.hibrido':'Híbrido',
  'fm.sort':'Ordenar','fm.sort.new':'Mais recentes','fm.sort.ini':'Início mais próximo','fm.open':'Só abertos','fm.clear':'Limpar filtros','fm.est':'Estado da inscrição',
  'fm.est.all':'Todos','fm.est.ins':'Inscritos','fm.est.disp':'Disponíveis','fm.count':'{n} programas','fm.count.1':'1 programa',
- 'fm.empty':'Ainda não há programas de formação publicados.','fm.none':'Nenhum programa corresponde aos filtros.','fm.more':'Mostrar mais','fm.vd':'Ver detalhe',
+ 'fm.empty':'Ainda não há programas de formação publicados.','fm.none':'Nenhum programa corresponde aos filtros.','fm.vd':'Ver detalhe',
  'fm.canreg':'Inscrições abertas','fm.full':'Esgotado','fm.closed':'Encerrado','fm.online':'Online','fm.startdur':'Início {d} · {h} h',
  'fm.entity':'Entidade','fm.loc':'Local','fm.modality':'Modalidade','fm.dur':'Duração','fm.hours':'{h} horas','fm.start':'Início','fm.end':'Fim','fm.slots':'Vagas','fm.slots.v':'{n} de {t} disponíveis','fm.prazo':'Prazo de inscrição',
  'fm.desc':'Descrição','fm.req':'Requisitos','fm.back':'Voltar à formação','fm.nf':'Programa não encontrado','fm.nf.p':'O programa pedido não existe ou já não está disponível.',
@@ -42,7 +41,7 @@ add({
  'fm.toggle':'Filters','fm.pais':'Country','fm.pais.all':'All','fm.mod':'Mode','fm.mod.all':'All','fm.mod.presencial':'In person','fm.mod.online':'Online','fm.mod.hibrido':'Hybrid',
  'fm.sort':'Sort by','fm.sort.new':'Most recent','fm.sort.ini':'Starting soonest','fm.open':'Open only','fm.clear':'Clear filters','fm.est':'Registration status',
  'fm.est.all':'All','fm.est.ins':'Registered','fm.est.disp':'Available','fm.count':'{n} programmes','fm.count.1':'1 programme',
- 'fm.empty':'No training programmes have been published yet.','fm.none':'No programme matches the filters.','fm.more':'Show more','fm.vd':'View details',
+ 'fm.empty':'No training programmes have been published yet.','fm.none':'No programme matches the filters.','fm.vd':'View details',
  'fm.canreg':'Registration open','fm.full':'Full','fm.closed':'Closed','fm.online':'Online','fm.startdur':'Starts {d} · {h} h',
  'fm.entity':'Organisation','fm.loc':'Location','fm.modality':'Mode','fm.dur':'Duration','fm.hours':'{h} hours','fm.start':'Start','fm.end':'End','fm.slots':'Places','fm.slots.v':'{n} of {t} available','fm.prazo':'Registration deadline',
  'fm.desc':'Description','fm.req':'Requirements','fm.back':'Back to training','fm.nf':'Programme not found','fm.nf.p':'The requested programme does not exist or is no longer available.',
@@ -122,7 +121,7 @@ api.fmCancelar=id=>new Promise((ok,no)=>setTimeout(()=>{
  const p=progDe(id);if(p)p.ocup=Math.max(0,p.ocup-1);
  MOCK.fmIns.splice(k,1);sync();ok()},500));
 
-const FM={q:'',pais:'',loc:'',mod:'',est:'',sort:'new',abertas:true,n:PG,list:[],det:null,cur:null,tm:0};
+const FM={q:'',pais:'',loc:'',mod:'',est:'',sort:'new',abertas:true,list:[],det:null,cur:null,tm:0};
 const nome=p=>lang==='en'&&p.en?p.en:p.nome;
 const ld=(p,f)=>lang==='en'&&p[f+'En']?p[f+'En']:p[f];
 const modN=m=>t('fm.mod.'+m);
@@ -194,8 +193,7 @@ function renderRes(){
  c.textContent=t(r.length===1?'fm.count.1':'fm.count',{n:r.length});
  if(!FM.list.length){box.innerHTML=`<div class="state card"><i class="fas fa-graduation-cap" aria-hidden="true"></i>${t('fm.empty')}</div>`;c.textContent='';return}
  if(!r.length){box.innerHTML=`<div class="state card"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><p>${t('fm.none')}</p><br><button class="btn btn-l" type="button" data-a="fm-clear">${t('fm.clear')}</button></div>`;return}
- const show=r.slice(0,FM.n);
- box.innerHTML=`<div class="vgrid">${show.map(card).join('')}</div>`+(r.length>show.length?`<div class="more"><button class="btn btn-l" type="button" data-a="fm-more">${t('fm.more')} (${r.length-show.length})</button></div>`:'');
+ box.innerHTML=LRM_CAR.html(r.map(card).join(''),r.length,t('n.form'));LRM_CAR.later();
 }
 async function lista(){
  await loadPaises();FM.list=await api.fmProgs();FM.det=null;
@@ -505,16 +503,15 @@ Actions['fm-cert-dl']=(b,id)=>{
 /* ---------- filtros ---------- */
 document.addEventListener('input',e=>{
  if(e.target.id==='fmFm'){$('#fmMc').textContent=e.target.value.length+'/500'}
- if(e.target.id==='fmQ'){FM.q=e.target.value;clearTimeout(FM.tm);FM.tm=setTimeout(()=>{FM.n=PG;renderRes();updFiltros()},120)}
+ if(e.target.id==='fmQ'){FM.q=e.target.value;clearTimeout(FM.tm);FM.tm=setTimeout(()=>{renderRes();updFiltros()},120)}
 });
 document.addEventListener('change',e=>{
  if(e.target.id==='fmFp'){fillRegF('');return}
  const el=e.target,k=el.dataset&&el.dataset.f;if(!k||!el.closest('#fmF'))return;
- FM[k]=el.type==='checkbox'?el.checked:el.value;if(k==='pais'){FM.loc='';fillReg()}FM.n=PG;renderRes();updFiltros();
+ FM[k]=el.type==='checkbox'?el.checked:el.value;if(k==='pais'){FM.loc='';fillReg()}renderRes();updFiltros();
 });
-Actions['fm-est']=(b,v)=>{FM.est=v||'';FM.n=PG;renderRes();updFiltros()};
-Actions['fm-more']=()=>{FM.n+=PG;renderRes()};
-Actions['fm-clear']=()=>{Object.assign(FM,{q:'',pais:'',loc:'',mod:'',est:'',sort:'new',abertas:true,n:PG});
+Actions['fm-est']=(b,v)=>{FM.est=v||'';renderRes();updFiltros()};
+Actions['fm-clear']=()=>{Object.assign(FM,{q:'',pais:'',loc:'',mod:'',est:'',sort:'new',abertas:true});
  const f=$('#fmF');if(f){f.reset();$('#fmQ').value='';$('#fmPais').value='';$('#fmMod').value='';fillReg();$('#fmSort').value='new';$('#fmAb').checked=true}renderRes();updFiltros();if(f)$('#fmQ').focus()};
 Actions['fm-tog']=b=>{const on=!$('#fmF').classList.contains('open');$('#fmF').classList.toggle('open',on);b.setAttribute('aria-expanded',on)};
 /* auxiliares do formulário (país, região, indicativo) partilhados com js/candidato-empreendedorismo.js */

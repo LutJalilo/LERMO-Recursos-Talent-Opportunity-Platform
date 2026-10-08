@@ -846,3 +846,15 @@ i.ico.fa-spin svg{animation:icspin .9s linear infinite}@keyframes icspin{to{tran
 .tl-vs{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.35rem .9rem;font-size:.84rem}.tl-vs li{display:flex;align-items:flex-start;gap:.45rem;min-width:0}.tl-vs i{color:var(--pl);margin-top:.2rem;font-size:.78rem}.tl-vs span{overflow-wrap:anywhere}
 .tl-cn{align-self:flex-end;color:var(--m);font-size:.72rem}
 @media(max-width:560px){.tl-vs{grid-template-columns:1fr}}
+
+
+/* ===== Talentos: carrossel de cartões — dedo no telemóvel; Anterior/Próximo + barra de rolagem no computador (como as Oportunidades) ===== */
+.tl-row{display:flex;gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch;padding:.45rem .2rem 1rem;margin:0 -.2rem;scrollbar-width:thin;scrollbar-color:var(--g) rgba(27,67,50,.1)}
+.tl-row:focus-visible{outline:3px solid rgba(201,160,58,.55);outline-offset:2px;border-radius:12px}
+.tl-row::-webkit-scrollbar{height:10px}.tl-row::-webkit-scrollbar-track{background:rgba(27,67,50,.08);border-radius:99px}.tl-row::-webkit-scrollbar-thumb{background:var(--g);border-radius:99px}
+.tl-row>.tl-c{flex:0 0 calc((100% - 2rem)/3);min-width:290px;min-height:340px;padding:1.1rem;scroll-snap-align:start} /* mesmo tamanho dos cartões das vagas (.vgc): 3 por página */
+.tl-row>.tl-c:hover{transform:none}
+.tl-car{justify-content:flex-end;margin-top:0;border-top:0;padding-top:0}
+.tl-car .btn{width:auto}
+@media(max-width:700px){.tl-row>.tl-c{flex-basis:85%;min-width:0}}
+@media(pointer:coarse){.tl-car{display:none}}

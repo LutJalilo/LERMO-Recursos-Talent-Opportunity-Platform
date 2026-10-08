@@ -1,13 +1,12 @@
 'use strict';
 /* Área Oportunidades (tabela vagas): lista, filtros, detalhe e candidatura.
    Depende de dashboard-candidato.js: MOCK/api, t, esc, crumbs, fmtD, fmtM, L, Views, Actions, Modal, toast, invalidate, vAberta. */
-const PAGE=4;
 Object.assign(D.pt,{
  'op.sub':'Oportunidades de estágio, emprego efectivo, trainee e freelance.','op.search':'Pesquisar por título, empresa ou local','op.f.tipo':'Tipo','op.f.reg':'Regime','op.f.pais':'País','op.f.regiao':'Região','op.f.pickc':'Escolha um país','op.f.allp':'Todos','op.f.sort':'Ordenar',
  'op.f.all':'Todos','op.f.allf':'Todas','op.f.open':'Só abertas','op.f.clear':'Limpar filtros','op.f.toggle':'Filtros','op.sort.new':'Mais recentes','op.sort.dl':'Prazo mais próximo',
  'op.count':'{n} oportunidades','op.count.1':'1 oportunidade','reg.presencial':'Presencial','reg.hibrido':'Híbrido','reg.remoto':'Remoto',
  'op.view':'Ver detalhe','op.applied':'Candidatura enviada','op.closed':'Encerrada','op.dl.until':'Até {d}','op.dl.today':'Termina hoje','op.dl.day':'Falta 1 dia','op.dl.days':'Faltam {n} dias',
- 'op.empty':'Ainda não há oportunidades publicadas.','op.nores':'Nenhuma oportunidade corresponde aos filtros.','op.more':'Mostrar mais','op.back':'Voltar às oportunidades','op.nf':'Vaga não encontrada.','op.nf.p':'Pode ter sido removida ou o endereço está incorrecto.',
+ 'op.empty':'Ainda não há oportunidades publicadas.','op.nores':'Nenhuma oportunidade corresponde aos filtros.','op.back':'Voltar às oportunidades','op.nf':'Vaga não encontrada.','op.nf.p':'Pode ter sido removida ou o endereço está incorrecto.',
  'op.desc':'Descrição','op.req':'Requisitos','op.loc':'Localização','op.regime':'Regime','op.tipo':'Tipo','op.rem':'Remuneração','op.prazo':'Prazo de candidatura','op.pub':'Publicada em',
  'op.apply':'Candidatar-me','op.apply.h':'Esta vaga pode ser a sua oportunidade!','op.apply.ctx':'Candidate-se agora: a sua candidatura segue directamente para o recrutador e pode acompanhar o estado a qualquer momento em «Candidaturas». Não deixe passar o prazo.','op.applied.p':'Já enviou candidatura a esta vaga.','op.seeapp':'Ver candidatura','op.closed.p':'O prazo de candidatura terminou.',
  'op.open':'Aberta','op.menu':'Opções','op.mn.det':'Ver detalhe','op.mn.apply':'Candidatar-me','op.mn.closed':'Candidaturas encerradas','op.mn.seeapp':'Ver candidatura',
@@ -18,7 +17,7 @@ Object.assign(D.en,{
  'op.f.all':'All','op.f.allf':'All','op.f.open':'Open only','op.f.clear':'Clear filters','op.f.toggle':'Filters','op.sort.new':'Newest','op.sort.dl':'Closest deadline',
  'op.count':'{n} opportunities','op.count.1':'1 opportunity','reg.presencial':'On-site','reg.hibrido':'Hybrid','reg.remoto':'Remote',
  'op.view':'View details','op.applied':'Application sent','op.closed':'Closed','op.dl.until':'Until {d}','op.dl.today':'Ends today','op.dl.day':'1 day left','op.dl.days':'{n} days left',
- 'op.empty':'There are no published opportunities yet.','op.nores':'No opportunity matches the filters.','op.more':'Show more','op.back':'Back to opportunities','op.nf':'Job not found.','op.nf.p':'It may have been removed or the address is wrong.',
+ 'op.empty':'There are no published opportunities yet.','op.nores':'No opportunity matches the filters.','op.back':'Back to opportunities','op.nf':'Job not found.','op.nf.p':'It may have been removed or the address is wrong.',
  'op.desc':'Description','op.req':'Requirements','op.loc':'Location','op.regime':'Work mode','op.tipo':'Type','op.rem':'Salary','op.prazo':'Application deadline','op.pub':'Published on',
  'op.apply':'Apply now','op.apply.h':'This job could be your next opportunity!','op.apply.ctx':'Apply now: your application goes straight to the recruiter and you can track its status at any time under "Applications". Don\'t miss the deadline.','op.applied.p':'You have already applied to this job.','op.seeapp':'View application','op.closed.p':'The application deadline has passed.',
  'op.open':'Open','op.menu':'Options','op.mn.det':'View details','op.mn.apply':'Apply now','op.mn.closed':'Applications closed','op.mn.seeapp':'View application',
@@ -26,7 +25,7 @@ Object.assign(D.en,{
  'ap.send':'Send application','ap.prof':'What the company will see','ap.prof.p':'{e} experience(s) · {f} education record(s) · {c} skill(s) · {i} language(s)','ap.prof.pct':'Profile {v}% complete','ap.prof.edit':'Review profile','ap.prof.empty':'Your profile has no experience, education or skills yet. Complete it before applying to improve your chances.','ap.cancel':'Cancel','ap.sending':'Sending…','ap.ok':'Application sent successfully.','ap.fail':'Could not send the application. Please try again.','ap.dup':'You have already applied to this job.','ap.closed':'Applications for this job have closed.'});
 
 /* estado da lista (mantido ao ir ao detalhe e voltar) */
-const OP={q:'',pais:'',prov:'',tipo:'',reg:'',abertas:true,sort:'new',n:PAGE,list:[],det:null,tm:0};
+const OP={q:'',pais:'',prov:'',tipo:'',reg:'',abertas:true,sort:'new',list:[],det:null,tm:0};
 const TIPOS=['estagio','emprego_efectivo','trainee','freelance'],REGS=['presencial','hibrido','remoto'];   /* tipos_vaga, regimes_trabalho */
 const fmtN=n=>new Intl.NumberFormat(lang==='en'?'en-GB':'pt-PT').format(n);
 const opDesc=v=>lang==='en'&&v.descEn?v.descEn:v.desc,opReq=v=>lang==='en'&&v.reqEn?v.reqEn:v.req;
@@ -89,12 +88,11 @@ function renderRes(){
  c.textContent=t(r.length===1?'op.count.1':'op.count',{n:r.length});
  if(!OP.list.length){box.innerHTML=`<div class="state card"><i class="fas fa-briefcase" aria-hidden="true"></i>${t('op.empty')}</div>`;c.textContent='';return}
  if(!r.length){box.innerHTML=`<div class="state card"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><p>${t('op.nores')}</p><br><button class="btn btn-l" type="button" data-a="op-clear">${t('op.f.clear')}</button></div>`;return}
- const show=r.slice(0,OP.n);
- box.innerHTML=`<div class="vgrid">${show.map(card).join('')}</div>`+(r.length>show.length?`<div class="more"><button class="btn btn-l" type="button" data-a="op-more">${t('op.more')} (${r.length-show.length})</button></div>`:'');
+ box.innerHTML=LRM_CAR.html(r.map(card).join(''),r.length,t('n.op'));LRM_CAR.later();
 }
 const opts=(arr,sel,lbl)=>arr.map(x=>`<option value="${esc(x)}"${x===sel?' selected':''}>${esc(lbl(x))}</option>`).join('');
 async function lista(){
- const F=window.LRM_FRM;await F.loadPaises();OP.list=await api.vagas();OP.n=PAGE;
+ const F=window.LRM_FRM;await F.loadPaises();OP.list=await api.vagas();
  /* lista completa de países (249, js/paises.js), Moçambique primeiro — igual a Eventos, Formação, Financiamento e Perfil */
  const paises=F.paisesOrd();
  const sel=(k,id,lbl,all,arr,fn)=>`<div class="fld"><label for="${id}">${t(lbl)}</label><select id="${id}" data-f="${k}"><option value="">${t(all)}</option>${opts(arr,OP[k],fn)}</select></div>`;
@@ -173,14 +171,13 @@ document.addEventListener('submit',async e=>{
 
 /* ---------- filtros ---------- */
 document.addEventListener('input',e=>{
- if(e.target.id==='opQ'){OP.q=e.target.value;clearTimeout(OP.tm);OP.tm=setTimeout(()=>{OP.n=PAGE;renderRes();updFiltros()},120)}
+ if(e.target.id==='opQ'){OP.q=e.target.value;clearTimeout(OP.tm);OP.tm=setTimeout(()=>{renderRes();updFiltros()},120)}
  else if(e.target.id==='cMsg'){$('#cCnt').textContent=e.target.value.length+'/1000';if(e.target.closest('.fld').classList.contains('invalid')&&(!e.target.value.trim()||e.target.value.trim().length>=20)){e.target.closest('.fld').classList.remove('invalid');e.target.setAttribute('aria-invalid','false');$('#cErr').hidden=true}}
 });
 document.addEventListener('change',e=>{
  const el=e.target,k=el.dataset&&el.dataset.f;if(!k||!el.closest('#opF'))return;
- OP[k]=el.type==='checkbox'?el.checked:el.value;if(k==='pais'){OP.prov='';fillProv()}OP.n=PAGE;renderRes();updFiltros();
+ OP[k]=el.type==='checkbox'?el.checked:el.value;if(k==='pais'){OP.prov='';fillProv()}renderRes();updFiltros();
 });
-Actions['op-more']=()=>{OP.n+=PAGE;renderRes()};
-Actions['op-clear']=()=>{Object.assign(OP,{q:'',pais:'',prov:'',tipo:'',reg:'',abertas:true,sort:'new',n:PAGE});
+Actions['op-clear']=()=>{Object.assign(OP,{q:'',pais:'',prov:'',tipo:'',reg:'',abertas:true,sort:'new'});
  const f=$('#opF');if(f){f.reset();$('#opQ').value='';['opPais','opTipo','opReg'].forEach(i=>$('#'+i).value='');fillProv();$('#opSort').value='new';$('#opAb').checked=true}renderRes();updFiltros();if(f)$('#opQ').focus()};
 Actions['op-tog']=b=>{const on=!$('#opF').classList.contains('open');$('#opF').classList.toggle('open',on);b.setAttribute('aria-expanded',on)};

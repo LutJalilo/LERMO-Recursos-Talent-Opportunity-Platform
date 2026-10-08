@@ -102,13 +102,26 @@ function removeChip(k,v){
   else if(k==='sal')$('fSal').checked=false;
   readForm();
 }
+function carSync(){var r=document.getElementById('ocRow');if(!r)return;
+  var p=document.querySelector('[data-car="-1"]'),n=document.querySelector('[data-car="1"]');
+  if(p)p.disabled=r.scrollLeft<=2;if(n)n.disabled=r.scrollLeft+r.clientWidth>=r.scrollWidth-2}
+function carGo(d){var r=document.getElementById('ocRow'),c=r&&r.querySelector('.oc');if(!c)return;
+  var w1=c.getBoundingClientRect().width+(parseFloat(getComputedStyle(r).columnGap)||16),k=Math.max(1,Math.floor((r.clientWidth+1)/w1)); /* uma página = os cartões visíveis (3 no computador) */
+  r.scrollBy({left:d*w1*k,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
+document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='ocRow')carSync()},true);
+addEventListener('resize',carSync);
 function render(){
-  var r=filtered(),shown=r.slice(0,st.n);
+  var r=filtered();
   $('count').textContent=t(r.length===1?'op.count1':'op.countN',{n:r.length});
   $('mres').textContent=t(r.length===1?'op.f.result1':'op.f.resultN',{n:r.length});
   renderTabs();renderChips();
-  $('grid').innerHTML=r.length?shown.map(cardHtml).join(''):'<div class="empty"><i class="fas fa-magnifying-glass"></i><p>'+esc(st.pais?t('op.empty.country',{p:paisNome(st.pais)+(st.prov?' ('+provL(st.prov)+')':'')}):t('op.empty.any'))+'<br>'+esc(t('op.empty.try'))+'</p><button type="button" class="btn btn-l" data-rm="all">'+esc(t('op.empty.clear'))+'</button></div>';
-  $('more').innerHTML=r.length>st.n?'<p>'+esc(t('op.more.showing',{a:shown.length,b:r.length}))+'</p><button type="button" class="btn btn-l" data-more>'+esc(t('op.more.btn'))+'</button>':(r.length>PAGE?'<p>'+esc(t('op.more.all',{b:r.length}))+'</p>':'');
+  /* carrossel: desliza com o dedo (telemóvel); no computador, com 3 ou mais cartões, Anterior/Próximo + barra de rolagem */
+  var g=$('grid');g.className=r.length?'oc-car':'grid';
+  g.innerHTML=r.length?'<div class="oc-carw"><div class="oc-row" id="ocRow" tabindex="0" role="region" aria-label="'+esc(t('op.car.nav'))+'">'+r.map(cardHtml).join('')+'</div>'+
+   (r.length<3?'':'<nav class="oc-nav" aria-label="'+esc(t('op.car.nav'))+'"><button class="btn btn-l" type="button" data-car="-1" disabled><i class="fas fa-chevron-left" aria-hidden="true"></i> '+esc(t('op.car.prev'))+'</button><button class="btn btn-l" type="button" data-car="1">'+esc(t('op.car.next'))+' <i class="fas fa-chevron-right" aria-hidden="true"></i></button></nav>')+'</div>'
+   :'<div class="empty"><i class="fas fa-magnifying-glass"></i><p>'+esc(st.pais?t('op.empty.country',{p:paisNome(st.pais)+(st.prov?' ('+provL(st.prov)+')':'')}):t('op.empty.any'))+'<br>'+esc(t('op.empty.try'))+'</p><button type="button" class="btn btn-l" data-rm="all">'+esc(t('op.empty.clear'))+'</button></div>';
+  $('more').innerHTML='';
+  setTimeout(carSync,60);
   var p=new URLSearchParams();
   if(st.cat)p.set('cat',st.cat);if(st.q)p.set('q',st.q);if(st.reg)p.set('regime',st.reg);if(st.pais)p.set('pais',st.pais);if(st.prov)p.set('regiao',st.prov);if(st.tipos.length)p.set('tipo',st.tipos.join(','));
   history.replaceState(null,'',p.toString()?'?'+p:location.pathname);
@@ -167,6 +180,7 @@ function init(){
     var mb=e.target.closest('[data-menu]');
     if(mb){toggleMenu(mb);return}
     if(!e.target.closest('.oc .menu'))closeMenus();
+    var cb=e.target.closest('[data-car]');if(cb){carGo(+cb.dataset.car);return}
     var x=e.target.closest('[data-cat],[data-apply],[data-share],[data-view],[data-more],[data-rm]');
     if(!x)return;
     if(x.closest('.menu'))closeMenus();

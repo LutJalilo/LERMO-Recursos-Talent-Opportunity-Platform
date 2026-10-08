@@ -166,8 +166,7 @@ function renderRes(){
  c.textContent=t(r.length===1?'em.count.1':'em.count',{n:r.length});
  if(!EM.list.length){box.innerHTML=`<div class="state card"><i class="fas fa-lightbulb" aria-hidden="true"></i>${t('em.empty')}</div>`;c.textContent='';return}
  if(!r.length){box.innerHTML=`<div class="state card"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><p>${t('em.none')}</p><br><button class="btn btn-l" type="button" data-a="em-clear">${t('em.clear')}</button></div>`;return}
- const show=r.slice(0,EM.n);
- box.innerHTML=`<div class="vgrid">${show.map(card).join('')}</div>`+(r.length>show.length?`<div class="more"><button class="btn btn-l" type="button" data-a="em-more">${t('em.more')} (${r.length-show.length})</button></div>`:'');
+ box.innerHTML=LRM_CAR.html(r.map(card).join(''),r.length,t('n.proj'));LRM_CAR.later();
 }
 async function lista(){
  await F.loadPaises();EM.list=await api.empProjs();EM.det=null;

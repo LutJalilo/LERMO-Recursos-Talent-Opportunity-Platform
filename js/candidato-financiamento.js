@@ -125,8 +125,7 @@ function renderRes(){
  c.textContent=t(r.length===1?'fi.count.1':'fi.count',{n:r.length});
  if(!FI.list.length){box.innerHTML=`<div class="state card"><i class="fas fa-seedling" aria-hidden="true"></i>${t('fi.empty')}</div>`;c.textContent='';return}
  if(!r.length){box.innerHTML=`<div class="state card"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><p>${t('fi.none')}</p><br><button class="btn btn-l" type="button" data-a="fi-clear">${t('fi.clear')}</button></div>`;return}
- const show=r.slice(0,FI.n);
- box.innerHTML=`<div class="vgrid">${show.map(card).join('')}</div>`+(r.length>show.length?`<div class="more"><button class="btn btn-l" type="button" data-a="fi-more">${t('fi.more')} (${r.length-show.length})</button></div>`:'');
+ box.innerHTML=LRM_CAR.html(r.map(card).join(''),r.length,t('n.fin'));LRM_CAR.later();   /* carrossel: dedo no telemóvel; Anterior/Próximo no PC com 3+ cartões */
 }
 async function lista(){
  await loadPaises();FI.list=await api.finLinhas();FI.det=null;

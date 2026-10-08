@@ -80,8 +80,7 @@ function renderRes(){
  c.textContent=t(r.length===1?'ev.count.1':'ev.count',{n:r.length});
  if(!EV.list.length){box.innerHTML=`<div class="state card"><i class="fas fa-calendar-days" aria-hidden="true"></i>${t('ev.empty')}</div>`;c.textContent='';return}
  if(!r.length){box.innerHTML=`<div class="state card"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><p>${t('ev.none')}</p><br><button class="btn btn-l" type="button" data-a="ev-clear">${t('ev.clear')}</button></div>`;return}
- const show=r.slice(0,EV.n);
- box.innerHTML=`<div class="vgrid">${show.map(card).join('')}</div>`+(r.length>show.length?`<div class="more"><button class="btn btn-l" type="button" data-a="ev-more">${t('ev.more')} (${r.length-show.length})</button></div>`:'');
+ box.innerHTML=LRM_CAR.html(r.map(card).join(''),r.length,t('n.ev'));LRM_CAR.later();
 }
 async function lista(){
  await loadPaises();EV.list=await api.eventos();
